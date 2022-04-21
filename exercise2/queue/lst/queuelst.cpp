@@ -75,7 +75,7 @@ bool QueueLst<Data>::operator!=(const QueueLst<Data>& queue) const noexcept{
 
 // Specific member functions (inherited from Queue)
 template <typename Data>
-Data& QueueLst<Data>::Head() const{
+const Data& QueueLst<Data>::Head() const{
     return List<Data>::Front();
 }
 

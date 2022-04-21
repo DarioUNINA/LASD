@@ -64,7 +64,7 @@ bool QueueVec<Data>::operator!=(const QueueVec<Data>& queue) const noexcept{
 // Specific member functions (inherited from Queue)
 
 template <typename Data>
-Data& QueueVec<Data>::Head() const{
+const Data& QueueVec<Data>::Head() const{
     if(head == tail)
         throw std::length_error("Queue is empty!");
     else

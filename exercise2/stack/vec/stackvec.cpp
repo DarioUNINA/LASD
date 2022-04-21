@@ -58,7 +58,7 @@ bool StackVec<Data>::operator!=(const StackVec<Data>& stack) const noexcept{
 // Specific member functions (inherited from Stack)
 
 template <typename Data>
-Data& StackVec<Data>::Top() const{
+const Data& StackVec<Data>::Top() const{
     if(head == 0)
         throw std::length_error("Stack is empty!");
     else

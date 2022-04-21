@@ -69,7 +69,7 @@ public:
 
   // Specific member functions (inherited from Stack)
 
-  virtual Data& Top() const override; // Override Stack member (constant version; must throw std::length_error when empty)
+  virtual const Data& Top() const override; // Override Stack member (constant version; must throw std::length_error when empty)
   virtual Data& Top() override; // Override Stack member (must throw std::length_error when empty)
   virtual void Pop() override; // Override Stack member (must throw std::length_error when empty)
   virtual Data TopNPop() override; // Override Stack member (must throw std::length_error when empty)

@@ -72,7 +72,7 @@ bool StackLst<Data>:: operator!=(const StackLst<Data>& stack) const noexcept{
 // Specific member functions (inherited from Stack)
 
 template <typename Data>
-Data& StackLst<Data>:: Top() const{
+const Data& StackLst<Data>:: Top() const{
     return List<Data>:: Front();
 }
 

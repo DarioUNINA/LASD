@@ -46,7 +46,7 @@ public:
 
   // Specific member functions
 
-  virtual Data& Head() const = 0; // (constant version; concrete function must throw std::length_error when empty)
+  virtual const Data& Head() const = 0; // (constant version; concrete function must throw std::length_error when empty)
   virtual Data& Head() = 0; // (concrete function must throw std::length_error when empty)
   virtual void Dequeue() = 0; // (concrete function must throw std::length_error when empty)
   virtual Data HeadNDequeue() = 0; // (concrete function must throw std::length_error when empty)

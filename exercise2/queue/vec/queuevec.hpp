@@ -71,7 +71,7 @@ public:
 
   // Specific member functions (inherited from Queue)
 
-  virtual Data& Head() const override; // Override Queue member (constant version; must throw std::length_error when empty)
+  virtual const Data& Head() const override; // Override Queue member (constant version; must throw std::length_error when empty)
   virtual Data& Head() override; // Override Queue member (must throw std::length_error when empty)
   virtual void Dequeue() override; // Override Queue member (must throw std::length_error when empty)
   virtual Data HeadNDequeue() override; // Override Queue member (must throw std::length_error when empty)

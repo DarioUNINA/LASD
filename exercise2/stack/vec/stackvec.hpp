@@ -70,7 +70,7 @@ public:
 
   // Specific member functions (inherited from Stack)
 
-  virtual Data& Top() const override;
+  virtual const Data& Top() const override;
   virtual Data& Top() override;
   virtual void Pop() override;
   virtual Data TopNPop() override;
