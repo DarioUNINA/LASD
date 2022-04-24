@@ -1,6 +1,6 @@
 
-#ifndef LIST_HPP
-#define LIST_HPP
+#ifndef VECTOR_HPP
+#define VECTOR_HPP
 
 /* ************************************************************************** */
 
@@ -13,7 +13,7 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class List  :  public virtual LinearContainer<Data>,
+class Vector : public virtual LinearContainer<Data>,
                public virtual PreOrderMappableContainer<Data>, 
                public virtual PreOrderFoldableContainer<Data>,
                public virtual PostOrderMappableContainer<Data>,
@@ -27,95 +27,51 @@ protected:
 
   using LinearContainer<Data>:: size;
 
-
-  struct Node {
-
-    Node* next = nullptr;
-
-    Data key;
-
-    /* ********************************************************************** */
-
-    // Specific constructors
-      Node() = default;
-
-      Node(const Data&);
-
-      Node(Data&&) noexcept;
-
-    /* ********************************************************************** */
-
-    // Copy constructor
-      Node(const Node&);
-
-    // Move constructor
-      Node(Node&&) noexcept;
-
-    /* ********************************************************************** */
-
-    // Destructor
-    virtual ~Node() noexcept;
-
-    /* ********************************************************************** */
-
-    // Comparison operators
-    bool operator==(const Node&) const noexcept;
-    bool operator!=(const Node&) const noexcept;
-
-  };
-
-  Node* head = nullptr;
-  Node* tail = nullptr;
-
+  Data* Elements = nullptr;
 
 public:
 
   // Default constructor
-   List() = default;
+   Vector() = default;
 
   /* ************************************************************************ */
 
-  // Specific constructor
-   List(const LinearContainer<Data>&);
+  // Specific constructors
+  Vector(const ulong);
+  Vector(const LinearContainer<Data>&);
 
   /* ************************************************************************ */
 
   // Copy constructor
-  List(const List<Data>&);
+  Vector(const Vector<Data>&);
 
   // Move constructor
-  List(List<Data>&&) noexcept;
+  Vector(Vector<Data>&&) noexcept;
 
   /* ************************************************************************ */
 
   // Destructor
-  virtual ~List();
+  virtual ~Vector() noexcept;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  List<Data>& operator=(const List<Data>&);
+  Vector<Data>& operator=(const Vector<Data>&);
 
   // Move assignment
-  List<Data>& operator=(List<Data>&&) noexcept;
+  Vector<Data>& operator=(Vector<Data>&&) noexcept;
 
   /* ************************************************************************ */
 
   // Comparison operators
-  bool operator==(const List<Data>&) const noexcept;
-  bool operator!=(const List<Data>&) const noexcept;
+  bool operator==(const Vector<Data>&) const noexcept;
+  bool operator!=(const Vector<Data>&) const noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions
 
-  virtual void InsertAtFront(const Data&);
-  virtual void InsertAtFront(Data&&);
-  virtual void RemoveFromFront();
-  virtual Data FrontNRemove();
-
-  virtual void InsertAtBack(const Data&);
-  virtual void InsertAtBack(Data&&);
+  virtual void Resize(const ulong);
 
   /* ************************************************************************ */
 
@@ -127,10 +83,10 @@ public:
 
   // Specific member functions (inherited from LinearContainer)
 
-  Data& Front() const override;
-  Data& Back() const override;
+  virtual Data& Front() const override;
+  virtual Data& Back() const override;
 
-  Data& operator[](const ulong) const override;
+  Data& operator[](const ulong) const override; // Override LinearContainer member (must throw std::out_of_range when out of range)
 
   /* ************************************************************************ */
 
@@ -138,19 +94,19 @@ public:
 
   using typename MappableContainer<Data>::MapFunctor;
 
-  virtual void Map(MapFunctor, void*) override; 
+  virtual void Map(MapFunctor, void*) override; // Override MappableContainer member
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from PreOrderMappableContainer)
 
-  virtual void MapPreOrder(MapFunctor, void*) override;
+  virtual void MapPreOrder(MapFunctor, void*) override; // Override PreOrderMappableContainer member
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from PostOrderMappableContainer)
 
-  virtual void MapPostOrder(MapFunctor, void*) override;
+  virtual void MapPostOrder(MapFunctor, void*) override; // Override PostOrderMappableContainer member
 
   /* ************************************************************************ */
 
@@ -171,27 +127,12 @@ public:
   // Specific member functions (inherited from PostOrderFoldableContainer)
 
   virtual void FoldPostOrder(FoldFunctor, const void*, void*) const override;
-
-
-protected:
-
-  // Auxiliary member functions (for PreOrderMappableContainer & PostOrderMappableContainer)
-
-  virtual void MapPreOrder(MapFunctor, void*, Node*);
-  virtual void MapPostOrder(MapFunctor, void*, Node*);
-
-  /* ************************************************************************ */
-
-  // Auxiliary member functions (for PreOrderFoldableContainer & PostOrderFoldableContainer)
-
-  virtual void FoldPreOrder(FoldFunctor, const void*, void*, const Node*) const;
-  virtual void FoldPostOrder(FoldFunctor, const void*, void*, const Node*) const;
 };
 
 /* ************************************************************************** */
 
 }
 
-#include "list.cpp"
+#include "vector.cpp"
 
 #endif
