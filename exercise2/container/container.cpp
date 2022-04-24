@@ -85,7 +85,7 @@ void PreOrderFoldableContainer<Data>:: Fold(FoldFunctor function, const void* da
 
 /* ************************************************************************** */
 
-// // Specific member functions (PostOrderMappableContainer)
+// Specific member functions (PostOrderMappableContainer)
 
 template <typename Data>
 void PostOrderMappableContainer<Data>:: Map(MapFunctor function, void* value){
@@ -101,5 +101,39 @@ void PostOrderFoldableContainer<Data>:: Fold(FoldFunctor function, const void* d
     FoldPostOrder(function, data, value);
 }
 
+/* ************************************************************************** */
+
+// Specific member functions (InOrderFoldableContainer)
+
+template <typename Data>
+void InOrderFoldableContainer<Data>:: Fold(FoldFunctor function, const void* data, void* value) const{
+    FoldInOrder(function, data, value);
+}
+/* ************************************************************************** */
+
+// Specific member functions (BreadthOrderFoldableContainer)
+
+template <typename Data>
+void BreadthFoldableContainer<Data>:: Fold(FoldFunctor function, const void* data, void* value) const{
+    FoldBreadthOrder(function, data, value);
+}
+
+/* ************************************************************************** */
+
+// Specific member functions (InOrderMappableContainer)
+
+template <typename Data>
+void InOrderMappableContainer<Data>:: Map(MapFunctor function, void* value){
+    MapInOrder(function, value);
+}
+
+/* ************************************************************************** */
+
+// Specific member functions (BreadthOrderMappableContainer)
+
+template <typename Data>
+void BreadthMappableContainer<Data>:: Map(MapFunctor function, void* value){
+    MapBreadth(function, value);
+}
 
 }
