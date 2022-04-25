@@ -34,7 +34,7 @@ private:
 
 protected:
 
-  using BreadthFoldableContainer<Data>::size = 0;
+  using BreadthFoldableContainer<Data>::size;
 
 public:
 
@@ -71,7 +71,6 @@ public:
     Node& operator=(Node&&) noexcept = delete; // Move assignment of abstract types should not be possible.
 
 
-
     /* ********************************************************************** */
 
     // Specific member functions
@@ -84,8 +83,8 @@ public:
     virtual bool HasLeftChild() const noexcept = 0; // (concrete function should not throw exceptions)
     virtual bool HasRightChild() const noexcept = 0; // (concrete function should not throw exceptions)
 
-    virtual Node& LeftChild() = 0; // (concrete function must throw std::out_of_range when not existent)
-    virtual Node& RightChild() = 0; // (concrete function must throw std::out_of_range when not existent)
+    virtual Node* LeftChild() = 0; // (concrete function must throw std::out_of_range when not existent)
+    virtual Node* RightChild() = 0; // (concrete function must throw std::out_of_range when not existent)
 
   };
 
@@ -105,18 +104,16 @@ public:
   /* ************************************************************************ */
 
   // Comparison operators
-  bool operator==(const BinaryTree<Data>&) const noexcept = delete; // Comparison of abstract binary tree is possible. /IL CONFRONTO TRA NODI DEVE CONFRONTARE ANCHE I FIGLI
-  bool operator!=(const BinaryTree<Data>&) const noexcept = delete; // Comparison of abstract binary tree is possible. /DI CONSEGUENZA BASTA CONFRONTARE LE DUE RADICI
+  bool operator==(const BinaryTree<Data>&) const noexcept; // Comparison of abstract binary tree is possible. /IL CONFRONTO TRA NODI DEVE CONFRONTARE ANCHE I FIGLI
+  bool operator!=(const BinaryTree<Data>&) const noexcept; // Comparison of abstract binary tree is possible. /DI CONSEGUENZA BASTA CONFRONTARE LE DUE RADICI
 
   /* ************************************************************************ */
 
   // Specific member functions
 
-  virtual Data& Root() = 0; // (concrete function must throw std::length_error when empty)
+  virtual Node* Root() = 0; // (concrete function must throw std::length_error when empty)
 
   /* ************************************************************************ */
-
-  //FOld e Map vanno implementate qui, basta fare l' algoritmo ricorsivo ( possiamo scorrere tutto l' albero gia' qui) chiamati quelle di sotto partendo da root
 
   // Specific member functions (inherited from MappableContainer)
 
@@ -237,7 +234,9 @@ protected:
   // ... puntatore al nodo corrente (current)
   struct BinaryTree<Data>::Node* current = nullptr;
 
-  StackLst stack;
+  struct BinaryTree<Data>::Node* root = nullptr;
+
+  StackLst<Data>* stack;
 
 public:
 
@@ -255,15 +254,15 @@ public:
   /* ************************************************************************ */
 
   // Destructor
-  ~BTPreOrderIterator() = delete;
+  virtual ~BTPreOrderIterator();
 
   /* ************************************************************************ */
 
   // Copy assignment
-  BTPreOrderIterator& operator=(const BTPreOrderIterator<Data>&);
+  BTPreOrderIterator<Data>& operator=(const BTPreOrderIterator<Data>&);
 
   // Move assignment
-  BTPreOrderIterator& operator=(BTPreOrderIterator<Data>&&) noexcept;
+  BTPreOrderIterator<Data>& operator=(BTPreOrderIterator<Data>&&) noexcept;
 
   /* ************************************************************************ */
 
@@ -283,7 +282,7 @@ public:
 
   // Specific member functions (inherited from ForwardIterator)
 
-  BTPreOrderIterator<Data>& operator++() const; // (throw std::out_of_range when terminated)
+  BTPreOrderIterator<Data>& operator++(); // (throw std::out_of_range when terminated)
 
   /* ************************************************************************ */
 
@@ -308,7 +307,14 @@ protected:
   
   struct BinaryTree<Data>::Node* current = nullptr;
 
-  StackLst stack;
+  struct BinaryTree<Data>::Node* root = nullptr;
+
+  StackLst<struct BinaryTree<Data>::Node*>* stack = nullptr;
+
+
+  // Auxiliary Member Function
+
+  virtual void Explore() noexcept;
 
 public:
 
@@ -326,7 +332,7 @@ public:
   /* ************************************************************************ */
 
   // Destructor
-  ~BTPostOrderIterator() = delete;
+  ~BTPostOrderIterator();
 
   /* ************************************************************************ */
 
@@ -362,6 +368,8 @@ public:
 
   virtual void Reset() noexcept; // (should not throw exceptions) ricordati di svuotare lo stack o la coda
 
+
+
 };
 
 /* ************************************************************************** */
@@ -378,7 +386,14 @@ protected:
 
   struct BinaryTree<Data>::Node* current = nullptr;
 
-  StackLst stack;
+  struct BinaryTree<Data>::Node* root = nullptr;
+
+  StackLst<struct BinaryTree<Data>::Node*>* stack = nullptr;
+
+
+  // Auxiliary Member Function
+
+  virtual void Explore() noexcept;
 
 public:
 
@@ -396,7 +411,7 @@ public:
   /* ************************************************************************ */
 
   // Destructor
-  ~BTInOrderIterator() = delete;
+  ~BTInOrderIterator();
 
   /* ************************************************************************ */
 
@@ -448,7 +463,9 @@ protected:
 
   struct BinaryTree<Data>::Node* current = nullptr;
 
-  QueueLst queue;
+  struct BinaryTree<Data>::Node* root = nullptr;
+
+  QueueLst<struct BinaryTree<Data>::Node*>* queue = nullptr;
 
 public:
 
@@ -466,7 +483,7 @@ public:
   /* ************************************************************************ */
 
   // Destructor
-  ~BTBreadthIterator() = delete;
+  ~BTBreadthIterator();
 
   /* ************************************************************************ */
 
