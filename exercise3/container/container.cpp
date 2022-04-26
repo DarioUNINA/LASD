@@ -115,7 +115,7 @@ void InOrderFoldableContainer<Data>:: Fold(FoldFunctor function, const void* dat
 
 template <typename Data>
 void BreadthFoldableContainer<Data>:: Fold(FoldFunctor function, const void* data, void* value) const{
-    FoldBreadthOrder(function, data, value);
+    FoldBreadth(function, data, value);
 }
 
 /* ************************************************************************** */

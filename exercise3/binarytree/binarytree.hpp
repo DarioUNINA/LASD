@@ -19,14 +19,14 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class BinaryTree: virtual protected PreOrderMappableContainer<Data>,
-                  virtual protected PostOrderMappableContainer<Data>,
-                  virtual protected InOrderMappableContainer<Data>,
-                  virtual protected BreadthMappableContainer<Data>,
-                  virtual protected PreOrderFoldableContainer<Data>,
-                  virtual protected PostOrderFoldableContainer<Data>,
-                  virtual protected InOrderFoldableContainer<Data>,
-                  virtual protected BreadthFoldableContainer<Data>{
+class BinaryTree: virtual public PreOrderMappableContainer<Data>,
+                  virtual public PostOrderMappableContainer<Data>,
+                  virtual public InOrderMappableContainer<Data>,
+                  virtual public BreadthMappableContainer<Data>,
+                  virtual public PreOrderFoldableContainer<Data>,
+                  virtual public PostOrderFoldableContainer<Data>,
+                  virtual public InOrderFoldableContainer<Data>,
+                  virtual public BreadthFoldableContainer<Data>{
 
 private:
 
@@ -91,7 +91,7 @@ public:
   /* ************************************************************************ */
 
   // Destructor
-  virtual ~BinaryTree(); //dealloca root
+  virtual ~BinaryTree() = default; //dealloca root
 
   /* ************************************************************************ */
 
@@ -111,7 +111,7 @@ public:
 
   // Specific member functions
 
-  virtual Node* Root() = 0; // (concrete function must throw std::length_error when empty)
+  virtual Node* Root() const = 0; // (concrete function must throw std::length_error when empty)
 
   /* ************************************************************************ */
 
@@ -222,8 +222,8 @@ protected:
 /* ************************************************************************** */
 
 template <typename Data>
-class BTPreOrderIterator: virtual protected ForwardIterator<Data>,
-                          virtual protected ResettableIterator<Data>{
+class BTPreOrderIterator: virtual public ForwardIterator<Data>,
+                          virtual public ResettableIterator<Data>{
 
 private:
 
@@ -236,7 +236,7 @@ protected:
 
   struct BinaryTree<Data>::Node* root = nullptr;
 
-  StackLst<Data>* stack;
+  StackLst<struct BinaryTree<Data>::Node*>* stack;
 
 public:
 
@@ -248,7 +248,7 @@ public:
   // Copy constructor
   BTPreOrderIterator(const BTPreOrderIterator<Data>&);
 
-  // Move constructor
+  // Move constructor                               
   BTPreOrderIterator(BTPreOrderIterator<Data>&&)noexcept;
 
   /* ************************************************************************ */
@@ -274,7 +274,7 @@ public:
 
   // Specific member functions (inherited from Iterator)
 
-  struct BinaryTree<Data>::Node& operator*(); // (throw std::out_of_range when terminated) accesso a element del nodo che sta puntando current
+  virtual Data& operator* ()const; // (throw std::out_of_range when terminated) accesso a element del nodo che sta puntando current
 
   virtual bool Terminated() const noexcept; // (should not throw exceptions) se il puntatore a current e' nullptr 
 
@@ -295,8 +295,8 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
-class BTPostOrderIterator: virtual protected ForwardIterator<Data>,
-                           virtual protected ResettableIterator<Data>{
+class BTPostOrderIterator: virtual public ForwardIterator<Data>,
+                           virtual public ResettableIterator<Data>{
 
 private:
 
@@ -352,7 +352,7 @@ public:
 
   // Specific member functions (inherited from Iterator)
 
-  struct BinaryTree<Data>::Node& operator*(); // (throw std::out_of_range when terminated) accesso a element del nodo che sta puntando current
+  virtual Data& operator*() const; // (throw std::out_of_range when terminated) accesso a element del nodo che sta puntando current
 
   virtual bool Terminated() const noexcept; // (should not throw exceptions) se il puntatore a current e' nullptr 
 
@@ -375,8 +375,8 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
-class BTInOrderIterator: virtual protected ForwardIterator<Data>,
-                         virtual protected ResettableIterator<Data>{
+class BTInOrderIterator: virtual public ForwardIterator<Data>,
+                         virtual public ResettableIterator<Data>{
 
 private:
 
@@ -431,7 +431,7 @@ public:
 
   // Specific member functions (inherited from Iterator)
 
-  struct BinaryTree<Data>::Node& operator*(); // (throw std::out_of_range when terminated) accesso a element del nodo che sta puntando current
+  virtual Data& operator*() const; // (throw std::out_of_range when terminated) accesso a element del nodo che sta puntando current
 
   virtual bool Terminated() const noexcept; // (should not throw exceptions) se il puntatore a current e' nullptr 
 
@@ -452,8 +452,8 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
-class BTBreadthIterator: virtual protected ForwardIterator<Data>,
-                         virtual protected ResettableIterator<Data>{
+class BTBreadthIterator: virtual public ForwardIterator<Data>,
+                         virtual public ResettableIterator<Data>{
 
 private:
 
@@ -503,7 +503,7 @@ public:
 
   // Specific member functions (inherited from Iterator)
 
-  struct BinaryTree<Data>::Node& operator*(); // (throw std::out_of_range when terminated) accesso a element del nodo che sta puntando current
+  virtual Data& operator*() const; // (throw std::out_of_range when terminated) accesso a element del nodo che sta puntando current
 
   virtual bool Terminated() const noexcept; // (should not throw exceptions) se il puntatore a current e' nullptr 
 

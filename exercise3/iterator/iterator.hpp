@@ -42,17 +42,17 @@ public:
 
   // Specific member functions
 
-  Data& operator*() = 0; // (concrete function must throw std::out_of_range when terminated)
+  virtual Data& operator*() const = 0; // (concrete function must throw std::out_of_range when terminated)
                                   //Usato come un puntatore
 
-  bool Terminated() const noexcept = 0; // (concrete function should not throw exceptions)
+  virtual bool Terminated() const noexcept = 0; // (concrete function should not throw exceptions)
 
 };
 
 /* ************************************************************************** */
 
 template <typename Data>
-class ForwardIterator : public virtual Iterator<Data>{ // Must extend Iterator<Data>
+class ForwardIterator : virtual public Iterator<Data>{ // Must extend Iterator<Data>
 
 private:
 

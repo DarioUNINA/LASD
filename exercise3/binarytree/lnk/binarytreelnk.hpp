@@ -13,7 +13,7 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class BinaryTreeLnk : virtual protected BinaryTree<Data>{
+class BinaryTreeLnk : virtual public BinaryTree<Data>{
 
 private:
 
@@ -24,7 +24,7 @@ protected:
   using BinaryTree<Data>::size;
 
 
-  struct NodeLnk : virtual protected Node{ // Must extend Node
+  struct NodeLnk : virtual public BinaryTree<Data>::Node{ // Must extend Node
 
   private:
 
@@ -33,7 +33,7 @@ protected:
   protected:
 
 
-    using struct BinaryTree<Data>::Node:: key;
+    using BinaryTree<Data>::Node:: key;
 
     NodeLnk* leftChild = nullptr;
     NodeLnk* rightChild = nullptr;
@@ -42,7 +42,7 @@ protected:
 
     // Constructor
 
-    NodeLnk(const Data& data): key(data){};
+    NodeLnk(const Data& data) { key = data; };
 
     // Destrcutor
 
@@ -87,7 +87,7 @@ public:
   /* ************************************************************************ */
 
   // Copy constructor
-  BinaryTreeLnk(const BinaryTreeLnk<Data>& tree): size(tree.size), root(tree.root);
+  BinaryTreeLnk(const BinaryTreeLnk<Data>& tree){ size = tree.size; root = tree.root;}
 
   // Move constructor
   BinaryTreeLnk(BinaryTreeLnk<Data>&&) noexcept;
@@ -109,7 +109,7 @@ public:
 
   // Specific member functions (inherited from BinaryTree)
 
-  virtual NodeLnk* Root() override; // Override BinaryTree member (throw std::length_error when empty)
+  virtual struct BinaryTree<Data>::Node* Root() const override; // Override BinaryTree member (throw std::length_error when empty)
 
   /* ************************************************************************ */
 

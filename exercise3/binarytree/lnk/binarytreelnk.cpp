@@ -70,17 +70,15 @@ struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::NodeLnk:: LeftChild(){
 // Contructors
 template <typename Data>
 BinaryTreeLnk<Data>::BinaryTreeLnk(const LinearContainer<Data>& container){
-    size = container.size;
+    size = container.Size();
     root = new NodeLnk(container[0]);
 
-    for(ulong i = 0; i<containe.size;i++){
-
-    }
+    // 
 }
 
 
 template <typename Data>
-BinaryTreeLnk<Data>::BinaryTreeLnk(BinaryTreeLnk<Data>&& container) noexcept{
+BinaryTreeLnk<Data>::BinaryTreeLnk(BinaryTreeLnk<Data>&& tree) noexcept{
     std::swap(size, tree.size);
     std::swap(root, tree.root);
 }
@@ -99,6 +97,8 @@ template <typename Data>
 BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(const BinaryTreeLnk<Data>& tree){
     root = tree.root;
     size = tree.size;
+
+    return *this;
 }
 
 
@@ -106,6 +106,8 @@ template <typename Data>
 BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(BinaryTreeLnk<Data>&& tree) noexcept{
     std::swap(size, tree.size);
     std::swap(root, tree.root);
+
+    return *this;
 }
 
 
@@ -113,7 +115,7 @@ BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(BinaryTreeLnk<Data>&& tree) 
 
 //  Specific Member Functions
 template <typename Data>
-struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>:: Root(){
+struct BinaryTree<Data>::Node* BinaryTreeLnk<Data>:: Root() const{
     if(size == 0)
         throw std::length_error("The tree is empty!\n");
 

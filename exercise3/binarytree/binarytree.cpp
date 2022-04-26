@@ -10,10 +10,10 @@ namespace lasd {
 template <typename Data>
 bool BinaryTree<Data>::Node::operator==(const Node& node) const noexcept{
     if(key == key)
-        if(HasLeftChild() == node.HasLeftChild())
-            if(!HasLeftChild() || LeftChild() == node.LeftChild())
-                if(HasRightChild() == node.HasRightChild())
-                    if(!HasRightChild() || RightChild() == node.RightChild())
+        if(HasLeftChild() == node->HasLeftChild())
+            if(!HasLeftChild() || LeftChild() == node->LeftChild())
+                if(HasRightChild() == node->HasRightChild())
+                    if(!HasRightChild() || RightChild() == node->RightChild())
                         return true;            
 return false;
 }
@@ -107,11 +107,11 @@ void BinaryTree<Data>::FoldInOrder(FoldFunctor function, const void* value, void
 template <typename Data>
 void BinaryTree<Data>::MapPreOrder(MapFunctor function, void* value, Node* node){
     if(node!=nullptr){
-        function(node.Element(), value);
-        if(node.HasLeftChild())
-            MapPreOrder(function, value, node.LeftChild());
-        if(node.HasRightChild())
-            MapPreOrder(function, value, node.RightChild());
+        function(node->Element(), value);
+        if(node->HasLeftChild())
+            MapPreOrder(function, value, node->LeftChild());
+        if(node->HasRightChild())
+            MapPreOrder(function, value, node->RightChild());
     }
 
 }
@@ -120,11 +120,11 @@ void BinaryTree<Data>::MapPreOrder(MapFunctor function, void* value, Node* node)
 template <typename Data>
 void BinaryTree<Data>::MapPostOrder(MapFunctor function, void* value, Node* node){
     if(node!=nullptr){
-        if(node.HasLeftChild())
-            MapPostOrder(function, value, node.LeftChild());
-        if(node.HasRightChild())
-            MapPostOrder(function, value, node.RightChild());
-        function(node.Element(), value);
+        if(node->HasLeftChild())
+            MapPostOrder(function, value, node->LeftChild());
+        if(node->HasRightChild())
+            MapPostOrder(function, value, node->RightChild());
+        function(node->Element(), value);
     }
 
     
@@ -134,13 +134,13 @@ void BinaryTree<Data>::MapPostOrder(MapFunctor function, void* value, Node* node
 template <typename Data>
 void BinaryTree<Data>::MapInOrder(MapFunctor function, void* value, Node* node){
     if(node!=nullptr){
-        if(node.HasLeftChild())
-            MapPostOrder(function, value, node.LeftChild());
+        if(node->HasLeftChild())
+            MapPostOrder(function, value, node->LeftChild());
         
-        function(node.Element(), value);
+        function(node->Element(), value);
 
-        if(node.HasRightChild())
-            MapPostOrder(function, value, node.RightChild());   
+        if(node->HasRightChild())
+            MapPostOrder(function, value, node->RightChild());   
     }
 
 }
@@ -150,19 +150,19 @@ template <typename Data>
 void BinaryTree<Data>::MapBreadth(MapFunctor function, void* value){
     BTBreadthIterator i(*this);
 
-    for(;i.Terminated();i++)
-        function(i->Element(), value);
+    for(;i.Terminated();++i)
+        function(*i, value);
 }
 
 
 template <typename Data>
 void BinaryTree<Data>::FoldPreOrder(FoldFunctor function, const void* value, void* data, Node* node) const{
     if(node!=nullptr){
-        function(node.Element(), value, data);
-        if(node.HasLeftChild())
-            FoldPreOrder(function, value, node.LeftChild());
-        if(node.HasRightChild())
-            FoldPreOrder(function, value, node.RightChild());
+        function(node->Element(), value, data);
+        if(node->HasLeftChild())
+            FoldPreOrder(function, value, node->LeftChild());
+        if(node->HasRightChild())
+            FoldPreOrder(function, value, node->RightChild());
     }
 
 }
@@ -171,11 +171,11 @@ void BinaryTree<Data>::FoldPreOrder(FoldFunctor function, const void* value, voi
 template <typename Data>
 void BinaryTree<Data>::FoldPostOrder(FoldFunctor function, const void* value, void* data, Node* node) const{
     if(node!=nullptr){
-        if(node.HasLeftChild())
-            FoldPostOrder(function, value, node.LeftChild());
-        if(node.HasRightChild())
-            FoldPostOrder(function, value, node.RightChild());
-        function(node.Element(), value, data);
+        if(node->HasLeftChild())
+            FoldPostOrder(function, value, node->LeftChild());
+        if(node->HasRightChild())
+            FoldPostOrder(function, value, node->RightChild());
+        function(node->Element(), value, data);
     }
     
 }
@@ -184,13 +184,13 @@ void BinaryTree<Data>::FoldPostOrder(FoldFunctor function, const void* value, vo
 template <typename Data>
 void BinaryTree<Data>::FoldInOrder(FoldFunctor function, const void* value, void* data, Node* node) const{
     if(node!=nullptr){
-        if(node.HasLeftChild())
-            FoldInOrder(function, value, node.LeftChild());
+        if(node->HasLeftChild())
+            FoldInOrder(function, value, node->LeftChild());
         
-        function(node.Element(), value, data);
+        function(node->Element(), value, data);
 
-        if(node.HasRightChild())
-            FoldInOrder(function, value, node.RightChild());
+        if(node->HasRightChild())
+            FoldInOrder(function, value, node->RightChild());
     }
 
     
@@ -201,8 +201,8 @@ template <typename Data>
 void BinaryTree<Data>::FoldBreadth(FoldFunctor function, const void* value, void* data) const{
     BTBreadthIterator i(*this);
 
-    for(;i.Terminated();i++)
-        function(i->Element(), value, data);
+    for(;i.Terminated();++i)
+        function(*i, value, data);
 } 
 
 
@@ -240,7 +240,7 @@ BTPreOrderIterator<Data>::BTPreOrderIterator(BTPreOrderIterator<Data>&& iterator
 // Destructor
 template <typename Data>
 BTPreOrderIterator<Data>::~BTPreOrderIterator(){
-    delete *stack;
+    delete stack;
 }
 
 
@@ -288,11 +288,11 @@ bool BTPreOrderIterator<Data>::operator!=(const BTPreOrderIterator<Data>& iterat
 
 // Specific member functions
 template <typename Data>
-struct BinaryTree<Data>::Node& BTPreOrderIterator<Data>::operator*(){
+Data& BTPreOrderIterator<Data>::operator*() const{
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
 
-    return *current;
+    return current->Element();
 }
 
 
@@ -301,7 +301,7 @@ BTPreOrderIterator<Data>& BTPreOrderIterator<Data>::operator++(){
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
 
-    if(stack->size==0 && current!=root)
+    if(stack->Empty() && current!=root)
         current = nullptr;
     else
         if(current->IsLeaf())
@@ -366,7 +366,7 @@ BTPostOrderIterator<Data>::BTPostOrderIterator(BTPostOrderIterator<Data>&& itera
 // Destructor
 template <typename Data>
 BTPostOrderIterator<Data>::~BTPostOrderIterator(){
-    delete *stack;
+    delete stack;
 }
 
 
@@ -414,11 +414,11 @@ bool BTPostOrderIterator<Data>::operator!=(const BTPostOrderIterator<Data>& iter
 
 // Specific member functions
 template <typename Data>
-struct BinaryTree<Data>::Node& BTPostOrderIterator<Data>::operator*(){
+Data& BTPostOrderIterator<Data>::operator*() const{
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
 
-    return *current;
+    return current->Element();
 }
 
 
@@ -427,13 +427,13 @@ BTPostOrderIterator<Data>& BTPostOrderIterator<Data>::operator++(){
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
     
-    if(stack->size == 0)
+    if(stack->Empty())
         current = nullptr;
     else
         if(stack->Top()->RightChild() == current)
             current = stack->TopNPop();
         else{
-            current = stack->Top().RightChild();
+            current = stack->Top()->RightChild();
             Explore();
         }
 
@@ -504,7 +504,7 @@ BTInOrderIterator<Data>::BTInOrderIterator(BTInOrderIterator<Data>&& iterator) n
 // Destructor
 template <typename Data>
 BTInOrderIterator<Data>::~BTInOrderIterator(){
-    delete *stack;
+    delete stack;
 }
 
 
@@ -552,11 +552,11 @@ bool BTInOrderIterator<Data>::operator!=(const BTInOrderIterator<Data>& iterator
 
 // Specific member functions
 template <typename Data>
-struct BinaryTree<Data>::Node& BTInOrderIterator<Data>::operator*(){
+Data& BTInOrderIterator<Data>::operator*() const{
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
 
-    return *current;
+    return current->Element();
 }
 
 
@@ -565,7 +565,7 @@ BTInOrderIterator<Data>& BTInOrderIterator<Data>::operator++(){
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
     
-    if(stack->size == 0 && current!=root)
+    if(stack->Empty() && current!=root)
         current = nullptr;
     else
         if(current->HasRightChild()){
@@ -639,7 +639,7 @@ BTBreadthIterator<Data>::BTBreadthIterator(BTBreadthIterator<Data>&& iterator) n
 // Destructor
 template <typename Data>
 BTBreadthIterator<Data>::~BTBreadthIterator(){
-    delete *queue;
+    delete queue;
 }
 
 
@@ -687,11 +687,11 @@ bool BTBreadthIterator<Data>::operator!=(const BTBreadthIterator<Data>& iterator
 
 // Specific member functions
 template <typename Data>
-struct BinaryTree<Data>::Node& BTBreadthIterator<Data>::operator*(){
+Data& BTBreadthIterator<Data>::operator*() const{
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
 
-    return *current;
+    return current->Element();
 }
 
 
@@ -700,7 +700,7 @@ BTBreadthIterator<Data>& BTBreadthIterator<Data>::operator++(){
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
     
-    if(queue->size == 0 && current!= root)
+    if(queue->Size() == 0 && current!= root)
         current = nullptr;
     else{
         if(current->HasLeftChild())
