@@ -44,6 +44,8 @@ protected:
 
     NodeLnk(const Data& data) { key = data; };
 
+    NodeLnk(const Data& data, NodeLnk* lnode, NodeLnk* rnode) { key = data; leftChild = lnode; rightChild = rnode; };
+
     // Destrcutor
 
     virtual ~NodeLnk();
@@ -65,13 +67,20 @@ protected:
     virtual bool HasLeftChild() const noexcept; // (concrete function should not throw exceptions)
     virtual bool HasRightChild() const noexcept; // (concrete function should not throw exceptions)
 
-    virtual NodeLnk* LeftChild(); // (concrete function must throw std::out_of_range when not existent)
-    virtual NodeLnk* RightChild(); // (concrete function must throw std::out_of_range when not existent)
+    virtual struct BinaryTree<Data>::Node& LeftChild() override; // (concrete function must throw std::out_of_range when not existent)
+    virtual struct BinaryTree<Data>::Node& RightChild() override; // (concrete function must throw std::out_of_range when not existent)
+
+    virtual struct BinaryTree<Data>::Node& LeftChild() const override; // (concrete function must throw std::out_of_range when not existent)
+    virtual struct BinaryTree<Data>::Node& RightChild() const override; // (concrete function must throw std::out_of_range when not existent)
 
   };
 
 
   NodeLnk* root = nullptr;
+
+  // Auxiliary member function
+
+  NodeLnk* BuildTree(const LinearContainer<Data>&, const ulong) const;
 
 
 public:
@@ -109,7 +118,7 @@ public:
 
   // Specific member functions (inherited from BinaryTree)
 
-  virtual struct BinaryTree<Data>::Node* Root() const override; // Override BinaryTree member (throw std::length_error when empty)
+  virtual struct BinaryTree<Data>::Node& Root() const override; // Override BinaryTree member (throw std::length_error when empty)
 
   /* ************************************************************************ */
 

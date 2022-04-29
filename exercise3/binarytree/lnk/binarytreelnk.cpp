@@ -47,20 +47,37 @@ bool BinaryTreeLnk<Data>::NodeLnk:: HasRightChild() const noexcept{
 
 
 template <typename Data>
-struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::NodeLnk:: RightChild(){
-    if(rightChild != nullptr)
+struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: RightChild(){
+    if(rightChild == nullptr)
         throw std::out_of_range("The node has no right child!\n");
 
-    return rightChild;
+    return *rightChild;
 }
 
 
 template <typename Data>
-struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::NodeLnk:: LeftChild(){
-    if(leftChild != nullptr)
+struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: LeftChild(){
+    if(leftChild == nullptr)
         throw std::out_of_range("The node has no left child!\n");
 
-    return leftChild;
+    return *leftChild;
+}
+
+template <typename Data>
+struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: RightChild() const{
+    if(rightChild == nullptr)
+        throw std::out_of_range("The node has no right child!\n");
+
+    return *rightChild;
+}
+
+
+template <typename Data>
+struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: LeftChild() const{
+    if(leftChild == nullptr)
+        throw std::out_of_range("The node has no left child!\n");
+
+    return *leftChild;
 }
 
 
@@ -71,11 +88,10 @@ struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::NodeLnk:: LeftChild(){
 template <typename Data>
 BinaryTreeLnk<Data>::BinaryTreeLnk(const LinearContainer<Data>& container){
     size = container.Size();
-    root = new NodeLnk(container[0]);
 
-    // 
+    if(size != 0)
+        root = BuildTree(container, 0);
 }
-
 
 template <typename Data>
 BinaryTreeLnk<Data>::BinaryTreeLnk(BinaryTreeLnk<Data>&& tree) noexcept{
@@ -115,11 +131,11 @@ BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(BinaryTreeLnk<Data>&& tree) 
 
 //  Specific Member Functions
 template <typename Data>
-struct BinaryTree<Data>::Node* BinaryTreeLnk<Data>:: Root() const{
+struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>:: Root() const{
     if(size == 0)
         throw std::length_error("The tree is empty!\n");
 
-    return root;
+    return *root;
 }
 
 //  Specific Member Functions
@@ -130,5 +146,26 @@ void BinaryTreeLnk<Data>:: Clear(){
     delete root;
     root = nullptr;
 }
+
+/* ************************************************************************** */
+
+// Auxiliary member function
+template <typename Data>
+struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::BuildTree(const LinearContainer<Data>& container, const ulong index) const{
+
+    NodeLnk* left = nullptr;
+    NodeLnk* right = nullptr;
+
+    if((2*index)+1 < container.Size())
+        left = BuildTree(container, (2*index)+1);
+
+    if(2*(index+1) < container.Size())
+        right = BuildTree(container, 2*(index+1));
+    
+    NodeLnk* node = new NodeLnk(container[index], left, right);
+    return node;
+}
+
+
 
 }

@@ -83,15 +83,18 @@ public:
     virtual bool HasLeftChild() const noexcept = 0; // (concrete function should not throw exceptions)
     virtual bool HasRightChild() const noexcept = 0; // (concrete function should not throw exceptions)
 
-    virtual Node* LeftChild() = 0; // (concrete function must throw std::out_of_range when not existent)
-    virtual Node* RightChild() = 0; // (concrete function must throw std::out_of_range when not existent)
+    virtual Node& LeftChild()  = 0; // (concrete function must throw std::out_of_range when not existent)
+    virtual Node& RightChild() = 0; // (concrete function must throw std::out_of_range when not existent)
+
+    virtual Node& LeftChild() const = 0; // Unmutable function
+    virtual Node& RightChild() const = 0; // Unmutable function
 
   };
 
   /* ************************************************************************ */
 
   // Destructor
-  virtual ~BinaryTree() = default; //dealloca root
+  virtual ~BinaryTree() = default;
 
   /* ************************************************************************ */
 
@@ -111,7 +114,7 @@ public:
 
   // Specific member functions
 
-  virtual Node* Root() const = 0; // (concrete function must throw std::length_error when empty)
+  virtual Node& Root() const = 0; // (concrete function must throw std::length_error when empty)
 
   /* ************************************************************************ */
 
@@ -185,37 +188,37 @@ protected:
 
   // Auxiliary member functions (for PreOrderMappableContainer)
 
-  virtual void MapPreOrder(MapFunctor, void*, Node*); // Accessory function executing from one node of the tree
+  virtual void MapPreOrder(MapFunctor, void*, Node&); // Accessory function executing from one node of the tree
 
   /* ************************************************************************ */
 
   // Auxiliary member functions (for PreOrderFoldableContainer)
 
-  virtual void FoldPreOrder(FoldFunctor, const void*, void*, Node*) const; // Accessory function executing from one node of the tree
+  virtual void FoldPreOrder(FoldFunctor, const void*, void*, Node&) const; // Accessory function executing from one node of the tree
 
   /* ************************************************************************ */
 
   // Auxiliary member functions (for PostOrderMappableContainer)
 
-  virtual void MapPostOrder(MapFunctor, void*, Node*); // Accessory function executing from one node of the tree
+  virtual void MapPostOrder(MapFunctor, void*, Node&); // Accessory function executing from one node of the tree
 
   /* ************************************************************************ */
 
   // Auxiliary member functions (for PostOrderFoldableContainer)
 
-  virtual void FoldPostOrder(FoldFunctor, const void*, void*, Node*) const; // Accessory function executing from one node of the tree
+  virtual void FoldPostOrder(FoldFunctor, const void*, void*, Node&) const; // Accessory function executing from one node of the tree
 
   /* ************************************************************************ */
 
   // Auxiliary member functions (for InOrderMappableContainer)
 
-  virtual void MapInOrder(MapFunctor, void*, Node*); // Accessory function executing from one node of the tree
+  virtual void MapInOrder(MapFunctor, void*, Node&); // Accessory function executing from one node of the tree
 
   /* ************************************************************************ */
 
   // Auxiliary member functions (for InOrderFoldableContainer)
 
-  virtual void FoldInOrder(FoldFunctor, const void*, void*, Node*) const; // Accessory function executing from one node of the tree
+  virtual void FoldInOrder(FoldFunctor, const void*, void*, Node&) const; // Accessory function executing from one node of the tree
 
 };
 
