@@ -41,12 +41,12 @@ const Data& BinaryTree<Data>::Node::Element() const noexcept{
  // Comparison operators
 template <typename Data>
 bool BinaryTree<Data>::operator==(const BinaryTree& tree) const noexcept{
-    return *root == tree.Root();
+    return Root() == tree.Root();
 }
 
 template <typename Data>
 bool BinaryTree<Data>::operator!=(const BinaryTree& tree) const noexcept{
-    return !(*root == tree.Root());
+    return !(Root() == tree.Root());
 }
 
 /* ************************************************************************** */
@@ -54,33 +54,25 @@ bool BinaryTree<Data>::operator!=(const BinaryTree& tree) const noexcept{
 // Specific member functions
 template <typename Data>
 void BinaryTree<Data>::Map(MapFunctor function, void* value){
-    if(root == nullptr)
-       std::cout<<"All' inizio della map root e nullptr\n";
-
     MapBreadth(function, value);
 }
 
 
 template <typename Data>
 void BinaryTree<Data>::MapPreOrder(MapFunctor function, void* value){
-    if(root !=nullptr)
-    std::cout<<"sto passando"<< Root().Element();
-    else
-       std::cout<<"e nullptr \n";
-
-    MapPreOrder(function, value, *root);
+    MapPreOrder(function, value, Root());
 }
 
 
 template <typename Data>
 void BinaryTree<Data>::MapPostOrder(MapFunctor function, void* value){
-    MapPostOrder(function, value, *root);
+    MapPostOrder(function, value, Root());
 }
 
 
 template <typename Data>
 void BinaryTree<Data>::MapInOrder(MapFunctor function, void* value){
-    MapInOrder(function, value, *root);
+    MapInOrder(function, value, Root());
     
 }
 
@@ -93,19 +85,19 @@ void BinaryTree<Data>::Fold(FoldFunctor function, const void* value, void* data)
 
 template <typename Data>
 void BinaryTree<Data>::FoldPreOrder(FoldFunctor function, const void* value, void* data) const{
-    FoldPreOrder(function, value, data, *root);
+    FoldPreOrder(function, value, data, Root());
 }
 
 
 template <typename Data>
 void BinaryTree<Data>::FoldPostOrder(FoldFunctor function, const void* value, void* data) const{
-    FoldPostOrder(function, value, data, *root);
+    FoldPostOrder(function, value, data, Root());
 }
 
 
 template <typename Data>
 void BinaryTree<Data>::FoldInOrder(FoldFunctor function, const void* value, void* data) const{
-    FoldInOrder(function, value, data, *root);
+    FoldInOrder(function, value, data, Root());
 }
 
 

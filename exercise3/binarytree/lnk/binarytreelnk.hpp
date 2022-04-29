@@ -82,6 +82,9 @@ protected:
 
   NodeLnk* BuildTree(const LinearContainer<Data>&, const ulong) const;
 
+  NodeLnk* CopyTree(const struct BinaryTree<Data>::Node&) const;
+
+
 
 public:
 

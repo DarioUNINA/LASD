@@ -14,6 +14,9 @@ BinaryTreeLnk<Data>::NodeLnk::~NodeLnk(){
 // Copy and Move Assignment
 template <typename Data>
 struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(const NodeLnk& node){
+    delete leftChild;
+    delete rightChild;
+
     leftChild = node.leftChild;
     rightChild = node.rightChild;
     key = node.key;
@@ -111,8 +114,13 @@ BinaryTreeLnk<Data>::~BinaryTreeLnk(){
 //  Copy and Move Assignment
 template <typename Data>
 BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(const BinaryTreeLnk<Data>& tree){
-    root = tree.root;
+    delete root;
     size = tree.size;
+
+    if(size == 0)
+        root = nullptr;
+    else
+        root = CopyTree(tree.Root());
 
     return *this;
 }
@@ -166,6 +174,22 @@ struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::BuildTree(const Linear
     return node;
 }
 
+
+template <typename Data>
+struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::CopyTree(const struct BinaryTree<Data>::Node& node) const{
+
+    NodeLnk* left = nullptr;
+    NodeLnk* right = nullptr;
+
+    if(node.HasRightChild())
+        left = CopyTree(node.RightChild());
+
+    if(node.HasLeftChild())
+        right = CopyTree(node.LeftChild());
+    
+    NodeLnk* newNode = new NodeLnk(node.Element(), left, right);
+    return newNode;
+}
 
 
 }
