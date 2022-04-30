@@ -184,8 +184,6 @@ public:
 
 protected:
 
-  Node* root = nullptr;
-
   // Auxiliary member functions (for PreOrderMappableContainer)
 
   virtual void MapPreOrder(MapFunctor, void*, Node&); // Accessory function executing from one node of the tree

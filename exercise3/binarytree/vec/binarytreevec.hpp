@@ -14,7 +14,7 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class BinaryTreeVec {
+class BinaryTreeVec : virtual public BinaryTree<Data>{
                       // Must extend BinaryTree<Data>
 
 private:
@@ -23,11 +23,11 @@ private:
 
 protected:
 
-  // using BinaryTree<Data>::???;
 
-  // ...
+  /* ************************************************************************ */
+  /* ************************************************************************ */
 
-  struct NodeVec { // Must extend Node  
+  struct NodeVec : virtual public BinaryTree<Data>::Node{ // Must extend Node  
                   //contiene il dato (ereditato), il suo indice nel vettore (quindi di conseguenza si conoscono i figli) e un puntatore al vettore dell' albero
 
   private:
@@ -36,78 +36,118 @@ protected:
 
   protected:
 
-    // ...
+    ulong index;
+
+    using BinaryTree<Data>::Node:: key;
+
+    Vector<NodeVec*>* vector;
 
   public:
 
-    // ...
+    // Constructors
+    NodeVec(Vector<NodeVec*>* vector, const ulong position, const Data& data) { this->vector = vector;  key = data; index = position; };
+
+    NodeVec(const NodeVec&);
+
+
+    // Destructor
+    virtual ~NodeVec() = default;
+
+
+    /* ************************************************************************** */
+
+    // Copy Assignment
+    NodeVec& operator=(const NodeVec&);
+
+      // Move Assignment
+    NodeVec& operator=(NodeVec&&) noexcept;
+
+  /* ************************************************************************** */
+
+    // Specific Member Functions
+
+    virtual bool IsLeaf() const noexcept; // (concrete function should not throw exceptions)
+    virtual bool HasLeftChild() const noexcept; // (concrete function should not throw exceptions)
+    virtual bool HasRightChild() const noexcept; // (concrete function should not throw exceptions)
+
+    virtual struct BinaryTree<Data>::Node& LeftChild() override; // (concrete function must throw std::out_of_range when not existent)
+    virtual struct BinaryTree<Data>::Node& RightChild() override; // (concrete function must throw std::out_of_range when not existent)
+
+    virtual struct BinaryTree<Data>::Node& LeftChild() const override; // (concrete function must throw std::out_of_range when not existent)
+    virtual struct BinaryTree<Data>::Node& RightChild() const override; // (concrete function must throw std::out_of_range when not existent)
 
   };
+
+  /* ************************************************************************ */
+  /* ************************************************************************ */
+
+  using BinaryTree<Data>::size;
+
+  Vector<NodeVec*>* vector;
+
+  NodeVec* root = nullptr;
 
 public:
 
   // Default constructor
-  // BinaryTreeVec() specifiers;
+  BinaryTreeVec() = default;
 
   /* ************************************************************************ */
 
   // Specific constructors
-  // BinaryTreeVec(argument) specifiers; // A binary tree obtained from a LinearContainer
+  BinaryTreeVec(const LinearContainer<Data>&); // A binary tree obtained from a LinearContainer
 
   /* ************************************************************************ */
 
   // Copy constructor
-  // BinaryTreeVec(argument) specifiers;
+  BinaryTreeVec(const BinaryTreeVec<Data>&);
 
   // Move constructor
-  // BinaryTreeVec(argument) specifiers;
+  BinaryTreeVec(BinaryTreeVec<Data>&&) noexcept;
 
   /* ************************************************************************ */
 
   // Destructor
-  // ~BinaryTreeVec() specifiers;
+  virtual ~BinaryTreeVec();
+
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument) specifiers;
+  BinaryTreeVec<Data>& operator=(const BinaryTreeVec<Data>&);
 
   // Move assignment
-  // type operator=(argument) specifiers;
-
-  /* ************************************************************************ */
-
-  // Comparison operators
-  // type operator==(argument) specifiers;
-  // type operator!=(argument) specifiers;
+  BinaryTreeVec<Data>& operator=(BinaryTreeVec<Data>&&)noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from BinaryTree)
 
-  // type Root() specifiers; // Override BinaryTree member (throw std::length_error when empty)
+  virtual struct BinaryTree<Data>::Node& Root() const override; // Override BinaryTree member (throw std::length_error when empty)
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from Container)
 
-  // type Clear() specifiers; // Override Container member
+  virtual void Clear() override; // Override Container member
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from BreadthMappableContainer)
 
-  // type MapBreadth(arguments) specifiers; // Override BreadthMappableContainer member sono piu' efficienti sul vec
+  using typename MappableContainer<Data>::MapFunctor;
 
-  /* ************************************************************************ */
+  virtual void MapBreadth(MapFunctor, void*) override; // Override BreadthMappableContainer member
+
 
   // Specific member functions (inherited from BreadthFoldableContainer)
 
-  // type FoldBreadth(arguments) specifiers; // Override BreadthFoldableContainer member
+  using typename FoldableContainer<Data>::FoldFunctor;
 
+  virtual void FoldBreadth(FoldFunctor, const void*, void*) const override; // Override BreadthFoldableContainer member
+  
 };
 
-/* ************************************************************************** */
 
 }
 
