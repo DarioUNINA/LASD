@@ -41,12 +41,18 @@ const Data& BinaryTree<Data>::Node::Element() const noexcept{
  // Comparison operators
 template <typename Data>
 bool BinaryTree<Data>::operator==(const BinaryTree& tree) const noexcept{
-    return Root() == tree.Root();
+    if(size == tree.Size())
+        if(size == 0)
+            return true;
+        else
+            return (Root() == tree.Root());
+
+    return false;
 }
 
 template <typename Data>
 bool BinaryTree<Data>::operator!=(const BinaryTree& tree) const noexcept{
-    return !(Root() == tree.Root());
+    return !(*this == tree);
 }
 
 /* ************************************************************************** */

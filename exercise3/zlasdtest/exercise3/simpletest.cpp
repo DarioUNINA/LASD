@@ -66,6 +66,7 @@ void stestBinaryTreeInt(uint& testnum, uint& testerr) {
     // Empty(loctestnum, loctesterr, copbtvec, true);
 
     lasd::BinaryTreeLnk<int> copbtlnk(btlnk);
+    // Map(loctestnum, loctesterr, copbtlnk, true, &MapPrint<int>, 0);
     EqualBT(loctestnum, loctesterr, copbtlnk, btlnk);
     btlnk.Clear();
     btlnk = move(copbtlnk);

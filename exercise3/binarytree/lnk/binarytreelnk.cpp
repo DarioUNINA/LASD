@@ -20,6 +20,8 @@ struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(con
     leftChild = node.leftChild;
     rightChild = node.rightChild;
     key = node.key;
+
+    return *this;
 }
 
 
@@ -28,6 +30,8 @@ struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(Nod
     std::swap(leftChild. node.leftChild);
     std::swap(rightChild, node.rightChild);
     std::swap(key, node.key);
+
+    return *this;
 }
 
 
@@ -96,6 +100,16 @@ BinaryTreeLnk<Data>::BinaryTreeLnk(const LinearContainer<Data>& container){
         root = BuildTree(container, 0);
 }
 
+
+template <typename Data>
+BinaryTreeLnk<Data>::BinaryTreeLnk(const BinaryTreeLnk<Data>& tree){
+    size = tree.size;
+
+    if(size != 0)
+        root = CopyTree(tree.Root());
+}
+
+
 template <typename Data>
 BinaryTreeLnk<Data>::BinaryTreeLnk(BinaryTreeLnk<Data>&& tree) noexcept{
     std::swap(size, tree.size);
@@ -114,13 +128,10 @@ BinaryTreeLnk<Data>::~BinaryTreeLnk(){
 //  Copy and Move Assignment
 template <typename Data>
 BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(const BinaryTreeLnk<Data>& tree){
-    delete root;
-    size = tree.size;
+    BinaryTreeLnk<Data>* temp = new BinaryTreeLnk<Data>(tree);
 
-    if(size == 0)
-        root = nullptr;
-    else
-        root = CopyTree(tree.Root());
+    std::swap(*this, *temp);
+    delete temp;
 
     return *this;
 }
@@ -150,7 +161,7 @@ struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>:: Root() const{
 template <typename Data>
 void BinaryTreeLnk<Data>:: Clear(){
     size = 0;
-
+    
     delete root;
     root = nullptr;
 }
@@ -182,10 +193,10 @@ struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::CopyTree(const struct 
     NodeLnk* right = nullptr;
 
     if(node.HasRightChild())
-        left = CopyTree(node.RightChild());
+        right = CopyTree(node.RightChild());
 
     if(node.HasLeftChild())
-        right = CopyTree(node.LeftChild());
+        left = CopyTree(node.LeftChild());
     
     NodeLnk* newNode = new NodeLnk(node.Element(), left, right);
     return newNode;

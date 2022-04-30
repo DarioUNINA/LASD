@@ -99,7 +99,7 @@ public:
   /* ************************************************************************ */
 
   // Copy constructor
-  BinaryTreeLnk(const BinaryTreeLnk<Data>& tree){ size = tree.size; root = tree.root;}
+  BinaryTreeLnk(const BinaryTreeLnk<Data>&);
 
   // Move constructor
   BinaryTreeLnk(BinaryTreeLnk<Data>&&) noexcept;
