@@ -250,10 +250,13 @@ BTPreOrderIterator<Data>& BTPreOrderIterator<Data>::operator=(const BTPreOrderIt
 
 template <typename Data>
 BTPreOrderIterator<Data>& BTPreOrderIterator<Data>::operator=(BTPreOrderIterator<Data>&& iterator) noexcept{
-    BTPreOrderIterator<Data>* temp = new BTPreOrderIterator<Data>(std::move(iterator));
+    // BTPreOrderIterator<Data>* temp = new BTPreOrderIterator<Data>(std::move(iterator));
+    std::swap(root, iterator.root);
+    std::swap(current, iterator.current);
+    std::swap(stack, iterator.stack);
 
-    std::swap(*this, temp);
-    delete temp;
+    // std::swap(*this, temp);
+    // delete temp;
 
     return *this;
 }
@@ -298,10 +301,11 @@ BTPreOrderIterator<Data>& BTPreOrderIterator<Data>::operator++(){
             current = stack->TopNPop();
         else
             if(current->HasLeftChild()){
-                current = &(current->LeftChild());
-
                 if(current->HasRightChild())
                     stack->Push(&(current->RightChild()));
+
+                current = &(current->LeftChild());
+
             }else
                 current = &(current->RightChild());
 
@@ -318,7 +322,8 @@ bool BTPreOrderIterator<Data>::Terminated() const noexcept{
 template <typename Data>
 void BTPreOrderIterator<Data>::Reset() noexcept{
     current = root;
-    stack->Clear();
+    if(stack!=nullptr)
+        stack->Clear();
 }
 
 
@@ -416,11 +421,12 @@ template <typename Data>
 BTPostOrderIterator<Data>& BTPostOrderIterator<Data>::operator++(){
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
-    
+
+
     if(stack->Empty())
         current = nullptr;
     else
-        if(&(stack->Top()->RightChild()) == current)
+        if(!(stack->Top()->HasRightChild()) || &(stack->Top()->RightChild()) == current)
             current = stack->TopNPop();
         else{
             current = &(stack->Top()->RightChild());
@@ -440,9 +446,12 @@ bool BTPostOrderIterator<Data>::Terminated() const noexcept{
 template <typename Data>
 void BTPostOrderIterator<Data>::Reset() noexcept{
     current = root;
-    stack->Clear();
 
-    Explore();
+    if(stack!=nullptr){
+        stack->Clear();
+        Explore();
+    }
+    
 }
 
 
@@ -451,7 +460,7 @@ void BTPostOrderIterator<Data>::Reset() noexcept{
 //Auxiliary Member Function
 template <typename Data>
 void BTPostOrderIterator<Data>::Explore() noexcept{
-    while(current!= nullptr && !current->IsLeaf()){
+    while(current!= nullptr && !(current->IsLeaf())){
         stack->Push(current);
 
         if(current->HasLeftChild())
@@ -580,9 +589,11 @@ bool BTInOrderIterator<Data>::Terminated() const noexcept{
 template <typename Data>
 void BTInOrderIterator<Data>::Reset() noexcept{
     current = root;
-    stack->Clear();
 
-    Explore();
+    if(stack!=nullptr){
+        stack->Clear();
+        Explore();
+    }
 }
 
 
@@ -719,6 +730,10 @@ bool BTBreadthIterator<Data>::Terminated() const noexcept{
 template <typename Data>
 void BTBreadthIterator<Data>::Reset() noexcept{
     current = root;
-    queue->Clear();
+
+    if(queue!=nullptr)
+        queue->Clear();
 }
+
+
 }

@@ -46,7 +46,7 @@ namespace lasd
 
     virtual bool Empty() const noexcept
     {
-       return (size == 0);
+       return (Size() == 0);
     }
 
     virtual ulong Size() const noexcept
