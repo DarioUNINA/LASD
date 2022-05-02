@@ -12,6 +12,18 @@ BinaryTreeVec<Data>::NodeVec::NodeVec(const NodeVec& node){
 }
 
 
+// Destructor
+template <typename Data>
+BinaryTreeVec<Data>::NodeVec::~NodeVec(){
+    if(HasRightChild())
+        delete (*vector)[2*(index+1)];
+    
+    if(HasLeftChild())
+        delete (*vector)[(2*index)+1];
+}
+
+
+
 /* ************************************************************************** */
 
 // Copy and Move Assignment
@@ -40,7 +52,7 @@ struct BinaryTreeVec<Data>::NodeVec& BinaryTreeVec<Data>::NodeVec::operator=(Nod
 // Specific member Functions (inherited from Node)
 template <typename Data>
 bool BinaryTreeVec<Data>::NodeVec:: IsLeaf() const noexcept{
-    return ((2*index)+1 < vector->Size()  && 2*(index+1) < vector->Size());
+    return ((2*index)+1 >= vector->Size()  &&  2*(index+1) >= vector->Size());
 }
 
 
@@ -111,9 +123,10 @@ template <typename Data>
 BinaryTreeVec<Data>::BinaryTreeVec(const BinaryTreeVec<Data>& tree){
     vector = new Vector<NodeVec*>(tree.size);
 
-    for(ulong i = 0; i< tree.size; i++)
-        (*vector)[i] = new NodeVec(*((*(tree.vector))[i]));
-
+    for(ulong i = 0; i< tree.size; i++){
+        NodeVec* temp = ((*(tree.vector))[i]);
+        (*vector)[i] = new NodeVec(vector, i, temp->Element());
+    }
     size = tree.Size();
     root = (*vector)[0];
 }
@@ -131,7 +144,6 @@ BinaryTreeVec<Data>::BinaryTreeVec(BinaryTreeVec<Data>&& tree) noexcept{
 template <typename Data>
 BinaryTreeVec<Data>::~BinaryTreeVec(){
     delete root;
-
     delete vector;
 }
 
@@ -141,10 +153,22 @@ BinaryTreeVec<Data>::~BinaryTreeVec(){
 //  Copy and Move Assignment
 template <typename Data>
 BinaryTreeVec<Data>& BinaryTreeVec<Data>::operator=(const BinaryTreeVec<Data>& tree){
-    BinaryTreeVec<Data>* temp = new BinaryTreeVec<Data>(tree);
+    // BinaryTreeVec<Data>* temp = new BinaryTreeVec<Data>(tree);
 
-    std::swap(*this, *temp);
-    delete temp;
+    // std::swap(*this, *temp);
+
+    // delete temp;
+
+    vector = new Vector<NodeVec*>(tree.size);
+
+    for(ulong i = 0; i< tree.size; i++){
+        NodeVec* temp = ((*(tree.vector))[i]);
+        (*vector)[i] = new NodeVec(vector, i, temp->Element());
+    }
+    size = tree.Size();
+    root = (*vector)[0];
+
+
 
     return *this;
 }
@@ -177,8 +201,8 @@ template <typename Data>
 void BinaryTreeVec<Data>:: Clear(){
     size = 0;
     
-    delete vector;
     delete root;
+    delete vector;
 
     root = nullptr;
     vector = nullptr;

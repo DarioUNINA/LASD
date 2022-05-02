@@ -51,7 +51,7 @@ protected:
 
 
     // Destructor
-    virtual ~NodeVec() = default;
+    virtual ~NodeVec() ;
 
 
     /* ************************************************************************** */
