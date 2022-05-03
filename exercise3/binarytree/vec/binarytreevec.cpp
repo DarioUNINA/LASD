@@ -15,6 +15,7 @@ BinaryTreeVec<Data>::NodeVec::NodeVec(const NodeVec& node){
 // Destructor
 template <typename Data>
 BinaryTreeVec<Data>::NodeVec::~NodeVec(){
+    std::cout<<"elimino\n";
     if(HasRightChild())
         delete (*vector)[2*(index+1)];
     
@@ -153,22 +154,10 @@ BinaryTreeVec<Data>::~BinaryTreeVec(){
 //  Copy and Move Assignment
 template <typename Data>
 BinaryTreeVec<Data>& BinaryTreeVec<Data>::operator=(const BinaryTreeVec<Data>& tree){
-    // BinaryTreeVec<Data>* temp = new BinaryTreeVec<Data>(tree);
+    BinaryTreeVec<Data>* temp = new BinaryTreeVec<Data>(tree);
 
-    // std::swap(*this, *temp);
-
-    // delete temp;
-
-    vector = new Vector<NodeVec*>(tree.size);
-
-    for(ulong i = 0; i< tree.size; i++){
-        NodeVec* temp = ((*(tree.vector))[i]);
-        (*vector)[i] = new NodeVec(vector, i, temp->Element());
-    }
-    size = tree.Size();
-    root = (*vector)[0];
-
-
+    std::swap(*this, *temp);
+    delete temp;
 
     return *this;
 }

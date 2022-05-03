@@ -83,7 +83,7 @@ protected:
 
   using BinaryTree<Data>::size;
 
-  Vector<NodeVec*>* vector;
+  Vector<NodeVec*>* vector = nullptr;
 
   NodeVec* root = nullptr;
 
