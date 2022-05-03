@@ -11,28 +11,7 @@ BinaryTreeLnk<Data>::NodeLnk::~NodeLnk(){
 }
 
 
-// Copy and Move Assignment
-template <typename Data>
-struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(const NodeLnk& node){ // Da modificare
-    delete leftChild;
-    delete rightChild;
-
-    leftChild = node.leftChild;
-    rightChild = node.rightChild;
-    key = node.key;
-
-    return *this;
-}
-
-
-template <typename Data>
-struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(NodeLnk&& node) noexcept{
-    std::swap(leftChild. node.leftChild);
-    std::swap(rightChild, node.rightChild);
-    std::swap(key, node.key);
-
-    return *this;
-}
+/* ************************************************************************** */
 
 
 // Specific member Functions (inherited from Node)
@@ -46,6 +25,7 @@ template <typename Data>
 bool BinaryTreeLnk<Data>::NodeLnk:: HasLeftChild() const noexcept{
     return leftChild != nullptr;
 }
+
 
 template <typename Data>
 bool BinaryTreeLnk<Data>::NodeLnk:: HasRightChild() const noexcept{
@@ -70,6 +50,7 @@ struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: LeftChild(){
     return *leftChild;
 }
 
+
 template <typename Data>
 struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: RightChild() const{
     if(rightChild == nullptr)
@@ -90,6 +71,7 @@ struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: LeftChild() const{
 
 /* ************************************************************************** */
 /* ************************************************************************** */
+
 
 // Contructors
 template <typename Data>
@@ -192,11 +174,11 @@ struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::CopyTree(const struct 
     NodeLnk* left = nullptr;
     NodeLnk* right = nullptr;
 
-    if(node.HasRightChild())
-        right = CopyTree(node.RightChild());
-
     if(node.HasLeftChild())
         left = CopyTree(node.LeftChild());
+
+    if(node.HasRightChild())
+        right = CopyTree(node.RightChild());
     
     NodeLnk* newNode = new NodeLnk(node.Element(), left, right);
     return newNode;

@@ -42,8 +42,6 @@ protected:
 
     // Constructor
 
-    NodeLnk(const Data& data) { key = data; };
-
     NodeLnk(const Data& data, NodeLnk* lnode, NodeLnk* rnode) { key = data; leftChild = lnode; rightChild = rnode; };
 
     // Destrcutor
@@ -54,10 +52,10 @@ protected:
 
     // Copy Assignment
 
-    NodeLnk& operator=(const NodeLnk&);
+    NodeLnk& operator=(const NodeLnk&) = delete;
 
     // Move Assignment
-    NodeLnk& operator=(NodeLnk&&) noexcept;
+    NodeLnk& operator=(NodeLnk&&) noexcept = delete;
 
   /* ************************************************************************** */
 

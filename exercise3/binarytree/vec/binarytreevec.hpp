@@ -28,7 +28,6 @@ protected:
   /* ************************************************************************ */
 
   struct NodeVec : virtual public BinaryTree<Data>::Node{ // Must extend Node  
-                  //contiene il dato (ereditato), il suo indice nel vettore (quindi di conseguenza si conoscono i figli) e un puntatore al vettore dell' albero
 
   private:
 
@@ -47,7 +46,7 @@ protected:
     // Constructors
     NodeVec(Vector<NodeVec*>* vector, const ulong position, const Data& data) { this->vector = vector;  key = data; index = position; };
 
-    NodeVec(const NodeVec&);
+    // NodeVec(const NodeVec&);
 
 
     // Destructor
@@ -57,10 +56,10 @@ protected:
     /* ************************************************************************** */
 
     // Copy Assignment
-    NodeVec& operator=(const NodeVec&);
+    NodeVec& operator=(const NodeVec&) = delete;
 
-      // Move Assignment
-    NodeVec& operator=(NodeVec&&) noexcept;
+    // Move Assignment
+    NodeVec& operator=(NodeVec&&) noexcept = delete;
 
   /* ************************************************************************** */
 
@@ -84,8 +83,6 @@ protected:
   using BinaryTree<Data>::size;
 
   Vector<NodeVec*>* vector = nullptr;
-
-  NodeVec* root = nullptr;
 
 public:
 

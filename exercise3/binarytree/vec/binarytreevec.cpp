@@ -3,19 +3,9 @@ namespace lasd {
 
 /* ************************************************************************** */
 
-// Copy Constructor
-template <typename Data>
-BinaryTreeVec<Data>::NodeVec::NodeVec(const NodeVec& node){
-    vector = node.vector;
-    key = node.key;
-    index = node.index;
-}
-
-
 // Destructor
 template <typename Data>
 BinaryTreeVec<Data>::NodeVec::~NodeVec(){
-    std::cout<<"elimino\n";
     if(HasRightChild())
         delete (*vector)[2*(index+1)];
     
@@ -23,29 +13,6 @@ BinaryTreeVec<Data>::NodeVec::~NodeVec(){
         delete (*vector)[(2*index)+1];
 }
 
-
-
-/* ************************************************************************** */
-
-// Copy and Move Assignment
-template <typename Data>
-struct BinaryTreeVec<Data>::NodeVec& BinaryTreeVec<Data>::NodeVec::operator=(const NodeVec& node){ // Da eliminare
-    index = node.index;
-    key = node.key;
-    vector = node.vector;
-
-    return *this;
-}
-
-
-template <typename Data>
-struct BinaryTreeVec<Data>::NodeVec& BinaryTreeVec<Data>::NodeVec::operator=(NodeVec&& node) noexcept{ // Da eliminare
-    std::swap(index, node.index);
-    std::swap(vector, node.vector);
-    std::swap(key, node.key);
-
-    return *this;
-}
 
 /* ************************************************************************** */
 
@@ -116,7 +83,6 @@ BinaryTreeVec<Data>::BinaryTreeVec(const LinearContainer<Data>& container){
        (*vector)[i] = new NodeVec(vector, i, container[i]);
 
     size = container.Size();
-    root = (*vector)[0];
 }
 
 
@@ -129,7 +95,6 @@ BinaryTreeVec<Data>::BinaryTreeVec(const BinaryTreeVec<Data>& tree){
         (*vector)[i] = new NodeVec(vector, i, temp->Element());
     }
     size = tree.Size();
-    root = (*vector)[0];
 }
 
 
@@ -137,14 +102,14 @@ template <typename Data>
 BinaryTreeVec<Data>::BinaryTreeVec(BinaryTreeVec<Data>&& tree) noexcept{
     std::swap(vector, tree.vector);
     std::swap(size, tree.size);
-    std::swap(root, tree.root);
 }
 
 
 // Destructor
 template <typename Data>
 BinaryTreeVec<Data>::~BinaryTreeVec(){
-    delete root;
+    if(vector!=nullptr)
+        delete (*vector)[0];
     delete vector;
 }
 
@@ -167,7 +132,6 @@ BinaryTreeVec<Data>& BinaryTreeVec<Data>::operator=(const BinaryTreeVec<Data>& t
 template <typename Data>
 BinaryTreeVec<Data>& BinaryTreeVec<Data>::operator=(BinaryTreeVec<Data>&& tree) noexcept{
     std::swap(size, tree.size);
-    std::swap(root, tree.root);
     std::swap(vector, tree.vector);
 
     return *this;
@@ -181,7 +145,7 @@ struct BinaryTree<Data>::Node& BinaryTreeVec<Data>:: Root() const{
     if(size == 0)
         throw std::length_error("The tree is empty!\n");
 
-    return *root;
+    return *((*vector)[0]);
 }
 
 
@@ -190,10 +154,10 @@ template <typename Data>
 void BinaryTreeVec<Data>:: Clear(){
     size = 0;
     
-    delete root;
+    if(vector!=nullptr)
+        delete (*vector)[0];
     delete vector;
 
-    root = nullptr;
     vector = nullptr;
 }
 
