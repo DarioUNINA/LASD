@@ -13,7 +13,7 @@ BinaryTreeLnk<Data>::NodeLnk::~NodeLnk(){
 
 // Copy and Move Assignment
 template <typename Data>
-struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(const NodeLnk& node){
+struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(const NodeLnk& node){ // Da modificare
     delete leftChild;
     delete rightChild;
 

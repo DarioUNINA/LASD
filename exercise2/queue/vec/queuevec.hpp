@@ -38,7 +38,7 @@ public:
   /* ************************************************************************ */
 
   // Specific constructor
-  QueueVec(const LinearContainer<Data>& container):Vector<Data>(container), tail(container.Size()){};
+  QueueVec(const LinearContainer<Data>&);
 
   /* ************************************************************************ */
 
@@ -46,7 +46,7 @@ public:
   QueueVec(const QueueVec<Data>& queue):Vector<Data>(queue), tail(queue.tail), head(queue.head){};
 
   // Move constructor
- QueueVec(QueueVec<Data>&& queue) noexcept;
+  QueueVec(QueueVec<Data>&& queue) noexcept;
 
   /* ************************************************************************ */
 

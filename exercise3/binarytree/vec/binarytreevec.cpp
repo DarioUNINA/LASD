@@ -28,7 +28,7 @@ BinaryTreeVec<Data>::NodeVec::~NodeVec(){
 
 // Copy and Move Assignment
 template <typename Data>
-struct BinaryTreeVec<Data>::NodeVec& BinaryTreeVec<Data>::NodeVec::operator=(const NodeVec& node){
+struct BinaryTreeVec<Data>::NodeVec& BinaryTreeVec<Data>::NodeVec::operator=(const NodeVec& node){ // Da eliminare
     index = node.index;
     key = node.key;
     vector = node.vector;
@@ -38,7 +38,7 @@ struct BinaryTreeVec<Data>::NodeVec& BinaryTreeVec<Data>::NodeVec::operator=(con
 
 
 template <typename Data>
-struct BinaryTreeVec<Data>::NodeVec& BinaryTreeVec<Data>::NodeVec::operator=(NodeVec&& node) noexcept{
+struct BinaryTreeVec<Data>::NodeVec& BinaryTreeVec<Data>::NodeVec::operator=(NodeVec&& node) noexcept{ // Da eliminare
     std::swap(index, node.index);
     std::swap(vector, node.vector);
     std::swap(key, node.key);
