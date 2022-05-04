@@ -43,7 +43,6 @@ public:
   // Specific member functions
 
   virtual Data& operator*() const = 0; // (concrete function must throw std::out_of_range when terminated)
-                                  //Usato come un puntatore
 
   virtual bool Terminated() const noexcept = 0; // (concrete function should not throw exceptions)
 
@@ -70,22 +69,22 @@ public:
   /* ************************************************************************ */
 
   // Copy assignment
-  Iterator<Data>& operator=(const Iterator<Data>&) = delete; // Copy assignment of abstract types should not be possible.
+  ForwardIterator<Data>& operator=(const ForwardIterator<Data>&) = delete; // Copy assignment of abstract types should not be possible.
 
   // Move assignment
-  Iterator<Data>& operator=(Iterator<Data>&&) noexcept = delete; // Move assignment of abstract types should not be possible.
+  ForwardIterator<Data>& operator=(ForwardIterator<Data>&&) noexcept = delete; // Move assignment of abstract types should not be possible.
 
   /* ************************************************************************ */
 
   // Comparison operators
-  bool operator==(Iterator<Data>&) const noexcept = delete; // Comparison of abstract types might not be possible.
-  bool operator!=(Iterator<Data>&) const noexcept = delete; // Comparison of abstract types might not be possible.
+  bool operator==(ForwardIterator<Data>&) const noexcept = delete; // Comparison of abstract types might not be possible.
+  bool operator!=(ForwardIterator<Data>&) const noexcept = delete; // Comparison of abstract types might not be possible.
 
   /* ************************************************************************ */
 
   // Specific member functions
 
-  virtual Iterator<Data>& operator++() = 0; // (concrete function must throw std::out_of_range when terminated)
+  virtual ForwardIterator<Data>& operator++() = 0; // (concrete function must throw std::out_of_range when terminated)
 
 };
 
@@ -208,9 +207,6 @@ public:
   // Specific member functions
 
   virtual void Reset() noexcept = 0; // (concrete function should not throw exceptions)
-                              // torna in posizione iniziale
-                              // necessita quindi di sapere qual e' la root ( nel caso degli alberi)
-                              // l' impelementazione con creta sta in binarytree
 
 };
 

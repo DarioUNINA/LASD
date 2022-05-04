@@ -29,6 +29,7 @@ bool BinaryTreeVec<Data>::NodeVec:: HasLeftChild() const noexcept{
     return ((2*index)+1 < vector->Size());
 }
 
+
 template <typename Data>
 bool BinaryTreeVec<Data>::NodeVec:: HasRightChild() const noexcept{
     return (2*(index+1) < vector->Size());
@@ -110,6 +111,7 @@ template <typename Data>
 BinaryTreeVec<Data>::~BinaryTreeVec(){
     if(vector!=nullptr)
         delete (*vector)[0];
+
     delete vector;
 }
 
@@ -154,9 +156,10 @@ template <typename Data>
 void BinaryTreeVec<Data>:: Clear(){
     size = 0;
     
-    if(vector!=nullptr)
+    if(vector!=nullptr){
         delete (*vector)[0];
-    delete vector;
+        vector->Clear();
+    }
 
     vector = nullptr;
 }

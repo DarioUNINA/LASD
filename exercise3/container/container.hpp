@@ -568,7 +568,7 @@ template <typename Data>
 
     using typename FoldableContainer<Data>::FoldFunctor;
 
-    virtual void FoldBreadth(FoldFunctor, const void *, void *) const = 0;
+    virtual void FoldBreadth(FoldFunctor, const void*, void *) const = 0;
 
     /* ************************************************************************ */
 

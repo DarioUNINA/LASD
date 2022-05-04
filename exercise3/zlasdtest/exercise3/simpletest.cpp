@@ -100,7 +100,6 @@ void stestBinaryTreeFloat(lasd::BinaryTree<double>& bt, uint& testnum, uint& tes
     itr1.Reset();
     lasd::BTPreOrderIterator<double> newitr1(std::move(itr1));
     itr1.Reset();
-
     lasd::BTBreadthIterator<double> itr2(bt);
     GetItrValue(loctestnum, loctesterr, itr2, true, 1.2);
     ++itr2;

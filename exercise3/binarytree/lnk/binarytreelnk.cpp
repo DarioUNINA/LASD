@@ -139,6 +139,7 @@ struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>:: Root() const{
     return *root;
 }
 
+
 //  Specific Member Functions
 template <typename Data>
 void BinaryTreeLnk<Data>:: Clear(){

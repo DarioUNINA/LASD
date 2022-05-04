@@ -237,7 +237,8 @@ protected:
 
   struct BinaryTree<Data>::Node* root = nullptr;
 
-  StackLst<struct BinaryTree<Data>::Node*>* stack = nullptr;
+  // StackLst<struct BinaryTree<Data>::Node*>* stack = nullptr;
+  StackLst<struct BinaryTree<Data>::Node*> stack;
 
 public:
 

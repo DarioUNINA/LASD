@@ -32,7 +32,6 @@ protected:
 
   protected:
 
-
     using BinaryTree<Data>::Node:: key;
 
     NodeLnk* leftChild = nullptr;
@@ -61,15 +60,15 @@ protected:
 
     // Specific Member Functions
 
-    virtual bool IsLeaf() const noexcept; // (concrete function should not throw exceptions)
-    virtual bool HasLeftChild() const noexcept; // (concrete function should not throw exceptions)
-    virtual bool HasRightChild() const noexcept; // (concrete function should not throw exceptions)
+    virtual bool IsLeaf() const noexcept;
+    virtual bool HasLeftChild() const noexcept;
+    virtual bool HasRightChild() const noexcept;
 
-    virtual struct BinaryTree<Data>::Node& LeftChild() override; // (concrete function must throw std::out_of_range when not existent)
-    virtual struct BinaryTree<Data>::Node& RightChild() override; // (concrete function must throw std::out_of_range when not existent)
+    virtual struct BinaryTree<Data>::Node& LeftChild() override;
+    virtual struct BinaryTree<Data>::Node& RightChild() override;
 
-    virtual struct BinaryTree<Data>::Node& LeftChild() const override; // (concrete function must throw std::out_of_range when not existent)
-    virtual struct BinaryTree<Data>::Node& RightChild() const override; // (concrete function must throw std::out_of_range when not existent)
+    virtual struct BinaryTree<Data>::Node& LeftChild() const override;
+    virtual struct BinaryTree<Data>::Node& RightChild() const override;
 
   };
 
@@ -92,7 +91,7 @@ public:
   /* ************************************************************************ */
 
   // Specific constructors
-  BinaryTreeLnk(const LinearContainer<Data>&); // A binary tree obtained from a LinearContainer (in ampiezza)
+  BinaryTreeLnk(const LinearContainer<Data>&);
 
   /* ************************************************************************ */
 

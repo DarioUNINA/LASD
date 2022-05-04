@@ -3,9 +3,20 @@ namespace lasd {
 
 /* ************************************************************************** */
 
-//Move Constructor
+// Constructors
 template<typename Data>
-QueueVec<Data>::QueueVec(QueueVec<Data>&& queue) noexcept:Vector<Data>(queue){
+QueueVec<Data>::QueueVec(const LinearContainer<Data>& container){
+    size = container.Size()+1;
+    tail = size-1;
+    Elements = new Data[size];
+
+    for(ulong i=0; i< container.Size(); i++)
+        Elements[i] = container[i];
+}
+
+
+template<typename Data>
+QueueVec<Data>::QueueVec(QueueVec<Data>&& queue) noexcept:Vector<Data>(std::move(queue)){
     std::swap(tail, queue.tail);
     std::swap(head, queue.head);
 }
@@ -43,7 +54,7 @@ bool QueueVec<Data>::operator==(const QueueVec<Data>& queue) const noexcept{
     else{
         ulong index = queue.head;
 
-        for(ulong i = head; i!=tail; (++i)%size)
+        for(ulong i = head; i!=tail; i = (i+1)%(size))
             if(Elements[i] != queue[index])
                 return false;
             else
@@ -85,6 +96,7 @@ template <typename Data>
 void QueueVec<Data>::Dequeue(){
     if(head == tail)
         throw std::length_error("Queue is empty!");
+
     else{
         head = (++head)%size;
 
@@ -184,8 +196,7 @@ void QueueVec<Data>::Reduce(){
 template <typename Data>
 void QueueVec<Data>:: SwapVectors(QueueVec<Data>& queue){
     ulong index = 0;
-    
-    for(ulong i = head; i!=tail; (++i)%size){
+    for(ulong i = head; i!=tail; i = (i+1)%(size)){
         std::swap(Elements[i], queue.Elements[index]);
         ++index;
     }

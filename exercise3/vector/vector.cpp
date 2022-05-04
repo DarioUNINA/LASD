@@ -7,14 +7,12 @@ namespace lasd {
 
 template <typename Data>
 Vector<Data>:: Vector(const ulong newSize){
-
     size = newSize;
     Elements = new Data[newSize];
 }
 
 template <typename Data>
 Vector<Data>::Vector(const LinearContainer<Data>& container){
-
     size = container.Size();
     Elements = new Data[size];
 
@@ -160,7 +158,6 @@ Data& Vector<Data>:: Back() const{
 
 template<typename Data>
 Data& Vector<Data>::operator[](const ulong index) const{
-    
     if(index>=size)
         throw std::out_of_range("Index out of bounds. Vector size: " + std::to_string(size));
     else
