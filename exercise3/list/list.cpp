@@ -285,7 +285,6 @@ void List<Data>:: InsertAtBack(Data&& data){
 
 template <typename Data>
 void List<Data>:: Clear(){
-
     delete head;
 
     head = nullptr;

@@ -215,6 +215,7 @@ BTPreOrderIterator<Data>::BTPreOrderIterator(const BTPreOrderIterator<Data>& ite
     root = iterator.root;
 
     // stack = new StackLst<struct BinaryTree<Data>::Node*>(*(iterator.stack));
+    StackLst<struct BinaryTree<Data>::Node*> stack(iterator.stack);
 }
 
 
@@ -332,7 +333,7 @@ BTPostOrderIterator<Data>::BTPostOrderIterator(const BinaryTree<Data>& tree){
     root = &(tree.Root());
     current = root;
 
-    stack = new StackLst<struct BinaryTree<Data>::Node*>();
+    // stack = new StackLst<struct BinaryTree<Data>::Node*>();
     Explore();
 }
 
@@ -342,7 +343,8 @@ BTPostOrderIterator<Data>::BTPostOrderIterator(const BTPostOrderIterator<Data>& 
     current = iterator.current;
     root = iterator.root;
 
-    stack = new StackLst<struct BinaryTree<Data>::Node*>(*(iterator.stack));
+    // stack = new StackLst<struct BinaryTree<Data>::Node*>(*(iterator.stack));
+        StackLst<struct BinaryTree<Data>::Node*> stack(iterator.stack);
 }
 
 
@@ -357,7 +359,7 @@ BTPostOrderIterator<Data>::BTPostOrderIterator(BTPostOrderIterator<Data>&& itera
 // Destructor
 template <typename Data>
 BTPostOrderIterator<Data>::~BTPostOrderIterator(){
-    delete stack;
+    // delete stack;
 }
 
 
@@ -391,7 +393,7 @@ BTPostOrderIterator<Data>& BTPostOrderIterator<Data>::operator=(BTPostOrderItera
 // Comparison operators
 template <typename Data>
 bool BTPostOrderIterator<Data>::operator==(const BTPostOrderIterator<Data>& iterator) const noexcept{
-    return (*current == *(iterator.current) && *root == *(iterator.root) && *stack == *(iterator.stack));
+    return (*current == *(iterator.current) && *root == *(iterator.root) && /**stack == *(iterator.stack)*/ stack == iterator.stack);
 }
 
 
@@ -418,13 +420,23 @@ BTPostOrderIterator<Data>& BTPostOrderIterator<Data>::operator++(){
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
 
-    if(stack->Empty())
+    // if(stack->Empty())
+    //     current = nullptr;
+    // else
+    //     if(!(stack->Top()->HasRightChild()) || &(stack->Top()->RightChild()) == current)
+    //         current = stack->TopNPop();
+    //     else{
+    //         current = &(stack->Top()->RightChild());
+    //         Explore();
+    //     }
+
+    if(stack.Empty())
         current = nullptr;
     else
-        if(!(stack->Top()->HasRightChild()) || &(stack->Top()->RightChild()) == current)
-            current = stack->TopNPop();
+        if(!(stack.Top()->HasRightChild()) || &(stack.Top()->RightChild()) == current)
+            current = stack.TopNPop();
         else{
-            current = &(stack->Top()->RightChild());
+            current = &(stack.Top()->RightChild());
             Explore();
         }
 
@@ -442,11 +454,13 @@ template <typename Data>
 void BTPostOrderIterator<Data>::Reset() noexcept{
     current = root;
 
-    if(stack!=nullptr){
-        stack->Clear();
-        Explore();
-    }
-    
+    // if(stack!=nullptr){
+    //     stack->Clear();
+    //     Explore();
+    // }
+
+    stack.Clear();
+    Explore();
 }
 
 
@@ -456,7 +470,8 @@ void BTPostOrderIterator<Data>::Reset() noexcept{
 template <typename Data>
 void BTPostOrderIterator<Data>::Explore() noexcept{
     while(current!= nullptr && !(current->IsLeaf())){
-        stack->Push(current);
+        // stack->Push(current);
+        stack.Push(current);
 
         if(current->HasLeftChild())
             current = &(current->LeftChild());
@@ -475,7 +490,7 @@ BTInOrderIterator<Data>::BTInOrderIterator(const BinaryTree<Data>& tree){
     root = &(tree.Root());
     current = root;
 
-    stack = new StackLst<struct BinaryTree<Data>::Node*>();
+    // stack = new StackLst<struct BinaryTree<Data>::Node*>();
     Explore();
 }
 
@@ -485,7 +500,8 @@ BTInOrderIterator<Data>::BTInOrderIterator(const BTInOrderIterator<Data>& iterat
     current = iterator.current;
     root = iterator.root;
 
-    stack = new StackLst<struct BinaryTree<Data>::Node*>(*(iterator.stack));
+    // stack = new StackLst<struct BinaryTree<Data>::Node*>(*(iterator.stack));
+    StackLst<struct BinaryTree<Data>::Node*> stack(iterator.stack);
 }
 
 
@@ -500,7 +516,7 @@ BTInOrderIterator<Data>::BTInOrderIterator(BTInOrderIterator<Data>&& iterator) n
 // Destructor
 template <typename Data>
 BTInOrderIterator<Data>::~BTInOrderIterator(){
-    delete stack;
+    // delete stack;
 }
 
 
@@ -534,7 +550,7 @@ BTInOrderIterator<Data>& BTInOrderIterator<Data>::operator=(BTInOrderIterator<Da
 // Comparison operators
 template <typename Data>
 bool BTInOrderIterator<Data>::operator==(const BTInOrderIterator<Data>& iterator) const noexcept{
-    return (*current == *(iterator.current) && *root == *(iterator.root) && *stack == *(iterator.stack));
+    return (*current == *(iterator.current) && *root == *(iterator.root) && /* *stack == *(iterator.stack) */ stack == iterator.stack);
 }
 
 
@@ -561,7 +577,19 @@ BTInOrderIterator<Data>& BTInOrderIterator<Data>::operator++(){
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
     
-    if(stack->Empty() && current!=root)
+    // if(stack->Empty() && current!=root)
+    //     current = nullptr;
+    // else
+    //     if(current->HasRightChild()){
+    //         current = &(current->RightChild());
+    //         Explore();
+        
+    //     }else
+    //         current = stack->TopNPop();
+        
+    // return *this;
+
+    if(stack.Empty() && current!=root)
         current = nullptr;
     else
         if(current->HasRightChild()){
@@ -569,7 +597,7 @@ BTInOrderIterator<Data>& BTInOrderIterator<Data>::operator++(){
             Explore();
         
         }else
-            current = stack->TopNPop();
+            current = stack.TopNPop();
         
     return *this;
 }
@@ -585,10 +613,13 @@ template <typename Data>
 void BTInOrderIterator<Data>::Reset() noexcept{
     current = root;
 
-    if(stack!=nullptr){
-        stack->Clear();
-        Explore();
-    }
+    // if(stack!=nullptr){
+    //     stack->Clear();
+    //     Explore();
+    // }
+
+    stack.Clear();
+    Explore();
 }
 
 
@@ -598,7 +629,8 @@ void BTInOrderIterator<Data>::Reset() noexcept{
 template <typename Data>
 void BTInOrderIterator<Data>::Explore() noexcept{
     while(current!=nullptr && current->HasLeftChild()){
-        stack->Push(current);
+        // stack->Push(current);
+        stack.Push(current);
         current = &(current->LeftChild());
     }
 }
@@ -614,7 +646,7 @@ BTBreadthIterator<Data>::BTBreadthIterator(const BinaryTree<Data>& tree){
     root = &(tree.Root());
     current = root;
 
-    queue = new QueueLst<struct BinaryTree<Data>::Node*>();
+    // queue = new QueueLst<struct BinaryTree<Data>::Node*>();
 }
 
 
@@ -623,7 +655,9 @@ BTBreadthIterator<Data>::BTBreadthIterator(const BTBreadthIterator<Data>& iterat
     current = iterator.current;
     root = iterator.root;
 
-    queue = new QueueLst<struct BinaryTree<Data>::Node*>(*(iterator.queue));
+    // queue = new QueueLst<struct BinaryTree<Data>::Node*>(*(iterator.queue));
+    QueueLst<struct BinaryTree<Data>::Node*> queue(iterator.queue);
+
 }
 
 
@@ -638,7 +672,7 @@ BTBreadthIterator<Data>::BTBreadthIterator(BTBreadthIterator<Data>&& iterator) n
 // Destructor
 template <typename Data>
 BTBreadthIterator<Data>::~BTBreadthIterator(){
-    delete queue;
+    // delete queue;
 }
 
 
@@ -672,7 +706,7 @@ BTBreadthIterator<Data>& BTBreadthIterator<Data>::operator=(BTBreadthIterator<Da
 // Comparison operators
 template <typename Data>
 bool BTBreadthIterator<Data>::operator==(const BTBreadthIterator<Data>& iterator) const noexcept{
-    return (*current == *(iterator.current) && *root == *(iterator.root) && *queue == *(iterator.queue));
+    return (*current == *(iterator.current) && *root == *(iterator.root) && /* *queue == *(iterator.queue) */ queue == iterator.queue);
 }
 
 
@@ -699,16 +733,28 @@ BTBreadthIterator<Data>& BTBreadthIterator<Data>::operator++(){
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
     
-    if(queue->Size() == 0 && current!= root)
+    // if(queue->Size() == 0 && current!= root)
+    //     current = nullptr;
+    // else{
+    //     if(current->HasLeftChild())
+    //         queue->Enqueue(&(current->LeftChild()));        
+
+    //     if(current->HasRightChild())
+    //         queue->Enqueue(&(current->RightChild()));
+    
+    //     current = queue->HeadNDequeue();
+    // }
+
+    if(queue.Size() == 0 && current!= root)
         current = nullptr;
     else{
         if(current->HasLeftChild())
-            queue->Enqueue(&(current->LeftChild()));        
+            queue.Enqueue(&(current->LeftChild()));        
 
         if(current->HasRightChild())
-            queue->Enqueue(&(current->RightChild()));
+            queue.Enqueue(&(current->RightChild()));
     
-        current = queue->HeadNDequeue();
+        current = queue.HeadNDequeue();
     }
 
     return *this;
@@ -725,8 +771,10 @@ template <typename Data>
 void BTBreadthIterator<Data>::Reset() noexcept{
     current = root;
 
-    if(queue!=nullptr)
-        queue->Clear();
+    // if(queue!=nullptr)
+    //     queue->Clear();
+
+    queue.Clear();
 }
 
 

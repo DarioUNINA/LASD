@@ -39,7 +39,7 @@ protected:
 
     using BinaryTree<Data>::Node:: key;
 
-    Vector<NodeVec*>* vector;
+    Vector<NodeVec*>* vector = nullptr;
 
   public:
 

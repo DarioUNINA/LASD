@@ -15,6 +15,7 @@ void Empty(uint& testnum, uint& testerr, const lasd::Container& con, bool chk) {
   std::cout << " " << testnum << " (" << testerr << ") The container is " << ((tst = con.Empty()) ? "" : "not ") << "empty: ";
   std::cout << ((tst = (tst == chk)) ? "Correct" : "Error") << "!" << std::endl;
   testerr += (1 - (uint) tst);
+  
 }
 
 void Size(uint& testnum, uint& testerr, const lasd::Container& con, bool chk, ulong siz) {

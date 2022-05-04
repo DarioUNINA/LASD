@@ -311,7 +311,9 @@ protected:
 
   struct BinaryTree<Data>::Node* root = nullptr;
 
-  StackLst<struct BinaryTree<Data>::Node*>* stack = nullptr;
+  // StackLst<struct BinaryTree<Data>::Node*>* stack = nullptr;
+    StackLst<struct BinaryTree<Data>::Node*> stack;
+
 
 
   // Auxiliary Member Function
@@ -390,7 +392,8 @@ protected:
 
   struct BinaryTree<Data>::Node* root = nullptr;
 
-  StackLst<struct BinaryTree<Data>::Node*>* stack = nullptr;
+  // StackLst<struct BinaryTree<Data>::Node*>* stack = nullptr;
+  StackLst<struct BinaryTree<Data>::Node*> stack;
 
 
   // Auxiliary Member Function
@@ -467,7 +470,9 @@ protected:
 
   struct BinaryTree<Data>::Node* root = nullptr;
 
-  QueueLst<struct BinaryTree<Data>::Node*>* queue = nullptr;
+  // QueueLst<struct BinaryTree<Data>::Node*>* queue = nullptr;
+  QueueLst<struct BinaryTree<Data>::Node*> queue;
+
 
 public:
 
