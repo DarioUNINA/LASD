@@ -1,16 +1,11 @@
 
-#include "zlasdtest/test.hpp"
-
-#include "zmytest/test.hpp"
-
-/* ************************************************************************** */
-
-#include <iostream>
+#ifndef LASDTEST_HPP
+#define LASDTEST_HPP
 
 /* ************************************************************************** */
 
-int main() {
-  std::cout << "Lasd Libraries 2022" << std::endl;
-  Menu();
-  return 0;
-}
+void lasdtest();
+
+/* ************************************************************************** */
+
+#endif

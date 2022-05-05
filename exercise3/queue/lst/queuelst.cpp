@@ -3,7 +3,6 @@ namespace lasd {
 
 /* ************************************************************************** */
 
-
 //Constructors
 template <typename Data>
 QueueLst<Data>::QueueLst(const LinearContainer<Data>& container){

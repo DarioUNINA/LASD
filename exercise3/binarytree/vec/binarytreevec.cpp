@@ -109,7 +109,7 @@ BinaryTreeVec<Data>::BinaryTreeVec(BinaryTreeVec<Data>&& tree) noexcept{
 // Destructor
 template <typename Data>
 BinaryTreeVec<Data>::~BinaryTreeVec(){
-    if(vector!=nullptr)
+    if(vector!=nullptr && vector->Size()>0)
         delete (*vector)[0];
 
     delete vector;
@@ -156,12 +156,10 @@ template <typename Data>
 void BinaryTreeVec<Data>:: Clear(){
     size = 0;
     
-    if(vector!=nullptr){
+    if(vector!=nullptr &&  vector->Size()>0){
         delete (*vector)[0];
         vector->Clear();
     }
-
-    vector = nullptr;
 }
 
 

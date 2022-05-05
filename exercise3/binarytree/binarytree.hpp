@@ -471,7 +471,7 @@ protected:
   struct BinaryTree<Data>::Node* root = nullptr;
 
   // QueueLst<struct BinaryTree<Data>::Node*>* queue = nullptr;
-  QueueLst<struct BinaryTree<Data>::Node*> queue;
+  QueueLst<struct BinaryTree<Data>::Node*> queue{};
 
 
 public:
