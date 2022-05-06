@@ -63,6 +63,24 @@ void OperationChoose(ushort& choice){
     }
 }
 
+void IOperationChoose(ushort& choice){
+
+    std::cout <<"\nSelect any operation\n";
+    std::cout << "1) Read Current Node\n";
+    std::cout << "2) Update Current Node\n";
+    std::cout << "3) Increment Iterator\n";
+    std::cout << "4) Reset Iterator\n";
+    std::cout << "4) Check Termination\n";
+    std::cout << "5) Back\n";
+
+    std::cin>>choice;
+
+    while (std::cin.fail()){
+        std::cin.clear(); 
+        std::cin.ignore(USHRT_MAX, '\n'); 
+        std::cout<< "Invalid input! Please retry\n";
+    }
+}
 
 /* ************************************************************************ */
 
@@ -121,7 +139,7 @@ ulong SetLenght(){
 
 
 void OrderChoice(uint& choice){
-    std::cout<<"Select the order:\n";
+    std::cout<<"Select any order:\n";
     std::cout<<"1)Pre Order\n";
     std::cout<<"2)In order:\n";
     std::cout<<"3)Post order\n";
@@ -136,11 +154,10 @@ void OrderChoice(uint& choice){
     }
 }
 
-void MapPrint(const int& key, void* value){
+template <typename Data>
+void MapPrint(const Data& key, void* value){
     std::cout << key << ", ";
 }
-
-
 
 template <typename Data>
 void Print(uint& choice, lasd::BinaryTree<Data>& tree){
@@ -149,19 +166,20 @@ void Print(uint& choice, lasd::BinaryTree<Data>& tree){
     switch(choice){
 
     case 1:{
-        // tree.MapPreOrder(MapPrint, 0);
+        tree.MapPreOrder(MapPrint<Data>, 0);
+
         break;}
 
     case 2:{
-        // tree.MapInOrder(MapPrint, 0);
+        tree.MapInOrder(MapPrint<Data>, 0);
         break;}
 
     case 3:{
-        // tree.MapPostOrder(MapPrint, 0);
+        tree.MapPostOrder(MapPrint<Data>, 0);
         break;}
 
     case 4:{
-        tree.Map(MapPrint, 0);
+        tree.MapBreadth(MapPrint<Data>, 0);
         break;}
    
     default:
@@ -205,21 +223,18 @@ std::string getRandomString(){
 
 // Filling Data Structure functions
 
-template <typename Data>
-void IntFill(lasd::Vector<Data>& vector){
+void IntFill(lasd::Vector<int>& vector){
     for(ulong i = 0; i<vector.Size(); i++)
         vector[i] = getRandomInt();
 }
 
-template <typename Data>
-void FloatFill(lasd::Vector<Data>& vector){
+void FloatFill(lasd::Vector<float>& vector){
     for(ulong i = 0; i<vector.Size(); i++)
         vector[i] = getRandomFloat();
 }
 
 
-template <typename Data>
-void StringFill(lasd::Vector<Data>& vector){
+void StringFill(lasd::Vector<std::string>& vector){
     for(ulong i = 0; i<vector.Size(); i++)
         vector[i] = getRandomString();
 }
@@ -255,7 +270,7 @@ void Fold(lasd::FoldableContainer<float>& container){
 
     const void* value = &v;
 
-    float r = 1;
+    float r = 0;
     void* result = &r;
 
     container.Fold(FoldFunctFloat, value, result);
@@ -285,7 +300,7 @@ void Fold(lasd::FoldableContainer<int>& container){
 
     const void* value = &v;
 
-    int r = 0;
+    int r = 1;
     void* result = &r;
 
     container.Fold(FoldFunctInt, value, result);
@@ -303,7 +318,7 @@ void MapFunctInt(int& key, void* value){
 
 
 void MapFunctFloat(float& key, void* value){
-    key = static_cast<float>(std::pow(key, (*(static_cast<const int*>(value)))));
+    key = static_cast<float>(std::pow(key, (*(static_cast<const float*>(value)))));
 }
 
 
@@ -339,28 +354,6 @@ void Map(lasd::BinaryTree<std::string>& tree){
 
 /* ************************************************************************ */
 
-// Print Function (using Map function)
-
-// void MapPrintInt(const int& key, void* value) {
-//   std::cout << key << ", ";
-// }
-
-// void MapPrintFloat(const float& key, void* value) {
-//   std::cout << key << ", ";
-// }
-
-// void MapPrintString(const std::string& key, void* value) {
-//   std::cout << key << ", ";
-// }
-
-// template <typename Data>
-// void MapPrint(const Data& key, void* value){
-//     std::cout << key << ", ";
-// }
-
-
-/* ************************************************************************ */
-
 bool CheckExistence(lasd::BinaryTree<int>& tree){
     int v = SetInt();
     return tree.Exists(v);
@@ -385,6 +378,68 @@ bool CheckExistence(lasd::BinaryTree<std::string>& tree){
 
 
 // Test
+
+template <typename Data>
+void Iterator(lasd::BinaryTree<Data>& tree){
+    uint choice;
+
+    try{
+            OrderChoice(choice);
+
+            switch(choice){
+
+                case 1:{
+                    lasd::BTPreOrderIterator<Data> iterator(tree);
+
+                    Test(iterator)
+                    break;}
+
+                case 2:{
+                    lasd::BTInOrderIterator<Data> iterator(tree);
+                    Test(iterator)
+                    break;}
+
+                case 3:{
+                    lasd::BTPostOrderIterator<Data> iterator(tree);
+                    Test(iterator)
+                    break;}
+
+                case 4:{
+                    lasd::BTBreadthIterator<Data> iterator(tree);
+                    Test(iterator)
+                    break;}
+                
+                default:
+                    break;    
+            }
+    }catch(...){
+        std::cout<<"ERROR: An exception was thrown!\n";
+    }
+}
+
+template <typename Data>
+void Test(lasd::BTPreOrderIterator<Data>& i){
+
+}
+
+
+template <typename Data>
+void Test(lasd::BTInOrderIterator<Data>& i){
+
+}
+
+
+template <typename Data>
+void Test(lasd::BTPostOrderIterator<Data>& i){
+
+}
+
+
+template <typename Data>
+void Test(lasd::BTBreadthIterator<Data>& i){
+
+}
+
 
 template <typename Data>
 void Test(lasd::BinaryTree<Data>& tree){
@@ -422,9 +477,17 @@ void Test(lasd::BinaryTree<Data>& tree){
                     break;}
                 
                 case 5:{
-                    
+                    // Node(tree.root);
                     break;}
-                
+
+                case 6:{
+                    Iterator(tree);
+                    break;}
+
+                case 7:{
+                    exit = true;
+                    break;}
+
                 default:
                     break;    
             }
@@ -512,7 +575,7 @@ void BTLnk(){
                 const ulong lenght = SetLenght();
                 lasd::Vector<float> vector(lenght);
 
-                IntFill(vector);
+                FloatFill(vector);
 
                 lasd::BinaryTreeLnk<float> tree(vector);
 
@@ -523,7 +586,7 @@ void BTLnk(){
                 const ulong lenght = SetLenght();
                 lasd::Vector<std::string> vector(lenght);
 
-                IntFill(vector);
+                StringFill(vector);
 
                 lasd::BinaryTreeLnk<std::string> tree(vector);
 
@@ -539,6 +602,8 @@ void BTLnk(){
         }
     }while(!exit);
 }
+
+
 
 /* ************************************************************************ */
 

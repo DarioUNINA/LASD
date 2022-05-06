@@ -53,27 +53,13 @@
 
 // Filling Data Structure functions
 
-
-    template <typename Data>
-    void IntFill(lasd::Vector<Data>&);
+    void IntFill(lasd::Vector<int>&);
 
 
-    template <typename Data>
-    void IntFill(lasd::List<Data>&, const ulong&);
+    void FloatFill(lasd::Vector<float>&);
 
 
-    template <typename Data>
-    void FloatFill(lasd::Vector<Data>&);
-
-
-    template <typename Data>
-    void FloatFill(lasd::List<Data>& list, const ulong& limit);
-
-    template <typename Data>
-    void StringFill(lasd::Vector<Data>&);
-
-    template <typename Data>
-    void StringFill(lasd::List<Data>&, const ulong&);
+    void StringFill(lasd::Vector<std::string>&);
 
 
 /* ************************************************************************ */
