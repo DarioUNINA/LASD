@@ -28,6 +28,7 @@ void DataStructureChoose(ushort& choice){
     }
 }
 
+
 void TypeChoose(ushort& choice){
 
     std::cout<<"Please Select any type for your Data Structure:\n";
@@ -45,6 +46,7 @@ void TypeChoose(ushort& choice){
     }
 }
 
+
 void OperationChoose(ushort& choice){
 
     std::cout <<"\nSelect any operation\n";
@@ -52,7 +54,9 @@ void OperationChoose(ushort& choice){
     std::cout << "2) Check Existence of any value\n";
     std::cout << "3) Apply Specific Type Fold Function\n";
     std::cout << "4) Apply Specific Type Map Function\n";
-    std::cout << "5) Back\n";
+    std::cout << "5) Node Menu\n";
+    std::cout << "6) Iterator Menu\n";
+    std::cout << "7) Back\n";
 
     std::cin>>choice;
 
@@ -62,6 +66,7 @@ void OperationChoose(ushort& choice){
         std::cout<< "Invalid input! Please retry\n";
     }
 }
+
 
 void IOperationChoose(ushort& choice){
 
@@ -70,8 +75,8 @@ void IOperationChoose(ushort& choice){
     std::cout << "2) Update Current Node\n";
     std::cout << "3) Increment Iterator\n";
     std::cout << "4) Reset Iterator\n";
-    std::cout << "4) Check Termination\n";
-    std::cout << "5) Back\n";
+    std::cout << "5) Check Termination\n";
+    std::cout << "6) Back\n";
 
     std::cin>>choice;
 
@@ -81,6 +86,45 @@ void IOperationChoose(ushort& choice){
         std::cout<< "Invalid input! Please retry\n";
     }
 }
+
+
+void NOperationChoose(ushort& choice){
+
+    std::cout <<"\nSelect any operation\n";
+    std::cout << "1) Read Current Node\n";
+    std::cout << "2) Update Current Node\n";
+    std::cout << "3) Check Left Child existence\n";
+    std::cout << "4) Check Right Child existence\n";
+    std::cout << "5) Move to Left Child\n";
+    std::cout << "6) Move to Right Child\n";
+    std::cout << "7) Back\n";
+
+    std::cin>>choice;
+
+    while (std::cin.fail()){
+        std::cin.clear(); 
+        std::cin.ignore(USHRT_MAX, '\n'); 
+        std::cout<< "Invalid input! Please retry\n";
+    }
+}
+
+
+void OrderChoice(uint& choice){
+    std::cout<<"Select any order:\n";
+    std::cout<<"1)Pre Order\n";
+    std::cout<<"2)In order:\n";
+    std::cout<<"3)Post order\n";
+    std::cout<<"4)Breadth\n";
+
+    std::cin>>choice;
+
+    while (std::cin.fail()){
+        std::cin.clear(); 
+        std::cin.ignore(USHRT_MAX, '\n'); 
+        std::cout<< "Invalid input! Please retry\n";
+    }
+}
+
 
 /* ************************************************************************ */
 
@@ -138,26 +182,11 @@ ulong SetLenght(){
 }
 
 
-void OrderChoice(uint& choice){
-    std::cout<<"Select any order:\n";
-    std::cout<<"1)Pre Order\n";
-    std::cout<<"2)In order:\n";
-    std::cout<<"3)Post order\n";
-    std::cout<<"4)Breadth\n";
-
-    std::cin>>choice;
-
-    while (std::cin.fail()){
-        std::cin.clear(); 
-        std::cin.ignore(USHRT_MAX, '\n'); 
-        std::cout<< "Invalid input! Please retry\n";
-    }
-}
-
 template <typename Data>
 void MapPrint(const Data& key, void* value){
     std::cout << key << ", ";
 }
+
 
 template <typename Data>
 void Print(uint& choice, lasd::BinaryTree<Data>& tree){
@@ -188,6 +217,22 @@ void Print(uint& choice, lasd::BinaryTree<Data>& tree){
 }
 
 
+void UpdateNode(int& data){
+    data = SetInt();
+}
+
+
+void UpdateNode(float& data){
+    data = SetFloat();
+}
+
+
+void UpdateNode(std::string& data){
+    std::cout<<"Please enter any string\n";
+    std::cin>>data;
+}
+
+
 /* ************************************************************************ */
 
 // Random values generators
@@ -198,9 +243,11 @@ int getRandomInt(){
   return distx(genx);
 }
 
+
 float getRandomFloat(){
   return static_cast<float>(getRandomInt())/100;
 }
+
 
 std::string getRandomString(){
   
@@ -227,6 +274,7 @@ void IntFill(lasd::Vector<int>& vector){
     for(ulong i = 0; i<vector.Size(); i++)
         vector[i] = getRandomInt();
 }
+
 
 void FloatFill(lasd::Vector<float>& vector){
     for(ulong i = 0; i<vector.Size(); i++)
@@ -376,8 +424,243 @@ bool CheckExistence(lasd::BinaryTree<std::string>& tree){
 
 /* ************************************************************************ */
 
-
 // Test
+
+template <typename Data>
+void Test(lasd::Iterator<Data>& i){
+bool exit = false;
+    ushort choice;
+
+    do{
+        try{
+            IOperationChoose(choice);
+
+            switch(choice){
+
+                case 1:{
+                    std::cout<<"Current element is "<<*i<<"\n";
+                    break;}
+
+                case 2:{
+                    UpdateNode(*i);
+                    break;}
+
+                case 3:{
+                    ++(dynamic_cast<lasd::ForwardIterator<Data>&>(i));
+                    std::cout<<"Iterator incremented!\n";
+                    break;}
+
+                case 4:{
+                    (dynamic_cast<lasd::ResettableIterator<Data>&>(i)).Reset();
+                    std::cout<<"Iterator Resetted!\n";
+                    break;}
+                
+                case 5:{
+                    if(i.Terminated())
+                        std::cout<<"The visit has terminated!\n";
+                    else
+                        std::cout<<"The visit has not terminated!\n";
+                    break;}
+
+                case 6:{
+                    exit = true;
+                    break;}
+
+                default:
+                    break;    
+            }
+        }catch(...){
+            std::cout<<"ERROR: The visit is over!\n";
+        }
+    }while(!exit);
+}
+
+
+void Test(lasd::BinaryTree<int>::Node* node){
+bool exit = false;
+    ushort choice;
+    
+    do{
+        try{
+            NOperationChoose(choice);
+
+            switch(choice){
+
+                case 1:{
+                    std::cout<<"Current element is "<<node->Element()<<"\n";
+                    break;}
+
+                case 2:{
+                    UpdateNode(node->Element());
+                    std::cout<<"Node updated!\n";
+                    break;}
+
+                case 3:{
+                    if(node->HasLeftChild())
+                        std::cout<<"Current node has left child!\n";
+                    else
+                        std::cout<<"Current node has no left child!\n";
+                    break;}
+
+                case 4:{
+                    if(node->HasRightChild())
+                        std::cout<<"Current node has right child!\n";
+                    else
+                        std::cout<<"Current node has no right child!\n";
+                    break;}
+                
+                case 5:{
+                    if(node->HasLeftChild()){
+                        node = &(node->LeftChild());
+                        std::cout<<"Node updated!\n";
+                    }else
+                         std::cout<<"Current node has no left child!\n";
+                    break;}
+
+                case 6:{
+                    if(node->HasRightChild()){
+                        node = &(node->RightChild());
+                        std::cout<<"Node updated!\n";
+                    }else
+                         std::cout<<"Current node has no right child!\n";
+                    break;}
+
+                case 7:{
+                    exit = true;
+                    break;}
+                default:
+                    break;    
+            }
+        }catch(...){
+            std::cout<<"ERROR: The visit is over!\n";
+        }
+    }while(!exit);    
+}
+
+
+void Test(lasd::BinaryTree<float>::Node* node){
+bool exit = false;
+    ushort choice;
+    
+    do{
+        try{
+            NOperationChoose(choice);
+
+            switch(choice){
+
+                case 1:{
+                    std::cout<<"Current element is "<<node->Element()<<"\n";
+                    break;}
+
+                case 2:{
+                    UpdateNode(node->Element());
+                    std::cout<<"Node updated!\n";
+                    break;}
+
+                case 3:{
+                    if(node->HasLeftChild())
+                        std::cout<<"Current node has left child!\n";
+                    else
+                        std::cout<<"Current node has no left child!\n";
+                    break;}
+
+                case 4:{
+                    if(node->HasRightChild())
+                        std::cout<<"Current node has right child!\n";
+                    else
+                        std::cout<<"Current node has no right child!\n";
+                    break;}
+                
+                case 5:{
+                    if(node->HasLeftChild()){
+                        node = &(node->LeftChild());
+                        std::cout<<"Node updated!\n";
+                    }else
+                         std::cout<<"Current node has no left child!\n";
+                    break;}
+
+                case 6:{
+                    if(node->HasRightChild()){
+                        node = &(node->RightChild());
+                        std::cout<<"Node updated!\n";
+                    }else
+                         std::cout<<"Current node has no right child!\n";
+                    break;}
+
+                case 7:{
+                    exit = true;
+                    break;}
+                default:
+                    break;    
+            }
+        }catch(...){
+            std::cout<<"ERROR: The visit is over!\n";
+        }
+    }while(!exit);    
+}
+
+
+void Test(lasd::BinaryTree<float>::Node* node){
+bool exit = false;
+    ushort choice;
+    
+    do{
+        try{
+            NOperationChoose(choice);
+
+            switch(choice){
+
+                case 1:{
+                    std::cout<<"Current element is "<<node->Element()<<"\n";
+                    break;}
+
+                case 2:{
+                    UpdateNode(node->Element());
+                    std::cout<<"Node updated!\n";
+                    break;}
+
+                case 3:{
+                    if(node->HasLeftChild())
+                        std::cout<<"Current node has left child!\n";
+                    else
+                        std::cout<<"Current node has no left child!\n";
+                    break;}
+
+                case 4:{
+                    if(node->HasRightChild())
+                        std::cout<<"Current node has right child!\n";
+                    else
+                        std::cout<<"Current node has no right child!\n";
+                    break;}
+                
+                case 5:{
+                    if(node->HasLeftChild()){
+                        node = &(node->LeftChild());
+                        std::cout<<"Node updated!\n";
+                    }else
+                         std::cout<<"Current node has no left child!\n";
+                    break;}
+
+                case 6:{
+                    if(node->HasRightChild()){
+                        node = &(node->RightChild());
+                        std::cout<<"Node updated!\n";
+                    }else
+                         std::cout<<"Current node has no right child!\n";
+                    break;}
+
+                case 7:{
+                    exit = true;
+                    break;}
+                default:
+                    break;    
+            }
+        }catch(...){
+            std::cout<<"ERROR: The visit is over!\n";
+        }
+    }while(!exit);    
+}
+
 
 template <typename Data>
 void Iterator(lasd::BinaryTree<Data>& tree){
@@ -390,23 +673,22 @@ void Iterator(lasd::BinaryTree<Data>& tree){
 
                 case 1:{
                     lasd::BTPreOrderIterator<Data> iterator(tree);
-
-                    Test(iterator)
+                    Test(iterator);
                     break;}
 
                 case 2:{
                     lasd::BTInOrderIterator<Data> iterator(tree);
-                    Test(iterator)
+                    Test(iterator);
                     break;}
 
                 case 3:{
                     lasd::BTPostOrderIterator<Data> iterator(tree);
-                    Test(iterator)
+                    Test(iterator);
                     break;}
 
                 case 4:{
                     lasd::BTBreadthIterator<Data> iterator(tree);
-                    Test(iterator)
+                    Test(iterator);
                     break;}
                 
                 default:
@@ -417,33 +699,9 @@ void Iterator(lasd::BinaryTree<Data>& tree){
     }
 }
 
-template <typename Data>
-void Test(lasd::BTPreOrderIterator<Data>& i){
-
-}
-
-
-template <typename Data>
-void Test(lasd::BTInOrderIterator<Data>& i){
-
-}
-
-
-template <typename Data>
-void Test(lasd::BTPostOrderIterator<Data>& i){
-
-}
-
-
-template <typename Data>
-void Test(lasd::BTBreadthIterator<Data>& i){
-
-}
-
 
 template <typename Data>
 void Test(lasd::BinaryTree<Data>& tree){
-
     bool exit = false;
     ushort choice;
 
@@ -477,7 +735,10 @@ void Test(lasd::BinaryTree<Data>& tree){
                     break;}
                 
                 case 5:{
-                    // Node(tree.root);
+                    if(tree.Size() >0)
+                        Test(&(tree.Root()));
+                    else
+                        std::cout<<"Tree has no node!\n";
                     break;}
 
                 case 6:{
@@ -501,7 +762,6 @@ void Test(lasd::BinaryTree<Data>& tree){
 /* ************************************************************************ */
 
 // Data Structure Initialization
-
 
 void BTVec(){
     bool exit = false;
@@ -602,7 +862,6 @@ void BTLnk(){
         }
     }while(!exit);
 }
-
 
 
 /* ************************************************************************ */

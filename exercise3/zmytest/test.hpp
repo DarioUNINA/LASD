@@ -11,6 +11,7 @@
 #include "../binarytree/vec/binarytreevec.hpp"
 #include "../binarytree/lnk/binarytreelnk.hpp"
 
+
  /* ************************************************************************** */
    // Print option functions
 
@@ -19,6 +20,13 @@
     void TypeChoose(ushort&);
 
     void OperationChoose(ushort&);
+
+    void IOperationChoose(ushort&);
+
+    void NOperationChoose(ushort&);
+
+    void OrderChoice(uint&);
+
 
 /* ************************************************************************ */
 
@@ -30,13 +38,12 @@
 
     ulong SetLenght();
 
-    void OrderChoice(uint&);
 
     template <typename Data>
-    ulong Resize(lasd::Vector<Data>&);
+    void MapPrint(const Data&, void*);
 
     template <typename Data>
-    void Print(uint& choice, lasd::BinaryTree<Data>&);
+    void Print(uint&, lasd::BinaryTree<Data>&);
 
 
     bool CheckExistence(lasd::BinaryTree<int>&);
@@ -45,6 +52,12 @@
 
     bool CheckExistence(lasd::BinaryTree<std::string>&);
 
+
+    void UpdateNode(int&);
+
+    void UpdateNode(float&);
+
+    void UpdateNode(std::string&);
 
 /* ************************************************************************ */
 
@@ -108,23 +121,26 @@
 
     void Map(lasd::BinaryTree<std::string>&); 
 
-    // template <typename Data>
-    // void MapPrint(const Data&, void*);
-
-    void MapPrint(const int&, void*);
-
 
 /* ************************************************************************ */
 
 // Tests
-
+   
     template <typename Data>
     void Test(lasd::BinaryTree<Data>&);
-   
+
+    template <typename Data>
+    void Test(struct lasd::BinaryTree<Data>::Node&);
+
+    template <typename Data>
+    void Test(lasd::Iterator<Data>&);
 
 /* ************************************************************************ */
 
 // Data Structure Initialization
+
+    template <typename Data>
+    void Iterator(lasd::BinaryTree<Data>&);
 
     void BTVec();
 
