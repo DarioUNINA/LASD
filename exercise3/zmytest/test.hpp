@@ -129,11 +129,15 @@
     template <typename Data>
     void Test(lasd::BinaryTree<Data>&);
 
-    template <typename Data>
-    void Test(struct lasd::BinaryTree<Data>::Node&);
+    void Test(lasd::BinaryTree<int>::Node&);
+
+    void Test(lasd::BinaryTree<float>::Node&);
+
+    void Test(lasd::BinaryTree<std::string>::Node&);
 
     template <typename Data>
     void Test(lasd::Iterator<Data>&);
+
 
 /* ************************************************************************ */
 

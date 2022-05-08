@@ -277,10 +277,12 @@ Data& BTPreOrderIterator<Data>::operator*() const{
 
 template <typename Data>
 BTPreOrderIterator<Data>& BTPreOrderIterator<Data>::operator++(){
-    if(Terminated())
+    std::cout<<"Prova1\n";
+    if(Terminated()){
         throw std::out_of_range("The iterator is pointing to NULL!\n");
+        std::cout<<"Provaaaaaaaaa\n";}
 
-    if(stack.Empty() && current!=root)
+    if(stack.Empty() && (current!=root || current->IsLeaf()))
         current = nullptr;
     else
         if(current->IsLeaf())
@@ -529,7 +531,7 @@ BTInOrderIterator<Data>& BTInOrderIterator<Data>::operator++(){
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
     
-    if(stack.Empty() && current!=root)
+    if(stack.Empty() && (current!=root || !(current->HasRightChild())))
         current = nullptr;
     else
         if(current->HasRightChild()){
@@ -657,7 +659,7 @@ BTBreadthIterator<Data>& BTBreadthIterator<Data>::operator++(){
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
     
-    if(queue.Size() == 0 && current!= root)
+    if(queue.Empty() && (current!= root || current->IsLeaf()))
         current = nullptr;
     else{
         if(current->HasLeftChild())

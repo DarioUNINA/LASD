@@ -313,7 +313,7 @@ void FoldFunctString(const std::string& key, const void* value, void* result){
 
 void Fold(lasd::FoldableContainer<float>& container){
     float v;
-    std::cout<<"Please insert any value";
+    std::cout<<"Please insert any value\n";
     std::cin>>v;
 
     const void* value = &v;
@@ -343,7 +343,7 @@ void Fold(lasd::FoldableContainer<std::string>& container){
 
 void Fold(lasd::FoldableContainer<int>& container){
     int v;
-    std::cout<<"Please insert any value";
+    std::cout<<"Please insert any value\n";
     std::cin>>v;
 
     const void* value = &v;
@@ -600,7 +600,7 @@ bool exit = false;
 }
 
 
-void Test(lasd::BinaryTree<float>::Node* node){
+void Test(lasd::BinaryTree<std::string>::Node* node){
 bool exit = false;
     ushort choice;
     
