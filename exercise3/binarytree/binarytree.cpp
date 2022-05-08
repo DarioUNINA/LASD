@@ -211,8 +211,7 @@ template <typename Data>
 BTPreOrderIterator<Data>::BTPreOrderIterator(const BTPreOrderIterator<Data>& iterator){
     current = iterator.current;
     root = iterator.root;
-
-    StackLst<struct BinaryTree<Data>::Node*> stack(iterator.stack);
+    stack = iterator.stack;
 }
 
 
@@ -277,10 +276,8 @@ Data& BTPreOrderIterator<Data>::operator*() const{
 
 template <typename Data>
 BTPreOrderIterator<Data>& BTPreOrderIterator<Data>::operator++(){
-    std::cout<<"Prova1\n";
-    if(Terminated()){
+    if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
-        std::cout<<"Provaaaaaaaaa\n";}
 
     if(stack.Empty() && (current!=root || current->IsLeaf()))
         current = nullptr;
@@ -329,8 +326,7 @@ template <typename Data>
 BTPostOrderIterator<Data>::BTPostOrderIterator(const BTPostOrderIterator<Data>& iterator){
     current = iterator.current;
     root = iterator.root;
-
-        StackLst<struct BinaryTree<Data>::Node*> stack(iterator.stack);
+    stack = iterator.stack;
 }
 
 
@@ -461,8 +457,7 @@ template <typename Data>
 BTInOrderIterator<Data>::BTInOrderIterator(const BTInOrderIterator<Data>& iterator){
     current = iterator.current;
     root = iterator.root;
-
-    StackLst<struct BinaryTree<Data>::Node*> stack(iterator.stack);
+    stack = iterator.stack;
 }
 
 
@@ -588,9 +583,7 @@ template <typename Data>
 BTBreadthIterator<Data>::BTBreadthIterator(const BTBreadthIterator<Data>& iterator){
     current = iterator.current;
     root = iterator.root;
-
-    QueueLst<struct BinaryTree<Data>::Node*> queue(iterator.queue);
-
+    queue = iterator.queue;
 }
 
 

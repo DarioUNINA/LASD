@@ -92,7 +92,7 @@ BinaryTreeVec<Data>::BinaryTreeVec(const BinaryTreeVec<Data>& tree){
     vector = new Vector<NodeVec*>(tree.size);
 
     for(ulong i = 0; i< tree.size; i++){
-        NodeVec* temp = ((*(tree.vector))[i]);
+        NodeVec* temp = (*(tree.vector))[i];
         (*vector)[i] = new NodeVec(vector, i, temp->Element());
     }
     size = tree.Size();
@@ -130,7 +130,6 @@ BinaryTreeVec<Data>& BinaryTreeVec<Data>::operator=(const BinaryTreeVec<Data>& t
 }
 
 
-//  Copy and Move Assignment
 template <typename Data>
 BinaryTreeVec<Data>& BinaryTreeVec<Data>::operator=(BinaryTreeVec<Data>&& tree) noexcept{
     std::swap(size, tree.size);
