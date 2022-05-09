@@ -136,8 +136,7 @@ namespace lasd
   /* ************************************************************************** */
 
   template <typename Data>
-  class MappableContainer : public virtual Container
-  {
+  class MappableContainer : public virtual Container{
 
   private:
     // ...
