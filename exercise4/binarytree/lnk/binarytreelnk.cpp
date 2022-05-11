@@ -34,7 +34,7 @@ bool BinaryTreeLnk<Data>::NodeLnk:: HasRightChild() const noexcept{
 
 
 template <typename Data>
-struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: RightChild(){
+struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk:: RightChild(){
     if(rightChild == nullptr)
         throw std::out_of_range("The node has no right child!\n");
 
@@ -43,7 +43,7 @@ struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: RightChild(){
 
 
 template <typename Data>
-struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: LeftChild(){
+struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk:: LeftChild(){
     if(leftChild == nullptr)
         throw std::out_of_range("The node has no left child!\n");
 
@@ -52,7 +52,7 @@ struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: LeftChild(){
 
 
 template <typename Data>
-struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: RightChild() const{
+struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk:: RightChild() const{
     if(rightChild == nullptr)
         throw std::out_of_range("The node has no right child!\n");
 
@@ -61,7 +61,7 @@ struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: RightChild() const
 
 
 template <typename Data>
-struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>::NodeLnk:: LeftChild() const{
+struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk:: LeftChild() const{
     if(leftChild == nullptr)
         throw std::out_of_range("The node has no left child!\n");
 
@@ -132,7 +132,7 @@ BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(BinaryTreeLnk<Data>&& tree) 
 
 //  Specific Member Functions
 template <typename Data>
-struct BinaryTree<Data>::Node& BinaryTreeLnk<Data>:: Root() const{
+struct BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>:: Root() const{
     if(size == 0)
         throw std::length_error("The tree is empty!\n");
 

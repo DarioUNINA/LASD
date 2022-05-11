@@ -5,12 +5,17 @@
 /* ************************************************************************** */
 
 #include "../binarytree.hpp"
+#include "../../bst/bst.hpp"
 
 /* ************************************************************************** */
 
 namespace lasd {
 
 /* ************************************************************************** */
+
+template <typename Data>
+class BST;
+
 
 template <typename Data>
 class BinaryTreeLnk : virtual public BinaryTree<Data>{
@@ -24,7 +29,9 @@ protected:
   using BinaryTree<Data>::size;
 
 
-  struct NodeLnk : virtual public BinaryTree<Data>::Node{ // Must extend Node
+  struct NodeLnk : virtual public BinaryTree<Data>::Node{
+
+
 
   private:
 
@@ -39,10 +46,15 @@ protected:
 
   public:
 
+      friend class BST<Data>;
+
+
     // Constructor
 
     NodeLnk(const Data& data, NodeLnk* lnode, NodeLnk* rnode) { key = data; leftChild = lnode; rightChild = rnode; };
 
+    NodeLnk(Data&& data) { std::swap(key, data); };
+   
     // Destrcutor
 
     virtual ~NodeLnk();
@@ -64,11 +76,11 @@ protected:
     virtual bool HasLeftChild() const noexcept;
     virtual bool HasRightChild() const noexcept;
 
-    virtual struct BinaryTree<Data>::Node& LeftChild() override;
-    virtual struct BinaryTree<Data>::Node& RightChild() override;
+    virtual NodeLnk& LeftChild() override;
+    virtual NodeLnk& RightChild() override;
 
-    virtual struct BinaryTree<Data>::Node& LeftChild() const override;
-    virtual struct BinaryTree<Data>::Node& RightChild() const override;
+    virtual NodeLnk& LeftChild() const override;
+    virtual NodeLnk& RightChild() const override;
 
   };
 
@@ -118,7 +130,7 @@ public:
 
   // Specific member functions (inherited from BinaryTree)
 
-  virtual struct BinaryTree<Data>::Node& Root() const override; // Override BinaryTree member (throw std::length_error when empty)
+  virtual NodeLnk& Root() const override; // Override BinaryTree member (throw std::length_error when empty)
 
   /* ************************************************************************ */
 

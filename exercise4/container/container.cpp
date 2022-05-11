@@ -49,7 +49,7 @@ Data& LinearContainer<Data>:: Back() const{
 // Quick Sort functions
 
 template <typename Data>
-ulong  LinearContainer<Data>::Partition(ulong first, ulong last) noexcept{
+ulong  LinearContainer<Data>::Partition(ulong first, ulong last) const noexcept{
 
   Data& x = operator[](first);
   ulong i = first-1;
@@ -74,14 +74,14 @@ ulong  LinearContainer<Data>::Partition(ulong first, ulong last) noexcept{
 
 
 template <typename Data>
-void LinearContainer<Data>::Sort() noexcept{
+void LinearContainer<Data>::Sort() const noexcept{
   if(size>1)
-    Quicksort(0, size-1);
+    QuickSort(0, size-1);
 }
 
 
 template <typename Data>
-void LinearContainer<Data>::QuickSort(ulong first, ulong last) noexcept{
+void LinearContainer<Data>::QuickSort(ulong first, ulong last) const noexcept{
   if (first < last) {
     ulong pivot = Partition(first, last);
 

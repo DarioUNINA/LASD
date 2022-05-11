@@ -70,9 +70,9 @@ namespace lasd
     
     // Quick Sort Auxiliary Functions 
 
-    ulong Partition(ulong, ulong) noexcept;
+    ulong Partition(ulong, ulong) const noexcept;
 
-    void QuickSort(ulong, ulong) noexcept;
+    void QuickSort(ulong, ulong) const noexcept;
 
 
   public:
@@ -105,7 +105,7 @@ namespace lasd
 
     // Sort Algorithm
     
-    void Sort() noexcept;
+    void Sort() const noexcept;
 
   };
 

@@ -14,6 +14,10 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
+class BinaryTreeLnk;
+
+
+template <typename Data>
 class BST : virtual public BinaryTreeLnk<Data>, 
             virtual public DictionaryContainer<Data>{
 
@@ -23,8 +27,8 @@ private:
 
 protected:
 
-  using BinaryTreeLnk<Data::size;
-  using BinaryTreeLnk<Data::root;
+  using BinaryTreeLnk<Data>::size;
+  using BinaryTreeLnk<Data>::root;
 
   using typename BinaryTreeLnk<Data>::NodeLnk;
 
@@ -38,8 +42,7 @@ public:
   /* ************************************************************************ */
 
   // Specific constructors
-  BST(const LinearContainer<Data>&); // A bst obtained from a LinearContainer
-                                    // ordina il linear container
+  BST(const LinearContainer<Data>&);
 
   /* ************************************************************************ */
 
@@ -125,16 +128,16 @@ protected:
  virtual NodeLnk*& FindPointerToMax(NodeLnk*&) noexcept;
  virtual NodeLnk* const& FindPointerToMax(NodeLnk* const&) const noexcept;
 
- virtual NodeLnk*& FindPointerTo(NodeLnk*&) noexcept;
- virtual NodeLnk* const& FindPointerTo(NodeLnk* const&) const noexcept;
+ virtual NodeLnk*& FindPointerTo(NodeLnk*&, const Data&) noexcept;
+ virtual NodeLnk* const& FindPointerTo(NodeLnk* const&, const Data&) const noexcept;
 
- virtual NodeLnk** FindPointerToPredecessor(NodeLnk*&) noexcept;
- virtual NodeLnk* const* FindPointerPredecessor(NodeLnk* const&) const noexcept;
+ virtual NodeLnk** FindPointerToPredecessor(NodeLnk*&, const Data&) noexcept;
+ virtual NodeLnk* const* FindPointerToPredecessor(NodeLnk* const&, const Data&) const noexcept;
 
- virtual NodeLnk** FindPointerToSuccessor(NodeLnk*&) noexcept;
- virtual NodeLnk* const* FindPointerToSuccessor(NodeLnk* const&) const noexcept;
+ virtual NodeLnk** FindPointerToSuccessor(NodeLnk*&, const Data&) noexcept;
+ virtual NodeLnk* const* FindPointerToSuccessor(NodeLnk* const&, const Data&) const noexcept;
 
- virtual struct BST<Data>::NodeLnk* BuildTree(const LinearContainer<Data>&, ulong, ulong);
+ virtual NodeLnk* BuildTree(const LinearContainer<Data>&, ulong, ulong);
  
 };
 
