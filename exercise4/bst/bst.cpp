@@ -71,8 +71,7 @@ namespace lasd {
      if(size == 0)
         return false;
 
-     NodeLnk* result = FindPointerTo(root, data);
-
+     NodeLnk* const& result = FindPointerTo(root, data);
      return result!=nullptr;
  }
 
@@ -82,7 +81,7 @@ namespace lasd {
     if(size==0)
         throw std::length_error("The BST is empty!\n");
 
-    NodeLnk* node = FindPointerToMin(root);
+    NodeLnk* const& node = FindPointerToMin(root);
     
     return node->key;
 }
@@ -115,13 +114,13 @@ namespace lasd {
      if(size == 0)
         throw std::length_error("The BST is empty!\n");
     
-    NodeLnk* node = FindPointerToMax(root);
+    NodeLnk* const& node = FindPointerToMax(root);
     return node->key;
  }
 
 
 template <typename Data>
- Data BST<Data>::MaxNRemove(){
+Data BST<Data>::MaxNRemove(){
      if(size == 0)
         throw std::length_error("The BST is empty!\n");
 
@@ -148,17 +147,21 @@ template <typename Data>
     if(size == 0)
         throw std::length_error("The BST is empty!\n");
     
-     NodeLnk** node = FindPointerToPredecessor(root, data);
-     return (*node)->key;
+     NodeLnk* const* node = FindPointerToPredecessor(root, data);
+     
+     if((*node)!=nullptr)
+        throw std::length_error("Predecessor not found!\n");
+     else
+        return data;
  }
 
  
  template <typename Data>
  Data BST<Data>::PredecessorNRemove(const Data& data){
-     if(size == 0)
+    if(size == 0)
         throw std::length_error("The BST is empty!\n");
 
-    NodeLnk* pred = Detach(FindPointerToPredecessor(data));
+    NodeLnk* pred = Detach(*(FindPointerToPredecessor(root, data)));
     Data result = pred->key;
 
     delete pred;
@@ -168,10 +171,10 @@ template <typename Data>
 
  template <typename Data>
  void BST<Data>::RemovePredecessor(const Data& data){
-     if(size == 0)
+    if(size == 0)
         throw std::length_error("The BST is empty!\n");
 
-    NodeLnk* pred = Detach(Predecessor(data));
+    NodeLnk* pred = Detach(*(FindPointerToPredecessor(root, data)));
     delete pred;
  }
  
@@ -181,17 +184,21 @@ template <typename Data>
     if(size == 0)
         throw std::length_error("The BST is empty!\n");
     
-     NodeLnk** succ = FindPointerToSuccessor(root, data);
-     return (*succ)->key;
+     NodeLnk* const* succ = FindPointerToSuccessor(root, data);
+     
+     if(*succ != nullptr)
+        throw std::length_error("Successor not found!\n");
+     else
+        return data;
  }
 
 
  template <typename Data>
  Data BST<Data>::SuccessorNRemove(const Data& data){
-     if(size == 0)
+    if(size == 0)
         throw std::length_error("The BST is empty!\n");
 
-    NodeLnk* pred = Detach(FindPointerToSuccessor(data));
+    NodeLnk* pred = Detach(*(FindPointerToSuccessor(root, data)));
     Data result = pred->key;
 
     delete pred;
@@ -201,10 +208,10 @@ template <typename Data>
 
  template <typename Data>
  void BST<Data>::RemoveSuccessor(const Data& data){
-     if(size == 0)
+    if(size == 0)
         throw std::length_error("The BST is empty!\n");
 
-    NodeLnk* succ = Detach(FindPointerToSuccessor(data));
+    NodeLnk* succ = Detach(*(FindPointerToSuccessor(root, data)));
     delete succ;
  }
 
@@ -215,33 +222,24 @@ template <typename Data>
 
  template <typename Data>
  void BST<Data>:: Insert(const Data& data){
-     NodeLnk* newNode = new NodeLnk(data, nullptr, nullptr);
+    NodeLnk* newNode = new NodeLnk(data, nullptr, nullptr);
 
-    NodeLnk* parent = FindPointerTo(root, data);
-
-    if(parent->key > data)
-        parent->leftChild = newNode;
-    else
-        parent->rightChild = newNode;
+    FindPointerTo(root, data) = newNode; //da controllare il duplicato
+    size++;
  }
 
  template <typename Data>
  void BST<Data>:: Insert(Data&& data){
-     NodeLnk* newNode = new NodeLnk(std::move(data));
+    NodeLnk* newNode = new NodeLnk(std::move(data));
 
-    NodeLnk* parent = FindPointerTo(root, data);
-
-    if(parent->key > data)
-        parent->leftChild = newNode;
-    else
-        parent->rightChild = newNode;
+    FindPointerTo(root, data) = newNode;
+    size++;
  }
 
  
  template <typename Data>
  void BST<Data>:: Remove(const Data& data){
      NodeLnk* node = Detach(FindPointerTo(root, data));
-
      delete node;
 }
 
@@ -278,7 +276,7 @@ typename BST<Data>::NodeLnk* const& BST<Data>:: FindPointerToMin(NodeLnk* const&
             current = current->leftChild;
         }
 
-    return *parent;
+    return *parent; //torna un riferimento a current->leftChild
 }
 
 
@@ -314,7 +312,6 @@ typename BST<Data>::NodeLnk* const& BST<Data>:: FindPointerTo(NodeLnk* const& no
     NodeLnk* const* parent = &node;
     NodeLnk* current = node;
 
-    if(current!=nullptr)
         while(current!=nullptr)
             if(current->key > data){
                 parent = &current->leftChild;
@@ -332,7 +329,7 @@ typename BST<Data>::NodeLnk* const& BST<Data>:: FindPointerTo(NodeLnk* const& no
 
 template <typename Data>
 typename BST<Data>::NodeLnk*& BST<Data>:: FindPointerTo(NodeLnk*& node, const Data& data) noexcept{
-    return const_cast<NodeLnk*&>(static_cast<const BST<Data>*>(this)->FindPointerTo(node));
+    return const_cast<NodeLnk*&>(static_cast<const BST<Data>*>(this)->FindPointerTo(node, data));
 }
 
 
@@ -348,15 +345,16 @@ typename BST<Data>::NodeLnk* const*  BST<Data>:: FindPointerToSuccessor(NodeLnk*
             if((*current)->key > data){
                 successor = current;
                 if((*current)->leftChild != nullptr)
-                    current = &current->leftChild;
+                    current = &(*current)->leftChild;
                 else
                     return successor;
             }else
                 if((*current)->rightChild != nullptr)
-                    current = &current->rightChild;
+                    current = &(*current)->rightChild;
                 else
                     return successor;
-
+    
+    return nullptr;
 }
 
 
@@ -378,14 +376,16 @@ typename BST<Data>::NodeLnk* const*  BST<Data>:: FindPointerToPredecessor(NodeLn
             if((*current)->key < data){
                 predecessor = current;
                 if((*current)->leftChild != nullptr)
-                    current = &current->leftChild;
+                    current = &(*current)->leftChild;
                 else
                     return predecessor;
             }else
                 if((*current)->rightChild != nullptr)
-                    current = &current->rightChild;
+                    current = &(*current)->rightChild;
                 else
                     return predecessor;
+
+    return nullptr;
 }
 
 
@@ -425,35 +425,49 @@ typename BST<Data>::NodeLnk*  BST<Data>:: Skip2Right(NodeLnk* & node) noexcept{
 
 template <typename Data>
 typename BST<Data>::NodeLnk*  BST<Data>:: DetachMin(NodeLnk* & node) noexcept{
-    NodeLnk* parent = FindPointerToMin(node);
-    NodeLnk* min = parent->leftChild;
+    NodeLnk*& min = FindPointerToMin(node);
+        min->rightChild == nullptr;
 
     if(min->IsLeaf()){
-        parent->leftChild == nullptr;
+        min->rightChild == nullptr;
         return min;
     }else
-        return Skip2Right(parent);        
+        return Skip2Right(min);        
 }
 
 
 template <typename Data>
 typename BST<Data>::NodeLnk*  BST<Data>:: DetachMax(NodeLnk* & node) noexcept{
-    NodeLnk* parent = FindPointerToMax(node);
-    NodeLnk* max = parent->leftChild;
+    NodeLnk*& max = FindPointerToMax(node);
 
     if(max->IsLeaf()){
-        parent->rightChild == nullptr;
+        max->leftChild == nullptr;
         return max;
     }else
-        return Skip2Left(parent);        
+        return Skip2Left(max);        
 }
 
 
 template <typename Data>
 typename BST<Data>::NodeLnk*  BST<Data>:: Detach(NodeLnk* & node) noexcept{
+    if(!node->HasLeftChild() && !node->HasRightChild())
+        return DetachMin(node);
+    
+    if(!node->HasLeftChild())
+        return Skip2Left(node);
+    else
+        return Skip2Right(node);
+}       
 
 
+template <typename Data>
+Data  BST<Data>:: DataNDelete(NodeLnk* & node) noexcept{
+    NodeLnk* temp = Detach(node);
 
+    Data result = temp->key;
+
+    delete temp;
+    return result;
 }
 
 
