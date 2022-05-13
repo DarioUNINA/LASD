@@ -202,9 +202,12 @@ void BinaryTree<Data>::FoldBreadth(FoldFunctor function, const void* value, void
  // Constructors
 template <typename Data>
 BTPreOrderIterator<Data>::BTPreOrderIterator(const BinaryTree<Data>& tree){
-    current = &(tree.Root());
-    root = &(tree.Root());
+    if(tree.Size()>0){
+        current = &(tree.Root());
+        root = &(tree.Root());
+    }
 }
+
 
 
 template <typename Data>
@@ -315,10 +318,12 @@ void BTPreOrderIterator<Data>::Reset() noexcept{
 // Constructors
 template <typename Data>
 BTPostOrderIterator<Data>::BTPostOrderIterator(const BinaryTree<Data>& tree){
-    root = &(tree.Root());
-    current = root;
+    if(tree.Size()>0){
+        root = &(tree.Root());
+        current = root;
 
-    Explore();
+        Explore();
+    }
 }
 
 
@@ -446,10 +451,12 @@ void BTPostOrderIterator<Data>::Explore() noexcept{
 // Constructors
 template <typename Data>
 BTInOrderIterator<Data>::BTInOrderIterator(const BinaryTree<Data>& tree){
-    root = &(tree.Root());
-    current = root;
+    if(tree.Size()>0){
+        root = &(tree.Root());
+        current = root;
 
-    Explore();
+        Explore();
+    }
 }
 
 
@@ -574,8 +581,10 @@ void BTInOrderIterator<Data>::Explore() noexcept{
 // Constructors
 template <typename Data>
 BTBreadthIterator<Data>::BTBreadthIterator(const BinaryTree<Data>& tree){
-    root = &(tree.Root());
-    current = root;
+    if(tree.Size()>0){
+        root = &(tree.Root());
+        current = root;
+    }
 }
 
 
