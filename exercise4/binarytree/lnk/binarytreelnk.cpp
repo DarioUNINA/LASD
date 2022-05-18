@@ -1,4 +1,3 @@
-
 namespace lasd {
 
 /* ************************************************************************** */
@@ -184,6 +183,5 @@ struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::CopyTree(const struct 
     NodeLnk* newNode = new NodeLnk(node.Element(), left, right);
     return newNode;
 }
-
 
 }
