@@ -79,10 +79,12 @@ void stestBSTInt(uint& testnum, uint& testerr) {
     Remove(loctestnum, loctesterr, bst, 5);
     Remove(loctestnum, loctesterr, bst, 2);
 
+
     Exists(loctestnum, loctesterr, bst, false, 5);
     Exists(loctestnum, loctesterr, bst, false, 2);
 
     RemoveMax(loctestnum, loctesterr, bst, true);
+
     Max(loctestnum, loctesterr, bst, true, 6);
 
     MapInOrder(loctestnum, loctesterr, bst, true, &MapPrint<int>, 0);
@@ -316,8 +318,8 @@ void stestBSTString(uint& testnum, uint& testerr) {
 
 void testSimpleExercise4() {
   uint testnum = 0, testerr = 0;
-  stestBSTInt(testnum, testerr);
+  // stestBSTInt(testnum, testerr);
   // stestBSTFloat(testnum, testerr);
-  // stestBSTString(testnum, testerr);
+  stestBSTString(testnum, testerr);
   cout << endl << "Exercise 4 (Simple Test) (Errors/Tests: " << testerr << "/" << testnum << ")" << endl;
 }

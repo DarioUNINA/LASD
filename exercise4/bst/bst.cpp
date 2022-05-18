@@ -8,10 +8,12 @@ namespace lasd {
 
  template <typename Data>
  BST<Data>::BST(const LinearContainer<Data>& container){
-     container.Sort();
+    //  container.Sort();
 
-     root = BuildTree(container, 0, container.Size()-1);
-     size = container.Size();
+    //  root = BuildTree(container, 0, container.Size()-1);
+    //  size = container.Size();
+     for(ulong i =0; i< container.Size(); ++i){
+         Insert(container[i]);}
  }
 
 
@@ -149,10 +151,10 @@ Data BST<Data>::MaxNRemove(){
     
      NodeLnk* const* node = FindPointerToPredecessor(root, data);
      
-     if((*node)!=nullptr)
+     if(*node ==nullptr)
         throw std::length_error("Predecessor not found!\n");
      else
-        return data;
+        return (*node)->key;
  }
 
  
@@ -186,10 +188,10 @@ Data BST<Data>::MaxNRemove(){
     
      NodeLnk* const* succ = FindPointerToSuccessor(root, data);
      
-     if(*succ != nullptr)
+     if(*succ == nullptr)
         throw std::length_error("Successor not found!\n");
      else
-        return data;
+        return (*succ)->key;
  }
 
 
@@ -222,18 +224,23 @@ Data BST<Data>::MaxNRemove(){
 
  template <typename Data>
  void BST<Data>:: Insert(const Data& data){
-    NodeLnk* newNode = new NodeLnk(data, nullptr, nullptr);
 
-    FindPointerTo(root, data) = newNode; //da controllare il duplicato
-    size++;
+    NodeLnk*& temp = FindPointerTo(root, data);
+    if(temp ==nullptr){
+        NodeLnk* newNode = new NodeLnk(data, nullptr, nullptr);
+        temp = newNode;
+        size++;
+    }
  }
 
  template <typename Data>
  void BST<Data>:: Insert(Data&& data){
-    NodeLnk* newNode = new NodeLnk(std::move(data));
 
-    FindPointerTo(root, data) = newNode;
-    size++;
+    NodeLnk*& temp = FindPointerTo(root, data);
+    if(temp ==nullptr){
+        temp = new NodeLnk(std::move(data));
+        size++;
+    }
  }
 
  
@@ -253,12 +260,12 @@ typename BST<Data>::NodeLnk* BST<Data>:: BuildTree(const LinearContainer<Data>& 
      NodeLnk* left = nullptr;
      NodeLnk* right = nullptr;
      ulong middle = (first+last)/2;
+    std::cout<<"inserisco "<<container[middle]<<"\n";
 
      if(last>first){
         NodeLnk* left = BuildTree(container, first, middle-1);
         NodeLnk* right = BuildTree(container, middle+1, last);
      }
-     
      NodeLnk* node = new NodeLnk(container[middle], left, right);
 
      return node;
@@ -293,7 +300,7 @@ typename BST<Data>::NodeLnk* const& BST<Data>:: FindPointerToMax(NodeLnk* const&
 
     if(current!=nullptr)
         while(current->HasRightChild()){
-            parent = &current->rightChild; //puntatore a leftChild (puntatore a puntatore a nodo)
+            parent = &current->rightChild;
             current = current->rightChild;
         }
 
@@ -312,8 +319,8 @@ typename BST<Data>::NodeLnk* const& BST<Data>:: FindPointerTo(NodeLnk* const& no
     NodeLnk* const* parent = &node;
     NodeLnk* current = node;
 
-        while(current!=nullptr)
-            if(current->key > data){
+        while(current!=nullptr){
+            if(current->key > data ){
                 parent = &current->leftChild;
                 current = current->leftChild;
             }else
@@ -321,7 +328,7 @@ typename BST<Data>::NodeLnk* const& BST<Data>:: FindPointerTo(NodeLnk* const& no
                     parent = &current->rightChild;
                     current = current->rightChild;
                 }else
-                    break;
+                    break;}
     
     return *parent;    
 }
@@ -344,12 +351,12 @@ typename BST<Data>::NodeLnk* const*  BST<Data>:: FindPointerToSuccessor(NodeLnk*
         else
             if((*current)->key > data){
                 successor = current;
-                if((*current)->leftChild != nullptr)
+                if((*current)->HasLeftChild())
                     current = &(*current)->leftChild;
                 else
                     return successor;
             }else
-                if((*current)->rightChild != nullptr)
+                if((*current)->HasRightChild())
                     current = &(*current)->rightChild;
                 else
                     return successor;
@@ -369,21 +376,24 @@ typename BST<Data>::NodeLnk* const*  BST<Data>:: FindPointerToPredecessor(NodeLn
     NodeLnk* const* current = &node;
     NodeLnk* const* predecessor = nullptr;
 
-    while(*current != nullptr)
-        if((*current)->key == data)
-            return &FindPointerToMax((*current)->leftChild);
-        else
-            if((*current)->key < data){
-                predecessor = current;
-                if((*current)->leftChild != nullptr)
-                    current = &(*current)->leftChild;
+    while(true){
+        if((*current)->key <data){
+            predecessor = current;
+            if((*current)->HasRightChild())
+                current = &(*current)->rightChild;
+            else
+                return predecessor;
+        }else{
+            if(!(*current)->HasLeftChild())
+                return predecessor;
+            else{
+                if((*current)->key > data)
+                    predecessor = &(*current)->leftChild;
                 else
-                    return predecessor;
-            }else
-                if((*current)->rightChild != nullptr)
-                    current = &(*current)->rightChild;
-                else
-                    return predecessor;
+                    return &FindPointerToMax((*current)->leftChild);
+            }
+        }
+    }
 
     return nullptr;
 }
@@ -399,10 +409,9 @@ template <typename Data>
 typename BST<Data>::NodeLnk*  BST<Data>:: Skip2Left(NodeLnk* & node) noexcept{
     NodeLnk* temp = nullptr;
     if(node!=nullptr){
-        size--;
-
         std::swap(temp, node->leftChild);
         std::swap(temp, node);
+        size--;
     }
 
     return temp;
@@ -413,10 +422,9 @@ template <typename Data>
 typename BST<Data>::NodeLnk*  BST<Data>:: Skip2Right(NodeLnk* & node) noexcept{
     NodeLnk* temp = nullptr;
     if(node!=nullptr){
-        size--;
-
         std::swap(temp, node->rightChild);
         std::swap(temp, node);
+        size--;
     }
 
     return temp;
@@ -425,38 +433,32 @@ typename BST<Data>::NodeLnk*  BST<Data>:: Skip2Right(NodeLnk* & node) noexcept{
 
 template <typename Data>
 typename BST<Data>::NodeLnk*  BST<Data>:: DetachMin(NodeLnk* & node) noexcept{
-    NodeLnk*& min = FindPointerToMin(node);
-        min->rightChild == nullptr;
-
-    if(min->IsLeaf()){
-        min->rightChild == nullptr;
-        return min;
-    }else
-        return Skip2Right(min);        
+    return Skip2Right(FindPointerToMin(node));
 }
 
 
 template <typename Data>
 typename BST<Data>::NodeLnk*  BST<Data>:: DetachMax(NodeLnk* & node) noexcept{
-    NodeLnk*& max = FindPointerToMax(node);
-
-    if(max->IsLeaf()){
-        max->leftChild == nullptr;
-        return max;
-    }else
-        return Skip2Left(max);        
+    return Skip2Left(FindPointerToMax(node));        
 }
 
 
 template <typename Data>
 typename BST<Data>::NodeLnk*  BST<Data>:: Detach(NodeLnk* & node) noexcept{
-    if(!node->HasLeftChild() && !node->HasRightChild())
+    if(node!=nullptr){
+        if(node->HasLeftChild() && node->HasRightChild()){
+            NodeLnk* min = DetachMax(node->leftChild);
+            std::swap(node->key, min->key);
+            return min;
+        }
+    
+        if(!node->HasLeftChild())
+            return Skip2Right(node);
+        else
+            return Skip2Left(node);
+    }else
         return DetachMin(node);
     
-    if(!node->HasLeftChild())
-        return Skip2Left(node);
-    else
-        return Skip2Right(node);
 }       
 
 
