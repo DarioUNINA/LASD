@@ -163,6 +163,8 @@ struct BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::BuildTree(const Linear
 
     if(2*(index+1) < container.Size())
         right = BuildTree(container, 2*(index+1));
+
+    std::cout<<"Inserisco "<<container[index]<<"\n";
     
     NodeLnk* node = new NodeLnk(container[index], left, right);
     return node;
