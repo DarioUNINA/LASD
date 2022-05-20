@@ -145,8 +145,6 @@ protected:
  virtual NodeLnk** FindPointerToSuccessor(NodeLnk*&, const Data&) noexcept;
  virtual NodeLnk* const* FindPointerToSuccessor(NodeLnk* const&, const Data&) const noexcept;
 
- virtual NodeLnk* BuildTree(const LinearContainer<Data>&, ulong, ulong);
- 
 };
 
 /* ************************************************************************** */

@@ -666,17 +666,16 @@ BTBreadthIterator<Data>& BTBreadthIterator<Data>::operator++(){
     if(Terminated())
         throw std::out_of_range("The iterator is pointing to NULL!\n");
     
-    if(queue.Empty() && (current!= root || current->IsLeaf()))
-        current = nullptr;
-    else{
-        if(current->HasLeftChild())
-            queue.Enqueue(&(current->LeftChild()));        
+    if(current->HasLeftChild())
+        queue.Enqueue(&(current->LeftChild()));        
 
-        if(current->HasRightChild())
-            queue.Enqueue(&(current->RightChild()));
+    if(current->HasRightChild())
+        queue.Enqueue(&(current->RightChild()));
     
+    if(queue.Empty())
+        current = nullptr;
+    else
         current = queue.HeadNDequeue();
-    }
 
     return *this;
 }

@@ -8,12 +8,8 @@ namespace lasd {
 
  template <typename Data>
  BST<Data>::BST(const LinearContainer<Data>& container){
-    //  container.Sort();
-
-    //  root = BuildTree(container, 0, container.Size()-1);
-    //  size = container.Size();
-     for(ulong i =0; i< container.Size(); ++i){
-         Insert(container[i]);}
+     for(ulong i =0; i< container.Size(); ++i)
+        Insert(container[i]);
  }
 
 
@@ -256,23 +252,6 @@ Data BST<Data>::MaxNRemove(){
 //  Auxiliary Member Function
 
 template <typename Data>
-typename BST<Data>::NodeLnk* BST<Data>:: BuildTree(const LinearContainer<Data>& container, ulong first, ulong last){
-     NodeLnk* left = nullptr;
-     NodeLnk* right = nullptr;
-     ulong middle = (first+last)/2;
-    std::cout<<"inserisco "<<container[middle]<<"\n";
-
-     if(last>first){
-        NodeLnk* left = BuildTree(container, first, middle-1);
-        NodeLnk* right = BuildTree(container, middle+1, last);
-     }
-     NodeLnk* node = new NodeLnk(container[middle], left, right);
-
-     return node;
- }
-
-
-template <typename Data>
 typename BST<Data>::NodeLnk* const& BST<Data>:: FindPointerToMin(NodeLnk* const& node) const noexcept{
     NodeLnk* const* parent = &node;
     NodeLnk* current = node;
@@ -347,7 +326,10 @@ typename BST<Data>::NodeLnk* const*  BST<Data>:: FindPointerToSuccessor(NodeLnk*
 
     while(*current != nullptr)
         if((*current)->key == data)
-            return &FindPointerToMin((*current)->rightChild);
+            if((*current)->HasRightChild())
+                return &FindPointerToMin((*current)->rightChild);
+            else
+                return successor;
         else
             if((*current)->key > data){
                 successor = current;
@@ -376,24 +358,24 @@ typename BST<Data>::NodeLnk* const*  BST<Data>:: FindPointerToPredecessor(NodeLn
     NodeLnk* const* current = &node;
     NodeLnk* const* predecessor = nullptr;
 
-    while(true){
-        if((*current)->key <data){
-            predecessor = current;
-            if((*current)->HasRightChild())
-                current = &(*current)->rightChild;
+    while(*current != nullptr)
+        if((*current)->key == data)
+            if((*current)->HasLeftChild())
+                return &FindPointerToMax((*current)->leftChild);
             else
                 return predecessor;
-        }else{
-            if(!(*current)->HasLeftChild())
-                return predecessor;
-            else{
-                if((*current)->key > data)
-                    predecessor = &(*current)->leftChild;
+        else
+            if((*current)->key < data){
+                predecessor = current;
+                if((*current)->HasRightChild())
+                    current = &(*current)->rightChild;
                 else
-                    return &FindPointerToMax((*current)->leftChild);
-            }
-        }
-    }
+                    return predecessor;
+            }else
+                if((*current)->HasLeftChild())
+                    current = &(*current)->leftChild;
+                else
+                    return predecessor;
 
     return nullptr;
 }
