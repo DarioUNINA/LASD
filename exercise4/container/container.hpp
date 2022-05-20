@@ -184,9 +184,9 @@ public:
 
   // Specific member functions
 
-  virtual void Insert(const Data&) = 0;
-  virtual void Insert(Data&&) = 0;
-  virtual void Remove(const Data&) = 0;
+  virtual bool Insert(const Data&) = 0;
+  virtual bool Insert(Data&&) = 0;
+  virtual bool Remove(const Data&) = 0;
 
 };
 

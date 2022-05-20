@@ -98,9 +98,9 @@ public:
 
   // Specific member functions (inherited from DictionaryContainer)
 
-  virtual void Insert(const Data&) override; // Override DictionaryContainer member (Copy of the value)
-  virtual void Insert(Data&&) override; // Override DictionaryContainer member (Move of the value)
-  virtual void Remove(const Data&) override; // Override DictionaryContainer member
+  virtual bool Insert(const Data&) override; // Override DictionaryContainer member (Copy of the value)
+  virtual bool Insert(Data&&) override; // Override DictionaryContainer member (Move of the value)
+  virtual bool Remove(const Data&) override; // Override DictionaryContainer member
 
   /* ************************************************************************ */
 

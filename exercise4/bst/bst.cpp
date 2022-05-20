@@ -97,6 +97,7 @@ namespace lasd {
      return result;
  }
 
+
   template <typename Data>
  void BST<Data>::RemoveMin(){
      if(size == 0)
@@ -147,7 +148,7 @@ Data BST<Data>::MaxNRemove(){
     
      NodeLnk* const* node = FindPointerToPredecessor(root, data);
      
-     if(*node ==nullptr)
+     if(node ==nullptr)
         throw std::length_error("Predecessor not found!\n");
      else
         return (*node)->key;
@@ -159,11 +160,16 @@ Data BST<Data>::MaxNRemove(){
     if(size == 0)
         throw std::length_error("The BST is empty!\n");
 
-    NodeLnk* pred = Detach(*(FindPointerToPredecessor(root, data)));
-    Data result = pred->key;
+    NodeLnk** temp = FindPointerToPredecessor(root, data);
 
-    delete pred;
-    return result;
+    if(temp != nullptr){
+        NodeLnk* pred = Detach(*temp);
+        Data result = pred->key;
+
+        delete pred;
+        return result;
+    }else
+        throw std::length_error("Predecessor of given value note found!\n");
  }
 
 
@@ -172,8 +178,13 @@ Data BST<Data>::MaxNRemove(){
     if(size == 0)
         throw std::length_error("The BST is empty!\n");
 
-    NodeLnk* pred = Detach(*(FindPointerToPredecessor(root, data)));
-    delete pred;
+    NodeLnk** temp = FindPointerToPredecessor(root, data);
+
+    if(temp != nullptr){
+        NodeLnk* pred = Detach(*temp);
+        delete pred;
+    }else
+        throw std::length_error("Predecessor of given value not found!\n");
  }
  
  
@@ -184,7 +195,7 @@ Data BST<Data>::MaxNRemove(){
     
      NodeLnk* const* succ = FindPointerToSuccessor(root, data);
      
-     if(*succ == nullptr)
+     if(succ == nullptr)
         throw std::length_error("Successor not found!\n");
      else
         return (*succ)->key;
@@ -196,11 +207,16 @@ Data BST<Data>::MaxNRemove(){
     if(size == 0)
         throw std::length_error("The BST is empty!\n");
 
-    NodeLnk* pred = Detach(*(FindPointerToSuccessor(root, data)));
-    Data result = pred->key;
+    NodeLnk** temp = FindPointerToSuccessor(root, data);
 
-    delete pred;
-    return result;
+    if(temp != nullptr){
+        NodeLnk* succ = Detach(*temp);
+        Data result = succ->key;
+
+        delete succ;
+        return result;
+    }else
+        throw std::length_error("Successor of given value not found!\n");
  }
 
 
@@ -209,8 +225,13 @@ Data BST<Data>::MaxNRemove(){
     if(size == 0)
         throw std::length_error("The BST is empty!\n");
 
-    NodeLnk* succ = Detach(*(FindPointerToSuccessor(root, data)));
-    delete succ;
+    NodeLnk** temp = FindPointerToSuccessor(root, data);
+
+    if(temp != nullptr){
+        NodeLnk* succ = Detach(*temp);
+        delete succ;
+    }else
+        throw std::length_error("Successor of given value not found!\n");
  }
 
 
@@ -219,31 +240,42 @@ Data BST<Data>::MaxNRemove(){
   // Specific member functions (inherited from DictionaryContainer)
 
  template <typename Data>
- void BST<Data>:: Insert(const Data& data){
+ bool BST<Data>:: Insert(const Data& data){
 
     NodeLnk*& temp = FindPointerTo(root, data);
     if(temp ==nullptr){
         NodeLnk* newNode = new NodeLnk(data, nullptr, nullptr);
         temp = newNode;
         size++;
-    }
+        
+        return true;
+    }else
+        return false;
  }
 
- template <typename Data>
- void BST<Data>:: Insert(Data&& data){
 
+ template <typename Data>
+ bool BST<Data>:: Insert(Data&& data){
     NodeLnk*& temp = FindPointerTo(root, data);
     if(temp ==nullptr){
         temp = new NodeLnk(std::move(data));
         size++;
-    }
+
+        return true;
+    }else
+        return false;
  }
 
  
  template <typename Data>
- void BST<Data>:: Remove(const Data& data){
+ bool BST<Data>:: Remove(const Data& data){
      NodeLnk* node = Detach(FindPointerTo(root, data));
+
+     if(node==nullptr)
+        return false;
+
      delete node;
+     return true;
 }
 
  
@@ -258,7 +290,7 @@ typename BST<Data>::NodeLnk* const& BST<Data>:: FindPointerToMin(NodeLnk* const&
 
     if(current!=nullptr)
         while(current->HasLeftChild()){
-            parent = &current->leftChild; //puntatore a leftChild (puntatore a puntatore a nodo)
+            parent = &current->leftChild;
             current = current->leftChild;
         }
 

@@ -475,11 +475,17 @@ void Test(lasd::BST<Data>& bst){
                     break;}
                 
                 case 5:{
-                    bst.Insert(setValue(bst));
+                    if(bst.Insert(setValue(bst)))
+                        std::cout<<"Insert completed!\n";
+                    else
+                        std::cout<<"The element is already in the BST!\n";
                     break;}
 
                 case 6:{
-                    bst.Remove(setValue(bst));
+                    if(bst.Remove(setValue(bst)))
+                        std::cout<<"Element removed!\n";
+                    else
+                        std::cout<<"The element is not in the BST!\n";
                     break;}
 
                 case 7:{
@@ -533,8 +539,8 @@ void Test(lasd::BST<Data>& bst){
                 case 13:{
                     if(bst.Size()>0)
                         try{
-                            Data key = setValue(bst);
-                            std::cout<<"The predecessor of the given value in the bst is "<<bst.Predecessor(key); 
+                            Data data = bst.Predecessor(setValue(bst));
+                            std::cout<<"The predecessor of the given value in the bst is "<<data;
                         }catch(...){
                             std::cout<<"There is no predecessor of the given value in the bst!\n";
                         }
@@ -557,8 +563,10 @@ void Test(lasd::BST<Data>& bst){
                 case 15:{
                     if(bst.Size()>0)
                         try{
-                            Data key = setValue(bst);
-                            std::cout<<"The predecessor of the given value  was "<<bst.PredecessorNRemove(key)<<" and it has been removed!\n"; 
+
+                            Data data = bst.PredecessorNRemove(setValue(bst));
+                            std::cout<<"The predecessor of the given value  was "<<data<<" and it has been removed!\n"; 
+
                         }catch(...){
                             std::cout<<"There is no predecessor of the given value in the bst!\n";
                         }
@@ -569,7 +577,10 @@ void Test(lasd::BST<Data>& bst){
                 case 16:{
                     if(bst.Size()>0)
                         try{
-                            std::cout<<"The successor of the given value in the bst is "<<bst.Successor(setValue(bst)); 
+
+                            Data data = bst.Successor(setValue(bst));
+                            std::cout<<"The successor of the given value in the bst is "<<data; 
+
                         }catch(...){
                             std::cout<<"There is no successor of the given value in the bst!\n";
                         }
@@ -592,8 +603,8 @@ void Test(lasd::BST<Data>& bst){
                 case 18:{
                     if(bst.Size()>0)
                         try{
-                            Data key = setValue(bst);
-                            std::cout<<"The successor of the given value  was "<<bst.SuccessorNRemove(key)<<" and it has been removed!\n"; 
+                            Data data = bst.SuccessorNRemove(setValue(bst));
+                            std::cout<<"The successor of the given value  was "<<data<<" and it has been removed!\n"; 
                         }catch(...){
                             std::cout<<"There is no successor of the given value in the bst!\n";
                         }
@@ -664,7 +675,6 @@ void BST(){
         }
     }while(!exit);
 }
-
 
 
 /* ************************************************************************ */
