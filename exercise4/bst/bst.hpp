@@ -122,7 +122,7 @@ protected:
 
   virtual Data DataNDelete(NodeLnk*&) noexcept;
 
-  virtual NodeLnk* Detach(NodeLnk*&) noexcept; //stacca il nodo senza distrggerlo
+  virtual NodeLnk* Detach(NodeLnk*&) noexcept;
 
   virtual NodeLnk* DetachMin(NodeLnk*&) noexcept;
   virtual NodeLnk* DetachMax(NodeLnk*&) noexcept;

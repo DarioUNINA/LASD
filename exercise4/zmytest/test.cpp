@@ -489,127 +489,108 @@ void Test(lasd::BST<Data>& bst){
                     break;}
 
                 case 7:{
-                    if(bst.Size()>0)
+                    try{
                         std::cout<<"The minimum of the tree is "<<bst.Min();
-                    else
-                        std::cout<<"The bst has no node!\n";
+                    }catch(std::length_error e){
+                        std::cout<<e.what();
+                    }
                     break;}
 
                 case 8:{
-                    if(bst.Size()>0)
+                    try{
                         std::cout<<"The maximum of the tree is "<<bst.Max();
-                    else
-                        std::cout<<"The bst has no node!\n";
+                    }catch(std::length_error e){
+                        std::cout<<e.what();
+                    }
                     break;}
 
                 case 9:{
-                    if(bst.Size()>0){
+                    try{
                         bst.RemoveMin();
                         std::cout<<"The minimum of the tree has been removed!\n";
+
+                    }catch(std::length_error e){
+                        std::cout<<e.what();
                     }
-                    else
-                        std::cout<<"The bst has no node!\n";
                     break;}
 
                 case 10:{
-                    if(bst.Size()>0){
+                    try{
                         std::cout<<"The minimum of the tree was "<< bst.MinNRemove()<<" and has been removed!\n";
+                    }catch(std::length_error e){
+                        std::cout<<e.what();
                     }
-                    else
-                        std::cout<<"The bst has no node!\n";
                     break;}                    
 
                 case 11:{
-                    if(bst.Size()>0){
+                    try{
                         bst.RemoveMax();
                         std::cout<<"The maximum of the tree has been removed!\n";
+                    }catch(std::length_error e){
+                        std::cout<<e.what();
                     }
-                    else
-                        std::cout<<"The bst has no node!\n";
                     break;}
 
                 case 12:{
-                    if(bst.Size()>0){
+                    try{
                         std::cout<<"The maximum of the tree was "<< bst.MaxNRemove()<<" and has been removed!\n";
+                    }catch(std::length_error e){
+                        std::cout<<e.what();
                     }
-                    else
-                        std::cout<<"The bst has no node!\n";
                     break;} 
 
                 case 13:{
-                    if(bst.Size()>0)
-                        try{
-                            Data data = bst.Predecessor(setValue(bst));
-                            std::cout<<"The predecessor of the given value in the bst is "<<data;
-                        }catch(...){
-                            std::cout<<"There is no predecessor of the given value in the bst!\n";
-                        }
-                    else
-                        std::cout<<"The bst has no node!\n";
+                    try{
+                        Data data = bst.Predecessor(setValue(bst));
+                        std::cout<<"The predecessor of the given value in the bst is "<<data;
+                    }catch(std::length_error e){
+                            std::cout<<e.what();
+                    }
                     break;}
 
                 case 14:{
-                    if(bst.Size()>0)
-                        try{
-                            bst.RemovePredecessor(setValue(bst));
-                            std::cout<<"The predecessor of the given value has been removed!";
-                        }catch(...){
-                            std::cout<<"There is no predecessor of the given value in the bst!\n";
-                        }
-                    else
-                        std::cout<<"The bst has no node!\n";
+                    try{
+                        bst.RemovePredecessor(setValue(bst));
+                        std::cout<<"The predecessor of the given value has been removed!";
+                    }catch(std::length_error e){
+                            std::cout<<e.what();
+                    }
                     break;} 
 
                 case 15:{
-                    if(bst.Size()>0)
                         try{
-
                             Data data = bst.PredecessorNRemove(setValue(bst));
                             std::cout<<"The predecessor of the given value  was "<<data<<" and it has been removed!\n"; 
-
-                        }catch(...){
-                            std::cout<<"There is no predecessor of the given value in the bst!\n";
+                        }catch(std::length_error e){
+                            std::cout<<e.what();
                         }
-                    else
-                        std::cout<<"The bst has no node!\n";
                     break;}
 
                 case 16:{
-                    if(bst.Size()>0)
-                        try{
-
-                            Data data = bst.Successor(setValue(bst));
-                            std::cout<<"The successor of the given value in the bst is "<<data; 
-
-                        }catch(...){
-                            std::cout<<"There is no successor of the given value in the bst!\n";
-                        }
-                    else
-                        std::cout<<"The bst has no node!\n";
+                    try{
+                        Data data = bst.Successor(setValue(bst));
+                        std::cout<<"The successor of the given value in the bst is "<<data; 
+                    }catch(...){
+                        std::cout<<"There is no successor of the given value in the bst!\n";
+                    }
                     break;}
 
                 case 17:{
-                    if(bst.Size()>0)
-                        try{
-                            bst.Successor(setValue(bst));
-                            std::cout<<"The successor of the given value has been removed!";
-                        }catch(...){
-                            std::cout<<"There is no successor of the given value in the bst!\n";
-                        }
-                    else
-                        std::cout<<"The bst has no node!\n";
+                    try{
+                        bst.RemoveSuccessor(setValue(bst));
+                        std::cout<<"The successor of the given value has been removed!";
+                    }catch(...){
+                        std::cout<<"There is no successor of the given value in the bst!\n";
+                    }
                     break;} 
 
                 case 18:{
-                    if(bst.Size()>0)
-                        try{
-                            Data data = bst.SuccessorNRemove(setValue(bst));
-                            std::cout<<"The successor of the given value  was "<<data<<" and it has been removed!\n"; 
-                        }catch(...){
-                            std::cout<<"There is no successor of the given value in the bst!\n";
-                        }
-                    else
-                        std::cout<<"The bst has no node!\n";
+                    try{
+                        Data data = bst.SuccessorNRemove(setValue(bst));
+                        std::cout<<"The successor of the given value  was "<<data<<" and it has been removed!\n"; 
+                    }catch(std::length_error e){
+                        std::cout<<e.what();
+                    }
                     break;}                    
 
                 case 19:{

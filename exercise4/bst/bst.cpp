@@ -162,13 +162,9 @@ Data BST<Data>::MaxNRemove(){
 
     NodeLnk** temp = FindPointerToPredecessor(root, data);
 
-    if(temp != nullptr){
-        NodeLnk* pred = Detach(*temp);
-        Data result = pred->key;
-
-        delete pred;
-        return result;
-    }else
+    if(temp != nullptr)
+        return DataNDelete(*temp);
+    else
         throw std::length_error("Predecessor of given value note found!\n");
  }
 
@@ -209,13 +205,9 @@ Data BST<Data>::MaxNRemove(){
 
     NodeLnk** temp = FindPointerToSuccessor(root, data);
 
-    if(temp != nullptr){
-        NodeLnk* succ = Detach(*temp);
-        Data result = succ->key;
-
-        delete succ;
-        return result;
-    }else
+    if(temp != nullptr)
+        return DataNDelete(*temp);
+    else
         throw std::length_error("Successor of given value not found!\n");
  }
 
@@ -244,8 +236,7 @@ Data BST<Data>::MaxNRemove(){
 
     NodeLnk*& temp = FindPointerTo(root, data);
     if(temp ==nullptr){
-        NodeLnk* newNode = new NodeLnk(data, nullptr, nullptr);
-        temp = newNode;
+        temp = new NodeLnk(data, nullptr, nullptr);
         size++;
         
         return true;
@@ -294,7 +285,7 @@ typename BST<Data>::NodeLnk* const& BST<Data>:: FindPointerToMin(NodeLnk* const&
             current = current->leftChild;
         }
 
-    return *parent; //torna un riferimento a current->leftChild
+    return *parent;
 }
 
 
@@ -330,7 +321,7 @@ typename BST<Data>::NodeLnk* const& BST<Data>:: FindPointerTo(NodeLnk* const& no
     NodeLnk* const* parent = &node;
     NodeLnk* current = node;
 
-        while(current!=nullptr){
+        while(current!=nullptr)
             if(current->key > data ){
                 parent = &current->leftChild;
                 current = current->leftChild;
@@ -339,7 +330,7 @@ typename BST<Data>::NodeLnk* const& BST<Data>:: FindPointerTo(NodeLnk* const& no
                     parent = &current->rightChild;
                     current = current->rightChild;
                 }else
-                    break;}
+                    current = nullptr;
     
     return *parent;    
 }
@@ -461,9 +452,9 @@ template <typename Data>
 typename BST<Data>::NodeLnk*  BST<Data>:: Detach(NodeLnk* & node) noexcept{
     if(node!=nullptr){
         if(node->HasLeftChild() && node->HasRightChild()){
-            NodeLnk* min = DetachMax(node->leftChild);
-            std::swap(node->key, min->key);
-            return min;
+            NodeLnk* pred = DetachMax(node->leftChild);
+            std::swap(node->key, pred->key);
+            return pred;
         }
     
         if(!node->HasLeftChild())
