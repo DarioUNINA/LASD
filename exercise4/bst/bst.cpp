@@ -90,12 +90,8 @@ namespace lasd {
      if(size == 0)
         throw std::length_error("The BST is empty!\n");
 
-     NodeLnk* min = DetachMin(root);
-     Data result = min->key;
-
-     delete min;
-     return result;
- }
+     return DataNDelete(FindPointerToMin(root));
+}
 
 
   template <typename Data>
@@ -123,12 +119,8 @@ Data BST<Data>::MaxNRemove(){
      if(size == 0)
         throw std::length_error("The BST is empty!\n");
 
-     NodeLnk* max = DetachMax(root);
-     Data result = max->key;
-
-     delete max;
-     return result;
- }
+     return DataNDelete(FindPointerToMax(root));
+}
 
 
  template <typename Data>
