@@ -21,57 +21,60 @@ class Hash {
 
 public:
 
-  // type operator()(argument) specifiers; // (concrete function should not throw exceptions)
+  ulong operator()(const Data&) const noexcept;
 
 };
 
 /* ************************************************************************** */
 
 template <typename Data>
-class HashTable { // Must extend DictionaryContainer<Data>,
-                  //             MappableContainer<Data>,
-                  //             FoldableContainer<Data>
+class HashTable : public DictionaryContainer<Data>,
+                  public MappableContainer<Data>,
+                  public FoldableContainer<Data>{
 
 private:
-
+-
   // ...
 
 protected:
 
-  // using DictionaryContainer<Data>::???;
+  using DictionaryContainer<Data>::size; //da settare come un primo abbastanza grande
 
-  // ...
+  Hash<Data> hash;
+
+  ulong A = 0;
+  ulong B = 1;
 
 public:
 
   // Destructor
-  // ~HashTable() specifiers
+  ~HashTable() default;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types should not be possible.
+  HashTable<Data> operator=(const HashTable<Data>&) = delete;
 
   // Move assignment
-  // type operator=(argument); // Move assignment of abstract types should not be possible.
+  HashTable<Data> operator=(HashTable<Data>&&) noexcept = delete;
 
   /* ************************************************************************ */
 
   // Comparison operators
-  // type operator==(argument) specifiers; // Comparison of abstract binary tree is possible.
-  // type operator!=(argument) specifiers; // Comparison of abstract binary tree is possible.
+  bool operator==(const HashTable<Data>&) const noexcept = delete;
+  bool operator!=(const HashTable<Data>&) const noexcept = delete;
 
   /* ************************************************************************ */
 
   // Specific member function
 
-  // type Resize(argument) specifiers; // Resize the hashtable to a given size
+  bool Resize(const ulong&); // Resize the hashtable to a given size
 
 protected:
 
   // Auxiliary member functions
 
-  // type HashKey(argument) specifiers; // prende il dato, fa la hash di codifica e poi inserendolo nella funzione di indirizzamento e ritorna il valore
+  ulong HashKey(const ulong&) const noexcept; // prende il dato, fa la hash di codifica e poi inserendolo nella funzione di indirizzamento e ritorna il valore
 
 };
 

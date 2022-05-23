@@ -5,6 +5,7 @@
 /* ************************************************************************** */
 
 #include "../binarytree.hpp"
+#include "../../bst/bst.hpp"
 
 /* ************************************************************************** */
 
@@ -13,8 +14,11 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class BinaryTreeLnk {
-                      // Must extend BinaryTree<Data>
+class BST;
+
+
+template <typename Data>
+class BinaryTreeLnk : virtual public BinaryTree<Data>{
 
 private:
 
@@ -22,11 +26,12 @@ private:
 
 protected:
 
-  // using BinaryTree<Data>::???;
+  using BinaryTree<Data>::size;
 
-  // ...
 
-  struct NodeLnk { // Must extend Node
+  struct NodeLnk : virtual public BinaryTree<Data>::Node{
+
+
 
   private:
 
@@ -34,62 +39,104 @@ protected:
 
   protected:
 
-    // ...
+    using BinaryTree<Data>::Node:: key;
+
+    NodeLnk* leftChild = nullptr;
+    NodeLnk* rightChild = nullptr;
 
   public:
 
-    // ...
+      friend class BST<Data>;
+
+
+    // Constructor
+
+    NodeLnk(const Data& data, NodeLnk* lnode, NodeLnk* rnode) { key = data; leftChild = lnode; rightChild = rnode; };
+
+    NodeLnk(Data&& data) { std::swap(key, data); };
+   
+    // Destrcutor
+
+    virtual ~NodeLnk();
+
+  /* ************************************************************************** */
+
+    // Copy Assignment
+
+    NodeLnk& operator=(const NodeLnk&) = delete;
+
+    // Move Assignment
+    NodeLnk& operator=(NodeLnk&&) noexcept = delete;
+
+  /* ************************************************************************** */
+
+    // Specific Member Functions
+
+    virtual bool IsLeaf() const noexcept;
+    virtual bool HasLeftChild() const noexcept;
+    virtual bool HasRightChild() const noexcept;
+
+    virtual NodeLnk& LeftChild() override;
+    virtual NodeLnk& RightChild() override;
+
+    virtual NodeLnk& LeftChild() const override;
+    virtual NodeLnk& RightChild() const override;
 
   };
+
+
+  NodeLnk* root = nullptr;
+
+  // Auxiliary member function
+
+  NodeLnk* BuildTree(const LinearContainer<Data>&, const ulong) const;
+
+  NodeLnk* CopyTree(const struct BinaryTree<Data>::Node&) const;
+
+
 
 public:
 
   // Default constructor
-  // BinaryTreeLnk() specifiers;
+  BinaryTreeLnk() = default;
 
   /* ************************************************************************ */
 
   // Specific constructors
-  // BinaryTreeLnk(argument) specifiers; // A binary tree obtained from a LinearContainer
+  BinaryTreeLnk(const LinearContainer<Data>&);
 
   /* ************************************************************************ */
 
   // Copy constructor
-  // BinaryTreeLnk(argument) specifiers;
+  BinaryTreeLnk(const BinaryTreeLnk<Data>&);
 
   // Move constructor
-  // BinaryTreeLnk(argument) specifiers;
+  BinaryTreeLnk(BinaryTreeLnk<Data>&&) noexcept;
 
   /* ************************************************************************ */
 
   // Destructor
-  // ~BinaryTreeLnk() specifiers;
+  virtual ~BinaryTreeLnk();
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument) specifiers;
+  BinaryTreeLnk<Data>& operator=(const BinaryTreeLnk<Data>&);
 
   // Move assignment
-  // type operator=(argument) specifiers;
-
-  /* ************************************************************************ */
-
-  // Comparison operators
-  // type operator==(argument) specifiers;
-  // type operator!=(argument) specifiers;
+  BinaryTreeLnk<Data>& operator=(BinaryTreeLnk<Data>&&)noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from BinaryTree)
 
-  // type Root() specifiers; // Override BinaryTree member (throw std::length_error when empty)
+  virtual NodeLnk& Root() const override; // Override BinaryTree member (throw std::length_error when empty)
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from Container)
 
-  // type Clear() specifiers; // Override Container member
+  virtual void Clear() override; // Override Container member
 
 };
 

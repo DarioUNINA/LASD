@@ -22,36 +22,36 @@ protected:
 public:
 
   // Destructor
-  // ~Iterator() specifiers
+  virtual ~Iterator() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types should not be possible.
+  Iterator<Data>& operator=(const Iterator<Data>&) = delete; // Copy assignment of abstract types should not be possible.
 
   // Move assignment
-  // type operator=(argument); // Move assignment of abstract types should not be possible.
+  Iterator<Data>& operator=(Iterator<Data>&&) noexcept = delete; // Copy assignment of abstract types should not be possible.
 
   /* ************************************************************************ */
 
   // Comparison operators
-  // type operator==(argument) specifiers; // Comparison of abstract types might not be possible.
-  // type operator!=(argument) specifiers; // Comparison of abstract types might not be possible.
+  bool operator==(const Iterator<Data>&) const noexcept = delete; // Comparison of abstract types might not be possible.
+  bool operator!=(const Iterator<Data>&) const noexcept = delete; // Comparison of abstract types might not be possible.
 
   /* ************************************************************************ */
 
   // Specific member functions
 
-  // type operator*() specifiers; // (concrete function must throw std::out_of_range when terminated)
+  virtual Data& operator*() const = 0; // (concrete function must throw std::out_of_range when terminated)
 
-  // type Terminated() specifiers; // (concrete function should not throw exceptions)
+  virtual bool Terminated() const noexcept = 0; // (concrete function should not throw exceptions)
 
 };
 
 /* ************************************************************************** */
 
 template <typename Data>
-class ForwardIterator { // Must extend Iterator<Data>
+class ForwardIterator : virtual public Iterator<Data>{ // Must extend Iterator<Data>
 
 private:
 
@@ -64,34 +64,34 @@ protected:
 public:
 
   // Destructor
-  // ~ForwardIterator() specifiers
+  virtual ~ForwardIterator() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types should not be possible.
+  ForwardIterator<Data>& operator=(const ForwardIterator<Data>&) = delete; // Copy assignment of abstract types should not be possible.
 
   // Move assignment
-  // type operator=(argument); // Move assignment of abstract types should not be possible.
+  ForwardIterator<Data>& operator=(ForwardIterator<Data>&&) noexcept = delete; // Move assignment of abstract types should not be possible.
 
   /* ************************************************************************ */
 
   // Comparison operators
-  // type operator==(argument) specifiers; // Comparison of abstract types might not be possible.
-  // type operator!=(argument) specifiers; // Comparison of abstract types might not be possible.
+  bool operator==(ForwardIterator<Data>&) const noexcept = delete; // Comparison of abstract types might not be possible.
+  bool operator!=(ForwardIterator<Data>&) const noexcept = delete; // Comparison of abstract types might not be possible.
 
   /* ************************************************************************ */
 
   // Specific member functions
 
-  // type operator++() specifiers; // (concrete function must throw std::out_of_range when terminated)
+  virtual ForwardIterator<Data>& operator++() = 0; // (concrete function must throw std::out_of_range when terminated)
 
 };
 
 /* ************************************************************************** */
 
 template <typename Data>
-class BackwardIterator { // Must extend Iterator<Data>
+class BackwardIterator { // Must extend Iterator<Data> //non va implementato
 
 private:
 
@@ -131,7 +131,7 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
-class BidirectionalIterator {
+class BidirectionalIterator {//non va implementato
                               // Must extend ForwardIterator<Data>,
                               //             BackwardIterator<Data>
 
@@ -177,7 +177,7 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
-class ResettableIterator { // Must extend Iterator<Data>
+class ResettableIterator : virtual public Iterator<Data>{
 
 private:
 
@@ -186,27 +186,27 @@ protected:
 public:
 
   // Destructor
-  // ~ResettableIterator() specifiers
+  virtual ~ResettableIterator() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types should not be possible.
+  ResettableIterator<Data>& operator=(const ResettableIterator<Data>&) = delete; // Copy assignment of abstract types should not be possible.
 
   // Move assignment
-  // type operator=(argument); // Move assignment of abstract types should not be possible.
+  ResettableIterator<Data>& operator=(ResettableIterator<Data>&&) noexcept = delete; // Move assignment of abstract types should not be possible.
 
   /* ************************************************************************ */
 
   // Comparison operators
-  // type operator==(argument) specifiers; // Comparison of abstract types might not be possible.
-  // type operator!=(argument) specifiers; // Comparison of abstract types might not be possible.
+  bool operator==(const ResettableIterator<Data>&) const noexcept = delete; // Comparison of abstract types might not be possible.
+  bool operator!=(const ResettableIterator<Data>&) const noexcept = delete; // Comparison of abstract types might not be possible.
 
   /* ************************************************************************ */
 
   // Specific member functions
 
-  // type Reset() specifiers; // (concrete function should not throw exceptions)
+  virtual void Reset() noexcept = 0; // (concrete function should not throw exceptions)
 
 };
 

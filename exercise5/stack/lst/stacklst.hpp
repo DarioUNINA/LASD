@@ -14,9 +14,8 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class StackLst {
-                  // Must extend Stack<Data>,
-                  //             List<Data>
+class StackLst : public Stack<Data>,
+                 protected virtual List<Data>{
 
 private:
 
@@ -24,63 +23,64 @@ private:
 
 protected:
 
-  // using List<Data>::???;
+  using List<Data>:: size;
+  using List<Data>:: head;
 
-  // ...
 
 public:
 
   // Default constructor
-  // StackLst() specifier;
+  StackLst() = default;
 
   /* ************************************************************************ */
 
   // Specific constructor
-  // StackLst(argument) specifiers; // A stack obtained from a LinearContainer
+  StackLst(const LinearContainer<Data>&);
 
   /* ************************************************************************ */
 
   // Copy constructor
-  // StackLst(argument);
+  StackLst(const StackLst<Data>&);
 
   // Move constructor
-  // StackLst(argument);
+  StackLst(StackLst<Data>&&) noexcept;
 
   /* ************************************************************************ */
 
   // Destructor
-  // ~StackLst() specifier;
+  virtual ~StackLst() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument);
+  StackLst<Data>& operator=(const StackLst<Data>&);
 
   // Move assignment
-  // type operator=(argument);
+  StackLst<Data>& operator=(StackLst<Data>&&) noexcept;
 
   /* ************************************************************************ */
 
   // Comparison operators
-  // type operator==(argument) specifiers;
-  // type operator!=(argument) specifiers;
+  bool operator==(const StackLst<Data>&) const noexcept;
+  bool operator!=(const StackLst<Data>&) const noexcept;
+
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from Stack)
 
-  // type Top() specifiers; // Override Stack member (constant version; must throw std::length_error when empty)
-  // type Top() specifiers; // Override Stack member (must throw std::length_error when empty)
-  // type Pop() specifiers; // Override Stack member (must throw std::length_error when empty)
-  // type TopNPop() specifiers; // Override Stack member (must throw std::length_error when empty)
-  // type Push(argument) specifiers; // Override Stack member (copy of the value)
-  // type Push(argument) specifiers; // Override Stack member (move of the value)
+  virtual const Data& Top() const override; // Override Stack member (constant version; must throw std::length_error when empty)
+  virtual Data& Top() override; // Override Stack member (must throw std::length_error when empty)
+  virtual void Pop() override; // Override Stack member (must throw std::length_error when empty)
+  virtual Data TopNPop() override; // Override Stack member (must throw std::length_error when empty)
+  virtual void Push(const Data&) override; // Override Stack member (copy of the value)
+  virtual void Push(Data&&) override; // Override Stack member (move of the value)
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from Container)
 
-  // type Clear() specifiers; // Override Container member
+  virtual void Clear() override; // Override Container member
 
 };
 
