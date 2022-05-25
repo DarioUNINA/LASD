@@ -8,7 +8,7 @@
 
 /* ************************************************************************** */
 
-#include "../container/container.hpp"
+#include "../bst/bst.hpp"
 
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
-class HashTable : public DictionaryContainer<Data>,
-                  public MappableContainer<Data>,
-                  public FoldableContainer<Data>{
+class HashTable : public DictionaryContainer<Data>{
 
 private:
 -
@@ -38,17 +36,19 @@ private:
 
 protected:
 
-  using DictionaryContainer<Data>::size; //da settare come un primo abbastanza grande
+  using DictionaryContainer<Data>::size = std::pow(2, 7);
 
-  Hash<Data> hash;
+  Hash<Data> hash{};
 
-  ulong A = 0;
-  ulong B = 1;
+  const ulong prime = 65537;
+
+  ulong A = getRandom(1);
+  ulong B = getRandom(0);
 
 public:
 
   // Destructor
-  ~HashTable() default;
+  ~HashTable() = default;
 
   /* ************************************************************************ */
 
@@ -68,13 +68,21 @@ public:
 
   // Specific member function
 
-  bool Resize(const ulong&); // Resize the hashtable to a given size
+  bool Resize(const ulong&) = 0;
 
 protected:
 
   // Auxiliary member functions
 
-  ulong HashKey(const ulong&) const noexcept; // prende il dato, fa la hash di codifica e poi inserendolo nella funzione di indirizzamento e ritorna il valore
+  ulong HashKey(const Data&) const noexcept; // prende il dato, fa la hash di codifica e poi inserendolo nella funzione di indirizzamento e ritorna il valore
+
+  ulong getRandom(const ushort& start) const noexcept{
+    std::default_random_engine genx(std::random_device{}());
+    std::uniform_int_distribution<ulong> distx(start, prime-1);
+    return distx(genx);
+  }
+
+  HashTable(const HashTable<Data>& table) : prime(table.prime), A(table.A), B(table.B) {size = table.size};
 
 };
 
