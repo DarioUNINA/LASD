@@ -49,6 +49,9 @@ public:
 /* ************************************************************************** */
 /* ************************************************************************** */
 
-
+template <typename Data>
+ulong HashTable<Data>::HashKey(const Data& data) const noexcept{
+  return ((A*(hash(data))+B)%prime)%dim;
+}
 
 }

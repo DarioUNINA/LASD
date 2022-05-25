@@ -5,7 +5,8 @@
 /* ************************************************************************** */
 
 #include "../hashtable.hpp"
-// #include ...
+#include "../../bst/bst.hpp"
+#include "../../vector/vector.hpp"
 
 /* ************************************************************************** */
 
@@ -14,7 +15,7 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class HashTableClsAdr { // Must extend HashTable<Data>
+class HashTableClsAdr : HashTable<Data>{
 
 private:
 
@@ -23,88 +24,101 @@ private:
 protected:
 
 
-  // using HashTable<Data>::???;
+  using HashTable<Data>::size;
+  using HashTable<Data>::dim;
 
-  // ...
+
+  Vector<BST<Data>> elements = Vector(dim);
+
 
 public:
 
   // Default constructor
-  // HashTableClsAdr() specifiers; //istanziamo il vettore di dimensione size che contengono puntatori a dizionari
-
+  HashTableClsAdr() = default;
+                              // da rivedere la questione del vettore
   /* ************************************************************************ */
 
   // Specific constructors
-  // HashTableClsAdr(argument) specifiers; // A hash table of a given size //questa serve per il resize
-  // HashTableClsAdr(argument) specifiers; // A hash table obtained from a LinearContainer
-  // HashTableClsAdr(argument) specifiers; // A hash table of a given size obtained from a LinearContainer //questa la usa 100%
+  HashTableClsAdr(const ulong&); // A hash table of a given size //questa serve per il resize
+  HashTableClsAdr(const LinearContainer<Data>&); // A hash table obtained from a LinearContainer
+  HashTableClsAdr(const LinearContainer<Data>& container, const ulong& newSize);/*: HashTableClsAdr(newSize){} HashTableClsAdr(container){}; // A hash table of a given size obtained from a LinearContainer //questa la usa 100%
 
   /* ************************************************************************ */
 
   // Copy constructor
-  // HashTableClsAdr(argument) specifiers;
+  HashTableClsAdr(const HashTableClsAdr<Data>&);
 
   // Move constructor
-  // HashTableClsAdr(argument) specifiers;
+  HashTableClsAdr(HashTableClsAdr<Data>&&);
 
   /* ************************************************************************ */
 
   // Destructor
-  // ~HashTableClsAdr() specifiers;
+  ~HashTableClsAdr() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument) specifiers;
+  HashTableClsAdr<Data>& operator=(const HashTableClsAdr<Data>&);
 
   // Move assignment
-  // type operator=(argument) specifiers;
+  HashTableClsAdr<Data>& operator=(HashTableClsAdr<Data>&&);
 
   /* ************************************************************************ */
 
   // Comparison operators
-  // type operator==(argument) specifiers; //prendi ogni valore e fai la exists nell' altra mappa, non sai come sono conservate in memoria (tipo cambia la funzione di pairing)
-                                          // fallo attraverso la map
+  bool operator==(const HashTableClsAdr<Data>&) const noexcept; //prendi ogni valore e fai la exists nell' altra mappa, non sai come sono conservate in memoria (tipo cambia la funzione di pairing)
+                                                               // fallo attraverso la map
   
-  // type operator!=(argument) specifiers;
+  bool operator!=(const HashTableClsAdr<Data>&) const noexcept;
+
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from HashTable)
 
-  // type Resize(argument) specifiers; // Resize the hashtable to a given size , fallo attraverso la map inserendo nella nuova hash ogni elemento
+  void Resize(const ulong&); // Resize the hashtable to a given size , fallo attraverso la map inserendo nella nuova hash ogni elemento
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from DictionaryContainer)
 
-  // type Insert(argument) specifiers; // Override DictionaryContainer member (Copy of the value) //chiama hashkey protetta e inserisci il dato
-  // type Insert(argument) specifiers; // Override DictionaryContainer member (Move of the value)
-  // type Remove(argument) specifiers; // Override DictionaryContainer member
+  bool Insert(const Data&) override; // Override DictionaryContainer member (Copy of the value) //chiama hashkey protetta e inserisci il dato
+  bool Insert(Data&&) override; // Override DictionaryContainer member (Move of the value)
+  bool Remove(const Data&) override; // Override DictionaryContainer member
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from TestableContainer)
 
-  // type Exists(argument) specifiers; // Override TestableContainer member //tramite le map
+  bool Exists(const Data&)const noexcept; // Override TestableContainer member //tramite le map
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from MappableContainer)
 
-  // type Map(argument) specifiers; // Override MappableContainer member
+  using typename MappableContainer<Data>::MapFunctor;
+
+  virtual void Map(MapFunctor, void *) override;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from FoldableContainer)
 
-  // type Fold(argument) specifiers; // Override FoldableContainer member
+  using typename FoldableContainer<Data>::FoldFunctor;
+
+  virtual void Fold(FoldFunctor, const void*, void*) const override;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from Container)
 
   // type Clear() specifiers; // Override Container member
+
+
+protected:
+
+  void MapExists()
 
 };
 

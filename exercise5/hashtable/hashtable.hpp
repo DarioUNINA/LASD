@@ -5,10 +5,7 @@
 /* ************************************************************************** */
 
 #include <random>
-
-/* ************************************************************************** */
-
-#include "../bst/bst.hpp"
+#include "../container/container.hpp"
 
 /* ************************************************************************** */
 
@@ -28,20 +25,22 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
-class HashTable : public DictionaryContainer<Data>{
+class HashTable : virtual public DictionaryContainer<Data>,
+                  virtual public MappableContainer<Data>,
+                  virtual public FoldableContainer<Data>{
 
 private:
--
+
   // ...
 
 protected:
 
-  using DictionaryContainer<Data>::size = std::pow(2, 7);
+  using DictionaryContainer<Data>::size;
+  ulong dim = std::pow(2, 7);
 
   Hash<Data> hash{};
 
   const ulong prime = 65537;
-
   ulong A = getRandom(1);
   ulong B = getRandom(0);
 
@@ -72,17 +71,34 @@ public:
 
 protected:
 
+
+// Copy and Move Constructors
+
+  HashTable(const HashTable<Data>& table) : A(table.A), B(table.B), dim(table.dim), hash(table.hash) {size = table.size;};
+
+
+  HashTable(HashTable<Data>&& table) {std::swap(A, table.A); std::swap(B, table.B); std::swap(size, table.size); std::swap(dim, table.dim); std::move(hash, table.hash);};
+
+
+/* ************************************************************************** */
+
+// Move Assignment
+
+  HashTable& operator=(HashTable<Data>&& table) {std::swap(A, table.A); std::swap(B, table.B); std::swap(size, table.size); std::swap(dim, table.dim); std::move(hash, table.hash);};
+
+
+/* ************************************************************************** */
+
   // Auxiliary member functions
 
-  ulong HashKey(const Data&) const noexcept; // prende il dato, fa la hash di codifica e poi inserendolo nella funzione di indirizzamento e ritorna il valore
+  ulong HashKey(const Data&) const noexcept;
 
   ulong getRandom(const ushort& start) const noexcept{
     std::default_random_engine genx(std::random_device{}());
     std::uniform_int_distribution<ulong> distx(start, prime-1);
     return distx(genx);
-  }
+  };
 
-  HashTable(const HashTable<Data>& table) : prime(table.prime), A(table.A), B(table.B) {size = table.size};
 
 };
 

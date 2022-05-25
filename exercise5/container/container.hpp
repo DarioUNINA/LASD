@@ -232,6 +232,8 @@ public:
     typedef std::function<void(Data &, void *)> MapFunctor;
 
     virtual void Map(MapFunctor, void *) = 0;
+
+    
   };
 
   /* ************************************************************************** */
