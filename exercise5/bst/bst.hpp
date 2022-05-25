@@ -108,13 +108,6 @@ public:
 
   virtual bool Exists(const Data&) const noexcept override; // Override TestableContainer member
 
-  void Print(NodeLnk* node){
-    std::cout<<node->key<<"\n";
-    if(node->HasLeftChild())
-      Print(node->leftChild);
-    if(node->HasRightChild())
-      Print(node->rightChild);
-  }
 
 protected:
 
