@@ -15,7 +15,7 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class HashTableClsAdr : HashTable<Data>{
+class HashTableClsAdr : public HashTable<Data>{
 
 private:
 
@@ -28,7 +28,7 @@ protected:
   using HashTable<Data>::dim;
 
 
-  Vector<BST<Data>> elements = Vector(dim);
+  Vector<BST<Data>> elements {dim};
 
 
 public:
@@ -41,7 +41,7 @@ public:
   // Specific constructors
   HashTableClsAdr(const ulong&); // A hash table of a given size //questa serve per il resize
   HashTableClsAdr(const LinearContainer<Data>&); // A hash table obtained from a LinearContainer
-  HashTableClsAdr(const LinearContainer<Data>& container, const ulong& newSize);/*: HashTableClsAdr(newSize){} HashTableClsAdr(container){}; // A hash table of a given size obtained from a LinearContainer //questa la usa 100%
+  HashTableClsAdr(const ulong&, const LinearContainer<Data>&);
 
   /* ************************************************************************ */
 
@@ -67,8 +67,7 @@ public:
   /* ************************************************************************ */
 
   // Comparison operators
-  bool operator==(const HashTableClsAdr<Data>&) const noexcept; //prendi ogni valore e fai la exists nell' altra mappa, non sai come sono conservate in memoria (tipo cambia la funzione di pairing)
-                                                               // fallo attraverso la map
+  bool operator==(const HashTableClsAdr<Data>&) const noexcept;
   
   bool operator!=(const HashTableClsAdr<Data>&) const noexcept;
 
@@ -77,7 +76,7 @@ public:
 
   // Specific member functions (inherited from HashTable)
 
-  void Resize(const ulong&); // Resize the hashtable to a given size , fallo attraverso la map inserendo nella nuova hash ogni elemento
+  void Resize(const ulong&);
 
   /* ************************************************************************ */
 
@@ -118,9 +117,7 @@ public:
 
 protected:
 
-  void ExistsFunc(const Data& data, const void* , void*) const noexcept;
-
-  void HashTableClsAdr<Data>::FoldEx(FoldFunctor, const void*, void*) const;
+  void FoldEx(FoldFunctor, const void*, void*) const;
 
 };
 

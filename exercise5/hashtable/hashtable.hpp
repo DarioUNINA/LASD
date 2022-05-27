@@ -52,10 +52,10 @@ public:
   /* ************************************************************************ */
 
   // Copy assignment
-  HashTable<Data> operator=(const HashTable<Data>&) = delete;
+  HashTable<Data>& operator=(const HashTable<Data>&) = delete;
 
   // Move assignment
-  HashTable<Data> operator=(HashTable<Data>&&) noexcept = delete;
+  // HashTable<Data> operator=(HashTable<Data>&&) noexcept = delete;
 
   /* ************************************************************************ */
 
@@ -67,24 +67,24 @@ public:
 
   // Specific member function
 
-  bool Resize(const ulong&) = 0;
+  virtual void Resize(const ulong&) = 0;
 
 protected:
 
 
 // Copy and Move Constructors
 
-  HashTable(const HashTable<Data>& table) : A(table.A), B(table.B), dim(table.dim), hash(table.hash) {size = table.size;};
+  HashTable(const HashTable<Data>& table) : A(table.A), B(table.B), dim(table.dim) {size = table.size;};
 
 
-  HashTable(HashTable<Data>&& table) {std::swap(A, table.A); std::swap(B, table.B); std::swap(size, table.size); std::swap(dim, table.dim); std::move(hash, table.hash);};
+  HashTable(HashTable<Data>&& table) {std::swap(A, table.A); std::swap(B, table.B); std::swap(size, table.size); std::swap(dim, table.dim); };
 
 
 /* ************************************************************************** */
 
 // Move Assignment
 
-  HashTable& operator=(HashTable<Data>&& table) {std::swap(A, table.A); std::swap(B, table.B); std::swap(size, table.size); std::swap(dim, table.dim); std::move(hash, table.hash);};
+  HashTable& operator=(HashTable<Data>&& table) noexcept {std::swap(A, table.A); std::swap(B, table.B); std::swap(size, table.size); std::swap(dim, table.dim); };
 
 
 /* ************************************************************************** */

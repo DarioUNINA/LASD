@@ -14,27 +14,24 @@ HashTableClsAdr<Data>::HashTableClsAdr(const ulong& newSize){
 
 template <typename Data>
 HashTableClsAdr<Data>::HashTableClsAdr(const LinearContainer<Data>& container){
-    for(ulong i=0; i<container.Size(); ++i)
-        Insert(container[i]);
+    DictionaryContainer<Data>::Insert(container);
 }
 
 
 template <typename Data>
-HashTableClsAdr<Data>::HashTableClsAdr(const LinearContainer<Data>& container, const ulong& newSize):HashTableClsAdr(newSize){
-    HashTableClsAdr<Data>::HashTableClsAdr(container);
+HashTableClsAdr<Data>::HashTableClsAdr(const ulong& newSize, const LinearContainer<Data>& container):HashTableClsAdr(newSize), HashTableClsAdr(container){
 }
 
 
 template <typename Data>
-HashTableClsAdr<Data>::HashTableClsAdr(const HashTableClsAdr& table){
-    HashTable<Data>::HashTable(table);
+HashTableClsAdr<Data>::HashTableClsAdr(const HashTableClsAdr<Data>& table): HashTable(table){
     
     elements = table.elements;
 }
 
 
 template <typename Data>
-HashTableClsAdr<Data>::HashTableClsAdr(HashTableClsAdr&& table){
+HashTableClsAdr<Data>::HashTableClsAdr(HashTableClsAdr<Data>&& table){
     HashTable(std::move(table));
 
     std::swap(elements, table.elements);
@@ -51,7 +48,7 @@ HashTableClsAdr<Data>& HashTableClsAdr<Data>:: operator=(const HashTableClsAdr<D
     std::swap(*this, *temp);
 
     delete temp;
-    return this;
+    return *this;
 }
 
 
@@ -60,12 +57,20 @@ HashTableClsAdr<Data>& HashTableClsAdr<Data>:: operator=(HashTableClsAdr<Data>&&
     HashTable<Data>::operator=(std::move(table));
 
     std::swap(elements, table.elements);
+    return *this;
 }
 
 
 /* ************************************************************************** */
 
 // Comparison Operators
+
+template <typename Data>
+void ExistsFunc(const Data& data, const void* table, void* result) noexcept{
+    if(!((static_cast<const HashTableClsAdr<BST<Data>>*>(table))->Exists(data)))
+        *(static_cast<bool*>(result)) = false;
+}
+
 
 template <typename Data>
 bool HashTableClsAdr<Data>::operator==(const HashTableClsAdr<Data>& table) const noexcept{
@@ -88,11 +93,32 @@ bool HashTableClsAdr<Data>::operator!=(const HashTableClsAdr<Data>& table) const
 
 /* ************************************************************************** */
 
+// Specific member functions (inherited from HashTable)
+
+template <typename Data>
+void MapInsert(Data& data, void* table){
+    (static_cast<HashTableClsAdr<BST<Data>>*>(table))->Insert(data);
+}
+
+
+template <typename Data>
+void HashTableClsAdr<Data>::Resize(const ulong& newSize){
+    HashTableClsAdr<Data>* temp = new HashTableClsAdr(newSize);
+
+    Map(MapInsert<Data>, temp);
+
+    std::swap(*this, *temp);
+    delete temp;
+}
+
+
+/* ************************************************************************ */
+
 // Specific member functions (inherited from DictionaryContainer)
 
 template <typename Data>
 bool HashTableClsAdr<Data>::Insert(const Data& data){
-    if((elements[HashTable::HashKey(data)]).Insert(data)){
+    if((elements[HashTable<Data>::HashKey(data)]).Insert(data)){
         size++;
         return true;
     }else
@@ -103,7 +129,7 @@ bool HashTableClsAdr<Data>::Insert(const Data& data){
 
 template <typename Data>
 bool HashTableClsAdr<Data>::Insert(Data&& data){
-    if((elements[HashTable::HashKey(data)]).Insert(std::move(data))){
+    if((elements[HashTable<Data>::HashKey(data)]).Insert(std::move(data))){
         size++;
         return true;
     }else
@@ -112,11 +138,11 @@ bool HashTableClsAdr<Data>::Insert(Data&& data){
 
 template <typename Data>
 bool HashTableClsAdr<Data>::Remove(const Data& data){
-    if((elements[HashTable::HashKey(data)]).Remove(data)){
+    if((elements[HashTable<Data>::HashKey(data)]).Remove(data)){
         size--;
         return true;
     }else
-        return false
+        return false;
 }
 
 
@@ -126,7 +152,7 @@ bool HashTableClsAdr<Data>::Remove(const Data& data){
 
 template <typename Data>
 bool HashTableClsAdr<Data>::Exists(const Data& data) const noexcept{
-    return elements[HashTable::HashKey(data)].Exists(data);
+    return elements[HashTable<Data>::HashKey(data)].Exists(data);
 }
 
 
@@ -138,14 +164,14 @@ bool HashTableClsAdr<Data>::Exists(const Data& data) const noexcept{
 template <typename Data>
 void HashTableClsAdr<Data>::Fold(FoldFunctor function, const void* data, void* value) const{
     for(ulong i=0; i<dim; ++i)
-        elments[i].Fold(function, data, value);
+        elements[i].Fold(function, data, value);
 }
 
 
 template <typename Data>
 void HashTableClsAdr<Data>::Map(MapFunctor function, void* value){
     for(ulong i=0; i<dim; ++i)
-        elments[i].Map(function, value);
+        elements[i].Map(function, value);
 }
 
 
@@ -167,18 +193,11 @@ void HashTableClsAdr<Data>:: Clear(){
 // Auxiliary member functions
 
 template <typename Data>
-void HashTableClsAdr<Data>::ExistsFunc(const Data& data, const void* table, void* result) const noexcept{
-    if(!(*(<static_cast(const HashTableClsAdr<BST<Data>>*)(table)).Exists(data)))
-        *<static_cast(bool*)(result) = false;
-}
-
-
-template <typename Data>
 void HashTableClsAdr<Data>::FoldEx(FoldFunctor function, const void* data, void* result) const{
     ulong i=-1;
 
-    while(++i<dim && *(<static_cast(bool*)>(result)))
-        elments[i].Fold(function, data, result);
+    while(++i<dim && *(static_cast<bool*>(result)))
+        elements[i].Fold(function, data, result);
 }
 
 
