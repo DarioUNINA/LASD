@@ -91,7 +91,7 @@ public:
 
   // Specific member functions (inherited from TestableContainer)
 
-  bool Exists(const Data&)const noexcept; // Override TestableContainer member //tramite le map
+  bool Exists(const Data&)const noexcept;
 
   /* ************************************************************************ */
 
@@ -113,12 +113,14 @@ public:
 
   // Specific member functions (inherited from Container)
 
-  // type Clear() specifiers; // Override Container member
+  void Clear() override;
 
 
 protected:
 
-  void MapExists()
+  void ExistsFunc(const Data& data, const void* , void*) const noexcept;
+
+  void HashTableClsAdr<Data>::FoldEx(FoldFunctor, const void*, void*) const;
 
 };
 
