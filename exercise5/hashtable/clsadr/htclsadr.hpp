@@ -38,8 +38,8 @@ public:
   /* ************************************************************************ */
 
   // Specific constructors
-  HashTableClsAdr(const ulong&); // A hash table of a given size //questa serve per il resize
-  HashTableClsAdr(const LinearContainer<Data>&); // A hash table obtained from a LinearContainer
+  HashTableClsAdr(const ulong&);
+  HashTableClsAdr(const LinearContainer<Data>&);
   HashTableClsAdr(const ulong&, const LinearContainer<Data>&);
 
   /* ************************************************************************ */
@@ -67,7 +67,6 @@ public:
 
   // Comparison operators
   bool operator==(const HashTableClsAdr<Data>&) const noexcept;
-  
   bool operator!=(const HashTableClsAdr<Data>&) const noexcept;
 
 
