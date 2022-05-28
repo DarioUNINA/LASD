@@ -16,11 +16,11 @@ public:
 
 
 template <>
-class Hash<float> {
+class Hash<double> {
 
 public:
 
-  ulong operator()(const float& data) const noexcept{
+  ulong operator()(const double& data) const noexcept{
       long integer = floor(data);
       long fract = pow(2, 24)*(data - integer);
       

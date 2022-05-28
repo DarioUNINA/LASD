@@ -46,6 +46,10 @@ protected:
 
 public:
 
+  // Constructor
+
+  HashTable() = default;
+
   // Destructor
   ~HashTable() = default;
 
@@ -84,7 +88,7 @@ protected:
 
 // Move Assignment
 
-  HashTable& operator=(HashTable<Data>&& table) noexcept {std::swap(A, table.A); std::swap(B, table.B); std::swap(size, table.size); std::swap(dim, table.dim); };
+  HashTable& operator=(HashTable<Data>&& table) noexcept {std::swap(A, table.A); std::swap(B, table.B); std::swap(size, table.size); std::swap(dim, table.dim); return *this; };
 
 
 /* ************************************************************************** */

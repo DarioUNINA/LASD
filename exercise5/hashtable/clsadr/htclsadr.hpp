@@ -27,7 +27,6 @@ protected:
   using HashTable<Data>::size;
   using HashTable<Data>::dim;
 
-
   Vector<BST<Data>> elements {dim};
 
 
@@ -35,7 +34,7 @@ public:
 
   // Default constructor
   HashTableClsAdr() = default;
-                              // da rivedere la questione del vettore
+
   /* ************************************************************************ */
 
   // Specific constructors
@@ -82,9 +81,9 @@ public:
 
   // Specific member functions (inherited from DictionaryContainer)
 
-  bool Insert(const Data&) override; // Override DictionaryContainer member (Copy of the value) //chiama hashkey protetta e inserisci il dato
-  bool Insert(Data&&) override; // Override DictionaryContainer member (Move of the value)
-  bool Remove(const Data&) override; // Override DictionaryContainer member
+  bool Insert(const Data&) override;
+  bool Insert(Data&&) override;
+  bool Remove(const Data&) override;
 
   /* ************************************************************************ */
 
