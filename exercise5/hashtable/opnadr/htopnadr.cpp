@@ -29,7 +29,7 @@ template <typename Data>
 HashTableOpnAdr<Data>::HashTableOpnAdr(const HashTableOpnAdr<Data>& table): HashTable<Data>::HashTable(table){
     elements = table.elements;
     flag = table.flag;
-    deleted = table.deleted;
+    ts = table.ts;
 }
 
 
@@ -37,7 +37,7 @@ template <typename Data>
 HashTableOpnAdr<Data>::HashTableOpnAdr(HashTableOpnAdr<Data>&& table): HashTable<Data>::HashTable(std::move(table)){
     std::swap(elements, table.elements);
     std::swap(flag, table.flag);
-    std::swap(deleted, table.deleted);
+    std::swap(ts, table.ts);
 }
 
 
@@ -61,7 +61,7 @@ HashTableOpnAdr<Data>& HashTableOpnAdr<Data>:: operator=(HashTableOpnAdr<Data>&&
 
     std::swap(elements, table.elements);
     std::swap(flag, table.flag);
-    std::swap(deleted, table.deleted);
+    std::swap(ts, table.ts);
     return *this;
 }
 
@@ -71,7 +71,7 @@ HashTableOpnAdr<Data>& HashTableOpnAdr<Data>:: operator=(HashTableOpnAdr<Data>&&
 // Comparison Operators
 
 template <typename Data>
-void ExistsFunc(const Data& data, const void* table, void* result) noexcept{
+void ExistsFunct(const Data& data, const void* table, void* result) noexcept{
     if(!((static_cast<const HashTableOpnAdr<Data>*>(table))->Exists(data)))
         *(static_cast<bool*>(result)) = false;
 }
@@ -84,10 +84,10 @@ bool HashTableOpnAdr<Data>::operator==(const HashTableOpnAdr<Data>& table) const
             return true;
         else{
             bool result = true;
-            FoldEx(ExistsFunc<Data>, &table, &result);
+            FoldEx(ExistsFunct<Data>, &table, &result);
 
             if(result)
-                table.FoldEx(ExistsFunc<Data>, this, &result);
+                table.FoldEx(ExistsFunct<Data>, this, &result);
 
             return result;
         }
@@ -108,7 +108,7 @@ bool HashTableOpnAdr<Data>::operator!=(const HashTableOpnAdr<Data>& table) const
 // Specific member functions (inherited from HashTable)
 
 template <typename Data>
-void MapInsert(const Data& data, void* table){
+void MapIns(const Data& data, void* table){
     (static_cast<HashTableOpnAdr<Data>*>(table))->Insert(data);
 }
 
@@ -117,7 +117,7 @@ ulong FindSize(const ulong& size) noexcept{
     ulong i=7;
     ulong curr;
 
-    while(curr = std::pow(2,i) <size)
+    while(curr = std::pow(2,i) <=size)
         ++i;
     
     return curr;
@@ -126,11 +126,11 @@ ulong FindSize(const ulong& size) noexcept{
 
 template <typename Data>
 void HashTableOpnAdr<Data>::Resize(const ulong& newSize){
-    newSize = FindSize(newSize);
+    ulong nSize = FindSize(newSize);
 
-    HashTableOpnAdr<Data>* temp = new HashTableOpnAdr(newSize);
+    HashTableOpnAdr<Data>* temp = new HashTableOpnAdr(nSize);
 
-    Map(MapInsert<Data>, temp);
+    Map(MapIns<Data>, temp);
 
     std::swap(*this, *temp);
     delete temp;
@@ -143,37 +143,56 @@ void HashTableOpnAdr<Data>::Resize(const ulong& newSize){
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Insert(const Data& data){
-    ulong index = FindEmpty(data);
+    if((size+ts) > dim/2 || ts > size/2)
+        Resize(size+1);
 
-    if(flag[index]==1)
-        return false;
-    else{
-        elements[index] = data;
+    ulong i=0;
+    ulong index = FindEmpty(data, i);
+
+    elements[index] = data;
+    size++;    
+
+    if(flag[index] == 0){
+
         flag[index] = 1;
-        size++;
         return true;
+
+    }else{
+
+        flag[index] = 1;
+        return !Remove(data, ++i);
     }
 }
 
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Insert(Data&& data){
-    ulong index = Find(data);
+    if((size+ts) > dim/2 || ts > size/2)
+        Resize(size+1);
 
-    if(flag[index] == 1)
-        return false;
-    else{
-        elements[index] = std::move(data);
+    ulong i=0;
+    ulong index = FindEmpty(data, i);
+
+    elements[index] = std::move(data);
+    size++;    
+
+    if(flag[index] == 0){
+
         flag[index] = 1;
-        size++;
         return true;
+
+    }else{
+
+        flag[index] = 1;
+        return !Remove(data, ++i);
     }
 }
 
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Remove(const Data& data){
-
+    ulong i;
+    return Remove(data, i);
 }
 
 
@@ -183,16 +202,10 @@ bool HashTableOpnAdr<Data>::Remove(const Data& data){
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Exists(const Data& data) const noexcept{
-    ulong i=0;
+    ulong i;
+    long int index = Find(data, i);
 
-    for(ulong curr = HashKey(data, i); curr < dim; ++i)
-        if(elements[curr] = data)
-            if(flag[curr] == 1)
-                return true;
-            else
-                return false;
-
-    return false;
+    return (index!=-1 && flag[index]==1);
 }
 
 
@@ -239,6 +252,62 @@ void HashTableOpnAdr<Data>:: Clear(){
     delete temp;
 }
 
+
+/* ************************************************************************ */
+
+// Auxiliary Member Function
+
+template <typename Data>
+long int HashTableOpnAdr<Data>::Find(const Data& data, ulong& i) const noexcept{
+    ulong curr;
+    while(i<size){
+        curr = HashKey(data, i);
+
+        if(elements[curr] == data && flag[curr] == 1)
+            return curr;
+
+        ++i;
+    }
+    
+    return -1;
+}
+
+
+template <typename Data>
+ulong HashTableOpnAdr<Data>::FindEmpty(const Data& data, ulong& i) const noexcept{
+    ulong curr;
+
+    do{
+        curr = HashKey(data, i);
+        ++i;
+    }while(flag[curr] != 1);
+
+    return curr;
+}
+
+
+template <typename Data>
+bool HashTableOpnAdr<Data>::Remove(const Data& data, ulong& i){
+    if((size+ts) < dim/4 && dim>=std::pow(2,8)) //secondo controllo per evitare operazioni inutili
+        Resize(size/2);
+
+    long int index = Find(data, i);
+
+    if(index == -1)
+        return false;
+    else{
+        flag[index] = 2;
+        size--;
+        ts++;
+        return true;
+    }
+}
+
+
+template <typename Data>
+ulong HashTableOpnAdr<Data>::HashKey(const Data& data, const ulong& i) const noexcept{
+    return (hash(data)+prime*i)%dim;
+}
 
 
 }

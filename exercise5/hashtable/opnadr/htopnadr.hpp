@@ -24,8 +24,10 @@ protected:
 
   using HashTable<Data>::size;
   using HashTable<Data>::dim;
+  using HashTable<Data>::prime;
+  using HashTable<Data>::hash;
 
-  ulong deleted = 0;
+  ulong ts = 0;
 
   Vector<Data> elements {dim};
   Vector<ushort> flag {dim};
@@ -116,12 +118,15 @@ protected:
 
   // Auxiliary member functions
 
-  virtual void FoldEx(FoldFunctor, const void*, void*) const override;
+  virtual void FoldEx(FoldFunctor, const void*, void*) const;
 
-  // type Find(argument) specifiers; //cerca il dato e restituisce l' indice
-  // type FindEmpty(argument) specifiers; //prende in input un indice e cerca il primo spot libero (della sequenza) dopo quell' indice
-  // type Remove(argument) specifiers; //prende un indice ed elimina il dato dopo quell indice
-  // type HashKey(argument) specifiers; // a due parametri
+  long int Find(const Data&, ulong&) const noexcept;
+
+  ulong FindEmpty(const Data&, ulong&) const noexcept;
+  
+  bool Remove(const Data&, ulong&);
+  
+  ulong HashKey(const Data&, const ulong&) const noexcept;
 
 };
 
