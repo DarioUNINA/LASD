@@ -36,8 +36,8 @@ namespace lasd {
  bool BST<Data>::operator==(const BST<Data>& tree) const noexcept{
     if(size == tree.Size()){
         if(size!=0){
-            BTInOrderIterator i(*this);
-            BTInOrderIterator it(tree);
+            BTInOrderIterator<Data> i(*this);
+            BTInOrderIterator<Data> it(tree);
         
             while(!(i.Terminated())){
                 if((*i)!=(*it))
