@@ -1,313 +1,313 @@
 
-namespace lasd {
+// namespace lasd {
 
-/* ************************************************************************** */
+// /* ************************************************************************** */
 
-// Constructors
+// // Constructors
 
-template <typename Data>
-HashTableOpnAdr<Data>::HashTableOpnAdr(const ulong& newSize){
-    dim = newSize;
-    elements.Resize(newSize);
-    flag.Resize(newSize);
-}
-
-
-template <typename Data>
-HashTableOpnAdr<Data>::HashTableOpnAdr(const LinearContainer<Data>& container){
-    DictionaryContainer<Data>::Insert(container);
-}
+// template <typename Data>
+// HashTableOpnAdr<Data>::HashTableOpnAdr(const ulong& newSize){
+//     dim = newSize;
+//     elements.Resize(newSize);
+//     flag.Resize(newSize);
+// }
 
 
-template <typename Data>
-HashTableOpnAdr<Data>::HashTableOpnAdr(const ulong& newSize, const LinearContainer<Data>& container):HashTableOpnAdr(newSize){
-    DictionaryContainer<Data>::Insert(container);
-}
+// template <typename Data>
+// HashTableOpnAdr<Data>::HashTableOpnAdr(const LinearContainer<Data>& container){
+//     DictionaryContainer<Data>::Insert(container);
+// }
 
 
-template <typename Data>
-HashTableOpnAdr<Data>::HashTableOpnAdr(const HashTableOpnAdr<Data>& table): HashTable<Data>::HashTable(table){
-    elements = table.elements;
-    flag = table.flag;
-    ts = table.ts;
-}
+// template <typename Data>
+// HashTableOpnAdr<Data>::HashTableOpnAdr(const ulong& newSize, const LinearContainer<Data>& container):HashTableOpnAdr(newSize){
+//     DictionaryContainer<Data>::Insert(container);
+// }
 
 
-template <typename Data>
-HashTableOpnAdr<Data>::HashTableOpnAdr(HashTableOpnAdr<Data>&& table): HashTable<Data>::HashTable(std::move(table)){
-    std::swap(elements, table.elements);
-    std::swap(flag, table.flag);
-    std::swap(ts, table.ts);
-}
+// template <typename Data>
+// HashTableOpnAdr<Data>::HashTableOpnAdr(const HashTableOpnAdr<Data>& table): HashTable<Data>::HashTable(table){
+//     elements = table.elements;
+//     flag = table.flag;
+//     ts = table.ts;
+// }
 
 
-/* ************************************************************************** */
-
-// Copy and Move Assignment
-
-template <typename Data>
-HashTableOpnAdr<Data>& HashTableOpnAdr<Data>:: operator=(const HashTableOpnAdr<Data>& table){
-    HashTableOpnAdr* temp = new HashTableOpnAdr(table);
-    std::swap(*this, *temp);
-
-    delete temp;
-    return *this;
-}
+// template <typename Data>
+// HashTableOpnAdr<Data>::HashTableOpnAdr(HashTableOpnAdr<Data>&& table): HashTable<Data>::HashTable(std::move(table)){
+//     std::swap(elements, table.elements);
+//     std::swap(flag, table.flag);
+//     std::swap(ts, table.ts);
+// }
 
 
-template <typename Data>
-HashTableOpnAdr<Data>& HashTableOpnAdr<Data>:: operator=(HashTableOpnAdr<Data>&& table){
-    HashTable<Data>::operator=(std::move(table));
+// /* ************************************************************************** */
 
-    std::swap(elements, table.elements);
-    std::swap(flag, table.flag);
-    std::swap(ts, table.ts);
-    return *this;
-}
+// // Copy and Move Assignment
 
+// template <typename Data>
+// HashTableOpnAdr<Data>& HashTableOpnAdr<Data>:: operator=(const HashTableOpnAdr<Data>& table){
+//     HashTableOpnAdr* temp = new HashTableOpnAdr(table);
+//     std::swap(*this, *temp);
 
-/* ************************************************************************** */
-
-// Comparison Operators
-
-template <typename Data>
-void ExistsFunct(const Data& data, const void* table, void* result) noexcept{
-    if(!((static_cast<const HashTableOpnAdr<Data>*>(table))->Exists(data)))
-        *(static_cast<bool*>(result)) = false;
-}
+//     delete temp;
+//     return *this;
+// }
 
 
-template <typename Data>
-bool HashTableOpnAdr<Data>::operator==(const HashTableOpnAdr<Data>& table) const noexcept{
-    if(size == table.size)
-        if(size == 0)
-            return true;
-        else{
-            bool result = true;
-            FoldEx(ExistsFunct<Data>, &table, &result);
+// template <typename Data>
+// HashTableOpnAdr<Data>& HashTableOpnAdr<Data>:: operator=(HashTableOpnAdr<Data>&& table){
+//     HashTable<Data>::operator=(std::move(table));
 
-            if(result)
-                table.FoldEx(ExistsFunct<Data>, this, &result);
-
-            return result;
-        }
-    else
-        return false;
-
-}
+//     std::swap(elements, table.elements);
+//     std::swap(flag, table.flag);
+//     std::swap(ts, table.ts);
+//     return *this;
+// }
 
 
-template <typename Data>
-bool HashTableOpnAdr<Data>::operator!=(const HashTableOpnAdr<Data>& table) const noexcept{
-    return !(*this == table);
-}
+// /* ************************************************************************** */
+
+// // Comparison Operators
+
+// template <typename Data>
+// void ExistsFunct(const Data& data, const void* table, void* result) noexcept{
+//     if(!((static_cast<const HashTableOpnAdr<Data>*>(table))->Exists(data)))
+//         *(static_cast<bool*>(result)) = false;
+// }
 
 
-/* ************************************************************************** */
+// template <typename Data>
+// bool HashTableOpnAdr<Data>::operator==(const HashTableOpnAdr<Data>& table) const noexcept{
+//     if(size == table.size)
+//         if(size == 0)
+//             return true;
+//         else{
+//             bool result = true;
+//             FoldEx(ExistsFunct<Data>, &table, &result);
 
-// Specific member functions (inherited from HashTable)
+//             if(result)
+//                 table.FoldEx(ExistsFunct<Data>, this, &result);
 
-template <typename Data>
-void MapIns(const Data& data, void* table){
-    (static_cast<HashTableOpnAdr<Data>*>(table))->Insert(data);
-}
+//             return result;
+//         }
+//     else
+//         return false;
+
+// }
 
 
-ulong FindSize(const ulong& size) noexcept{
-    ulong i=7;
-    ulong curr;
+// template <typename Data>
+// bool HashTableOpnAdr<Data>::operator!=(const HashTableOpnAdr<Data>& table) const noexcept{
+//     return !(*this == table);
+// }
 
-    while(curr = std::pow(2,i) <=size)
-        ++i;
+
+// /* ************************************************************************** */
+
+// // Specific member functions (inherited from HashTable)
+
+// template <typename Data>
+// void MapIns(const Data& data, void* table){
+//     (static_cast<HashTableOpnAdr<Data>*>(table))->Insert(data);
+// }
+
+
+// ulong FindSize(const ulong& size) noexcept{
+//     ulong i=7;
+//     ulong curr;
+
+//     while(curr = std::pow(2,i) <=size)
+//         ++i;
     
-    return curr;
-}
+//     return curr;
+// }
 
 
-template <typename Data>
-void HashTableOpnAdr<Data>::Resize(const ulong& newSize){
-    ulong nSize = FindSize(newSize);
+// template <typename Data>
+// void HashTableOpnAdr<Data>::Resize(const ulong& newSize){
+//     ulong nSize = FindSize(newSize);
 
-    HashTableOpnAdr<Data>* temp = new HashTableOpnAdr(nSize);
+//     HashTableOpnAdr<Data>* temp = new HashTableOpnAdr(nSize);
 
-    Map(MapIns<Data>, temp);
+//     Map(MapIns<Data>, temp);
 
-    std::swap(*this, *temp);
-    delete temp;
-}
-
-
-/* ************************************************************************ */
-
-// Specific member functions (inherited from DictionaryContainer)
-
-template <typename Data>
-bool HashTableOpnAdr<Data>::Insert(const Data& data){
-    if((size+ts) > dim/2 || ts > size/2)
-        Resize(size+1);
-
-    ulong i=0;
-    ulong index = FindEmpty(data, i);
-
-    elements[index] = data;
-    size++;    
-
-    if(flag[index] == 0){
-
-        flag[index] = 1;
-        return true;
-
-    }else{
-
-        flag[index] = 1;
-        return !Remove(data, ++i);
-    }
-}
+//     std::swap(*this, *temp);
+//     delete temp;
+// }
 
 
-template <typename Data>
-bool HashTableOpnAdr<Data>::Insert(Data&& data){
-    if((size+ts) > dim/2 || ts > size/2)
-        Resize(size+1);
+// /* ************************************************************************ */
 
-    ulong i=0;
-    ulong index = FindEmpty(data, i);
+// // Specific member functions (inherited from DictionaryContainer)
 
-    elements[index] = std::move(data);
-    size++;    
+// template <typename Data>
+// bool HashTableOpnAdr<Data>::Insert(const Data& data){
+//     if((size+ts) > dim/2 || ts > size/2)
+//         Resize(size+1);
 
-    if(flag[index] == 0){
+//     ulong i=0;
+//     ulong index = FindEmpty(data, i);
 
-        flag[index] = 1;
-        return true;
+//     elements[index] = data;
+//     size++;    
 
-    }else{
+//     if(flag[index] == 0){
 
-        flag[index] = 1;
-        return !Remove(data, ++i);
-    }
-}
+//         flag[index] = 1;
+//         return true;
 
+//     }else{
 
-template <typename Data>
-bool HashTableOpnAdr<Data>::Remove(const Data& data){
-    ulong i;
-    return Remove(data, i);
-}
+//         flag[index] = 1;
+//         return !Remove(data, ++i);
+//     }
+// }
 
 
-/* ************************************************************************** */
+// template <typename Data>
+// bool HashTableOpnAdr<Data>::Insert(Data&& data){
+//     if((size+ts) > dim/2 || ts > size/2)
+//         Resize(size+1);
 
-// Specific member functions (inherited from TestableContainer)
+//     ulong i=0;
+//     ulong index = FindEmpty(data, i);
 
-template <typename Data>
-bool HashTableOpnAdr<Data>::Exists(const Data& data) const noexcept{
-    ulong i;
-    long int index = Find(data, i);
+//     elements[index] = std::move(data);
+//     size++;    
 
-    return (index!=-1 && flag[index]==1);
-}
+//     if(flag[index] == 0){
 
+//         flag[index] = 1;
+//         return true;
 
-/* ************************************************************************** */
+//     }else{
 
-// Specific member functions (inherited from FoldableContainer and MappableContainer)
-
-
-template <typename Data>
-void HashTableOpnAdr<Data>::Fold(FoldFunctor function, const void* data, void* value) const{
-    for(ulong i = 0; i<dim; ++i)
-        if(flag[i]==1)
-            function(elements[i], data, value);
-}
+//         flag[index] = 1;
+//         return !Remove(data, ++i);
+//     }
+// }
 
 
-template <typename Data>
-void HashTableOpnAdr<Data>::Map(MapFunctor function, void* value){
-    for(ulong i = 0; i<dim; ++i)
-        if(flag[i]==1)
-            function(elements[i], value);
-}
+// template <typename Data>
+// bool HashTableOpnAdr<Data>::Remove(const Data& data){
+//     ulong i;
+//     return Remove(data, i);
+// }
 
 
-template <typename Data>
-void HashTableOpnAdr<Data>::FoldEx(FoldFunctor function, const void* table, void* result) const{
-    ulong i=-1;
+// /* ************************************************************************** */
 
-    while(++i<dim && *(static_cast<bool*>(result)))
-        if(flag[i]==1)
-            function(elements[i], table, result);
-}
+// // Specific member functions (inherited from TestableContainer)
 
+// template <typename Data>
+// bool HashTableOpnAdr<Data>::Exists(const Data& data) const noexcept{
+//     ulong i;
+//     long int index = Find(data, i);
 
-/* ************************************************************************ */
-
-// Specific member functions (inherited from Container)
-
-template <typename Data>
-void HashTableOpnAdr<Data>:: Clear(){
-    HashTableOpnAdr<Data>* temp = new HashTableOpnAdr<Data>();
-
-    std::swap(*this, *temp);
-    delete temp;
-}
+//     return (index!=-1 && flag[index]==1);
+// }
 
 
-/* ************************************************************************ */
+// /* ************************************************************************** */
 
-// Auxiliary Member Function
+// // Specific member functions (inherited from FoldableContainer and MappableContainer)
 
-template <typename Data>
-long int HashTableOpnAdr<Data>::Find(const Data& data, ulong& i) const noexcept{
-    ulong curr;
-    while(i<size){
-        curr = HashKey(data, i);
 
-        if(elements[curr] == data && flag[curr] == 1)
-            return curr;
+// template <typename Data>
+// void HashTableOpnAdr<Data>::Fold(FoldFunctor function, const void* data, void* value) const{
+//     for(ulong i = 0; i<dim; ++i)
+//         if(flag[i]==1)
+//             function(elements[i], data, value);
+// }
 
-        ++i;
-    }
+
+// template <typename Data>
+// void HashTableOpnAdr<Data>::Map(MapFunctor function, void* value){
+//     for(ulong i = 0; i<dim; ++i)
+//         if(flag[i]==1)
+//             function(elements[i], value);
+// }
+
+
+// template <typename Data>
+// void HashTableOpnAdr<Data>::FoldEx(FoldFunctor function, const void* table, void* result) const{
+//     ulong i=-1;
+
+//     while(++i<dim && *(static_cast<bool*>(result)))
+//         if(flag[i]==1)
+//             function(elements[i], table, result);
+// }
+
+
+// /* ************************************************************************ */
+
+// // Specific member functions (inherited from Container)
+
+// template <typename Data>
+// void HashTableOpnAdr<Data>:: Clear(){
+//     HashTableOpnAdr<Data>* temp = new HashTableOpnAdr<Data>();
+
+//     std::swap(*this, *temp);
+//     delete temp;
+// }
+
+
+// /* ************************************************************************ */
+
+// // Auxiliary Member Function
+
+// template <typename Data>
+// long int HashTableOpnAdr<Data>::Find(const Data& data, ulong& i) const noexcept{
+//     ulong curr;
+//     while(i<size){
+//         curr = HashKey(data, i);
+
+//         if(elements[curr] == data && flag[curr] == 1)
+//             return curr;
+
+//         ++i;
+//     }
     
-    return -1;
-}
+//     return -1;
+// }
 
 
-template <typename Data>
-ulong HashTableOpnAdr<Data>::FindEmpty(const Data& data, ulong& i) const noexcept{
-    ulong curr;
+// template <typename Data>
+// ulong HashTableOpnAdr<Data>::FindEmpty(const Data& data, ulong& i) const noexcept{
+//     ulong curr;
 
-    do{
-        curr = HashKey(data, i);
-        ++i;
-    }while(flag[curr] != 1);
+//     do{
+//         curr = HashKey(data, i);
+//         ++i;
+//     }while(flag[curr] != 1);
 
-    return curr;
-}
-
-
-template <typename Data>
-bool HashTableOpnAdr<Data>::Remove(const Data& data, ulong& i){
-    if((size+ts) < dim/4 && dim>=std::pow(2,8)) //secondo controllo per evitare operazioni inutili
-        Resize(size/2);
-
-    long int index = Find(data, i);
-
-    if(index == -1)
-        return false;
-    else{
-        flag[index] = 2;
-        size--;
-        ts++;
-        return true;
-    }
-}
+//     return curr;
+// }
 
 
-template <typename Data>
-ulong HashTableOpnAdr<Data>::HashKey(const Data& data, const ulong& i) const noexcept{
-    return (hash(data)+prime*i)%dim;
-}
+// template <typename Data>
+// bool HashTableOpnAdr<Data>::Remove(const Data& data, ulong& i){
+//     if((size+ts) < dim/4 && dim>=std::pow(2,8)) //secondo controllo per evitare operazioni inutili
+//         Resize(size/2);
+
+//     long int index = Find(data, i);
+
+//     if(index == -1)
+//         return false;
+//     else{
+//         flag[index] = 2;
+//         size--;
+//         ts++;
+//         return true;
+//     }
+// }
 
 
-}
+// template <typename Data>
+// ulong HashTableOpnAdr<Data>::HashKey(const Data& data, const ulong& i) const noexcept{
+//     return (hash(data)+prime*i)%dim;
+// }
+
+
+// }

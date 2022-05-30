@@ -27,7 +27,7 @@ void lasdtest() {
   // testFullExercise3();
   // testSimpleExercise4();
   // testFullExercise4();
-  testSimpleExercise5();
-  testFullExercise5();
+  // testSimpleExercise5();
+  // testFullExercise5();
   cout << endl << "Goodbye!" << endl;
 }
