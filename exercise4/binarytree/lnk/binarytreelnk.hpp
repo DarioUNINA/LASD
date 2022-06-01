@@ -94,7 +94,6 @@ protected:
   NodeLnk* CopyTree(const struct BinaryTree<Data>::Node&) const;
 
 
-
 public:
 
   // Default constructor

@@ -26,6 +26,9 @@ protected:
   using HashTable<Data>::dim;
   using HashTable<Data>::prime;
   using HashTable<Data>::hash;
+  using HashTable<Data>::A;
+  using HashTable<Data>::B;
+
 
   ulong ts = 0;
 
@@ -41,17 +44,50 @@ public:
   /* ************************************************************************ */
 
   // Specific constructors
-  HashTableOpnAdr(const ulong&);
-  HashTableOpnAdr(const LinearContainer<Data>&);
-  HashTableOpnAdr(const ulong&, const LinearContainer<Data>&);
 
+  HashTableOpnAdr(const ulong& newSize){
+      dim = newSize;
+      elements.Resize(newSize);
+      flag.Resize(newSize);
+
+      for(ulong i=0; i<dim; ++i)
+        flag[i]=0;
+  };
+  
+
+  HashTableOpnAdr(const LinearContainer<Data>& container){
+        DictionaryContainer<Data>::Insert(container);
+  };
+
+
+  HashTableOpnAdr(const ulong& newSize, const LinearContainer<Data>& container){
+    dim = newSize;
+    elements.Resize(newSize);
+    flag.Resize(newSize);
+
+    for(ulong i=0; i<dim; ++i)
+      flag[i]=0;
+
+    DictionaryContainer<Data>::Insert(container);
+
+};
+
+  
   /* ************************************************************************ */
 
   // Copy constructor
+
   HashTableOpnAdr(const HashTableOpnAdr<Data>&);
 
+
   // Move constructor
-  HashTableOpnAdr(HashTableOpnAdr<Data>&&);
+
+  HashTableOpnAdr(HashTableOpnAdr<Data>&& table): HashTable<Data>::HashTable(std::move(table)){
+    std::swap(elements, table.elements);
+    std::swap(flag, table.flag);
+    std::swap(ts, table.ts);
+}
+
 
   /* ************************************************************************ */
 
@@ -120,13 +156,15 @@ protected:
 
   virtual void FoldEx(FoldFunctor, const void*, void*) const;
 
-  long int Find(const Data&, ulong&) const noexcept;
+  ulong  Find(const Data&, ulong&) const noexcept;
 
   ulong FindEmpty(const Data&, ulong&) const noexcept;
   
   bool Remove(const Data&, ulong&);
   
   ulong HashKey(const Data&, const ulong&) const noexcept;
+
+  ulong FindSize(const ulong&) const noexcept;
 
 };
 

@@ -28,7 +28,7 @@
 
     int SetInt();
 
-    float SetFloat();
+    double Setdouble();
 
     ulong SetLenght();
 
@@ -37,14 +37,14 @@
 
     bool CheckExistence(lasd::BST<int>&);
 
-    bool CheckExistence(lasd::BST<float>&);
+    bool CheckExistence(lasd::BST<double>&);
 
     bool CheckExistence(lasd::BST<std::string>&);
 
 
     int setValue(lasd::BST<int>&);
 
-    float setValue(lasd::BST<float>&);
+    double setValue(lasd::BST<double>&);
 
     std::string setValue(lasd::BST<std::string>&);
 
@@ -55,7 +55,7 @@
 
     int getRandomInt();
 
-    float getRandomFloat();
+    double getRandomdouble();
 
     std::string getRandomString();
 
@@ -69,7 +69,7 @@
 
 
     template <typename Data>
-    void FloatFill(lasd::Vector<Data>&);
+    void doubleFill(lasd::Vector<Data>&);
 
 
     template <typename Data>
@@ -82,14 +82,14 @@
 
     void FoldFunctInt(const int& , const void* , void*);
 
-    void FoldFunctFloat(const float& , const void* , void* );
+    void FoldFunctdouble(const double& , const void* , void* );
 
     void FoldFunctString(const std::string&, const void*, void*);
 
 
     void Fold(lasd::FoldableContainer<int>&);
 
-    void Fold(lasd::FoldableContainer<float>& );
+    void Fold(lasd::FoldableContainer<double>& );
 
     void Fold(lasd::FoldableContainer<std::string>&);
 
@@ -120,5 +120,5 @@
     void Menu();
 
 /* ************************************************************************** */
-
+// #include "test.cpp"
 #endif

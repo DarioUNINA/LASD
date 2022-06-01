@@ -12,7 +12,6 @@
  /* ************************************************************************** */
    // Print option functions
 
-
     void TypeChoose(ushort&);
 
     void OperationChoose(ushort&);
@@ -28,7 +27,7 @@
 
     int SetInt();
 
-    float SetFloat();
+    double SetFloat();
 
     ulong SetLenght();
 

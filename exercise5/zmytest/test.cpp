@@ -540,7 +540,7 @@
 
 #include "../zlasdtest/test.hpp"
 #include "../hashtable/clsadr/htclsadr.hpp"
-// #include "../hashtable/opnadr/htopnadr.hpp"
+#include "../hashtable/opnadr/htopnadr.hpp"
 
 /* ************************************************************************ */
 
@@ -605,7 +605,7 @@ void OperationChoose(ushort& choice){
 
 // Auxiliary functions
 
-const int getRandomInt(){
+int getRandomInt(){
   std::default_random_engine genx(std::random_device{}());
   std::uniform_int_distribution<int> distx(0, 1000);
   int r = distx(genx);
