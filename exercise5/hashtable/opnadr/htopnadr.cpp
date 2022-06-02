@@ -297,7 +297,7 @@ bool HashTableOpnAdr<Data>::Remove(const Data& data, ulong& i){
         result = true;
     }
 
-    if((size+ts) < dim/4 && dim >= std::pow(2,8))
+    if((size+ts) < dim/8 && dim >= std::pow(2,8))
         Resize(dim/2);
 
     return result;
