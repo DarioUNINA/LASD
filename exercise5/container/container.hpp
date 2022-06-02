@@ -169,7 +169,7 @@ public:
   /* ************************************************************************ */
 
   // Copy assignment
-  DictionaryContainer<Data>& operator=(const DictionaryContainer<Data>) = delete;
+  DictionaryContainer<Data>& operator=(const DictionaryContainer<Data>&) = delete;
 
   // Move assignment
   DictionaryContainer<Data>& operator=(DictionaryContainer<Data>&&) noexcept = delete;
@@ -177,8 +177,8 @@ public:
   /* ************************************************************************ */
 
   // Comparison operators
-  bool operator==(const DictionaryContainer<Data>) const noexcept = delete;
-  bool operator!=(const DictionaryContainer<Data>) const noexcept = delete;
+  bool operator==(const DictionaryContainer<Data>&) const noexcept = delete;
+  bool operator!=(const DictionaryContainer<Data>&) const noexcept = delete;
 
   /* ************************************************************************ */
 

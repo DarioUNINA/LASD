@@ -73,6 +73,12 @@ public:
 
   virtual void Resize(const ulong&) = 0;
 
+  /* ************************************************************************ */
+
+  // Print Function
+
+  virtual void Print() noexcept;
+
 protected:
 
 

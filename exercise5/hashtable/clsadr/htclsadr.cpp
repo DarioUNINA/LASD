@@ -124,8 +124,8 @@ bool HashTableClsAdr<Data>::Insert(const Data& data){
     if((elements[HashTable<Data>::HashKey(data)]).Insert(data)){
         size++;
         return true;
-    }else
-        return false;
+    }else{std::cout<<data<<" e gia presente\n";
+        return false;}
 
 }
 

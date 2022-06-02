@@ -49,9 +49,28 @@ public:
 /* ************************************************************************** */
 /* ************************************************************************** */
 
+// Auciliary Member Function
+
 template <typename Data>
 ulong HashTable<Data>::HashKey(const Data& data) const noexcept{
   return ((A*(hash(data))+B)%prime)%dim;
+}
+
+
+/* ************************************************************************** */
+
+// Print Function
+
+template <typename Data>
+void MapPrint(const Data& key, void* value){
+    std::cout << key << ", ";
+}
+
+
+template <typename Data>
+void HashTable<Data>::Print() noexcept{
+  std::cout<<"The elements of the Hash Table are:\n";
+  this->Map(MapPrint<Data>, 0);
 }
 
 }

@@ -90,7 +90,7 @@ template <typename Data>
 ulong HashTableOpnAdr<Data>:: FindSize(const ulong& newSize) const noexcept{
     ulong i=7;
 
-    while(std::pow(2,i) <= newSize || std::pow(2,i)  < size*2)
+    while(std::pow(2,i) < newSize || std::pow(2,i) < size*2)
         ++i;
     
     return std::pow(2,i);
@@ -117,25 +117,30 @@ void HashTableOpnAdr<Data>::Resize(const ulong& newSize){
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Insert(const Data& data){
-    if((size+ts) > dim/2 || ts > size/2)//da controllare la seconda condizione e splittare in due resize
-        Resize(size+1);
+    if((size+ts) > dim/2)
+        Resize(dim+1);
 
-    ulong i=0;
+    if(ts > size/2)
+        Resize(dim);
+
+    ulong i = 0;
 
     ulong index = FindEmpty(data, i);
 
     if(index == dim)
         return false;
 
-    elements[index] = data;
+    ulong position = HashKey(data, index);
+
+    elements[position] = data;
     ++size;    
 
-    if(flag[index] == 0){
-        flag[index] = 1;
+    if(flag[position] == 0){
+        flag[position] = 1;
         return true;
 
     }else{
-        flag[index] = 1;
+        flag[position] = 1;
         return !Remove(data, ++index);
     }
 }
@@ -143,31 +148,38 @@ bool HashTableOpnAdr<Data>::Insert(const Data& data){
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Insert(Data&& data){
-    if((size+ts) > dim/2 || ts > size/2)
-        Resize(size+1);
+    if((size+ts) > dim/2)
+        Resize(dim+1);
 
-    ulong i=0;
-    ulong index = FindEmpty(data, i);
+    if(ts > size/2)
+        Resize(dim);
 
-    elements[index] = std::move(data);
-    size++;    
+    ulong index = 0;
 
-    if(flag[index] == 0){
+    index = FindEmpty(data, index);
 
-        flag[index] = 1;
+    if(index == dim)
+        return false;
+
+    ulong position = HashKey(data, index);
+
+    elements[position] = std::move(data);
+    ++size;    
+
+    if(flag[position] == 0){
+        flag[position] = 1;
         return true;
 
     }else{
-
-        flag[index] = 1;
-        return !Remove(data, ++i);
+        flag[position] = 1;
+        return !Remove(data, ++index);
     }
 }
 
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Remove(const Data& data){
-    ulong i;
+    ulong i=0;
     return Remove(data, i);
 }
 
@@ -178,10 +190,10 @@ bool HashTableOpnAdr<Data>::Remove(const Data& data){
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Exists(const Data& data) const noexcept{
-    ulong i;
-    long int index = Find(data, i);
+    ulong i = 0;
+    ulong index = Find(data, i);
 
-    return (index!=dim && flag[index]==1);
+    return (index!=dim);
 }
 
 
@@ -259,17 +271,19 @@ ulong HashTableOpnAdr<Data>::FindEmpty(const Data& data, ulong& i) const noexcep
 
         if(elements[curr] == data && flag[curr]==1)
             return dim;
-    
+
     }while(flag[curr] == 1);
 
-    return curr;
+    // if(i == dim)
+    //     return dim*2;
+
+    return --i;
 }
 
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Remove(const Data& data, ulong& i){
     ulong index = Find(data, i);
-
     bool result;
 
     if(index == dim)
@@ -283,7 +297,7 @@ bool HashTableOpnAdr<Data>::Remove(const Data& data, ulong& i){
     }
 
     if((size+ts) < dim/4 && dim>=std::pow(2,8))
-        Resize(size/2);
+        Resize(dim/2);
 
     return result;
 }

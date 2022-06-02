@@ -39,7 +39,7 @@ protected:
 public:
 
   // Default constructor
-  HashTableOpnAdr() = default;
+  HashTableOpnAdr() {for(ulong i=0; i<dim; ++i) {flag[i] = 0;}};
 
   /* ************************************************************************ */
 
@@ -149,6 +149,7 @@ public:
   // Specific member functions (inherited from Container)
 
   void Clear() override;
+  
 
 protected:
 

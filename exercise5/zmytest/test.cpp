@@ -56,7 +56,8 @@
 //     std::cout << "5) Apply Specific Type Fold Function\n";
 //     std::cout << "6) Resize the Hash Map\n";
 //     std::cout << "7) Clear the Table\n";
-//     std::cout << "8) Back\n";
+//     std::cout << "8) Resize the Table\n";
+//     std::cout << "9) Back\n";
 
 //     std::cin>>choice;
 
@@ -348,6 +349,10 @@
 //                     break;}
 
 //                 case 8:{
+//                         std::cout<<"There are "<<table.Size()<<" elements in the Hash able!";
+//                     break;}
+
+//                 case 9:{
 //                         exit = true;
 //                     break;}
 
@@ -379,7 +384,7 @@
 //                 lasd::Vector<int> vector(lenght);
 //                 IntFill(vector);
 
-//                 lasd::HashTableOpnAdr<int> table(vector);
+//                 lasd::HashTableOpnAdr<int> table((vector.Size())/2, vector);
 //                 Test(table);
 //                 break;}
             
@@ -388,7 +393,7 @@
 //                 lasd::Vector<double> vector(lenght);
 //                 FloatFill(vector);
 
-//                 lasd::HashTableOpnAdr<double> table(vector);
+//                 lasd::HashTableOpnAdr<double> table((vector.Size())/2,vector);
 //                 Test(table);
 //                 break;}
 
@@ -397,7 +402,7 @@
 //                 lasd::Vector<std::string> vector(lenght);
 //                 StringFill(vector);
 
-//                 lasd::HashTableOpnAdr<std::string> table(vector);
+//                 lasd::HashTableOpnAdr<std::string> table((vector.Size())/2,vector);
 //                 Test(table);
 //                 break;}
 
@@ -426,7 +431,7 @@
 //                 lasd::Vector<int> vector(lenght);
 //                 IntFill(vector);
 
-//                 lasd::HashTableClsAdr<int> table(vector);
+//                 lasd::HashTableClsAdr<int> table((vector.Size())/2, vector);
 //                 Test(table);
 //                 break;}
             
@@ -435,7 +440,7 @@
 //                 lasd::Vector<double> vector(lenght);
 //                 FloatFill(vector);
 
-//                 lasd::HashTableClsAdr<double> table(vector);
+//                 lasd::HashTableClsAdr<double> table((vector.Size())/2, vector);
 //                 Test(table);
 //                 break;}
 
@@ -444,7 +449,7 @@
 //                 lasd::Vector<std::string> vector(lenght);
 //                 StringFill(vector);
 
-//                 lasd::HashTableClsAdr<std::string> table(vector);
+//                 lasd::HashTableClsAdr<std::string> table((vector.Size())/2, vector);
 //                 Test(table);
 //                 break;}
 
@@ -507,7 +512,7 @@
         
 //         switch(choice){
 //             case 0:{
-//                 // lasdtest();
+//                 lasdtest();
 //                 break;}
                 
 //             case 1:{
@@ -607,7 +612,7 @@ void OperationChoose(ushort& choice){
 
 int getRandomInt(){
   std::default_random_engine genx(std::random_device{}());
-  std::uniform_int_distribution<int> distx(0, 1000);
+  std::uniform_int_distribution<int> distx(-1000, 1000);
   int r = distx(genx);
   std::cout<<"Scelgo "<<r<<std::endl;
   return r;
@@ -637,22 +642,17 @@ std::string getRandomString(){
 
 int SetInt(){
     int v;
-    std::cout<<"Please enter any integer value\n";
     return getRandomInt(); 
 }
 
 
 double SetFloat(){
-    std::cout<<"\nPlease enter any Float value\n";
-
     return getRandomFloat(); 
 }
 
 
 ulong SetLenght(){
     ulong n;
-
-    std::cout << "Please insert any size value\n";
     return getRandomInt()/10;
 }
 
@@ -674,10 +674,6 @@ double setValue(lasd::HashTable<double>& table){
 
 
 std::string setValue(lasd::HashTable<std::string>& table){
-    // std::cout<<"Please insert any string\n";
-    // std::string s;
-
-    // std::cin>>s;
     return getRandomString();
 }
 
@@ -774,7 +770,7 @@ void Fold(lasd::FoldableContainer<int>& container, lasd::BST<int>& bst){
     bst.Fold(FoldFunctInt, value, result2);
 
     if(*(int*)result2 != *(int*)result)
-        throw std::length_error("Risultato errato");
+        throw std::length_error("RISULTATO ERRATO!");
 
     std::cout<<"The result of the fold operation is: "<<*(static_cast<const int*>(result))<<"\n";
 }
@@ -818,14 +814,15 @@ void Test(lasd::HashTable<Data>& table, lasd::BST<Data>bst){
         do{
             ++op;
             choice = getRandomInt();
-            choice = choice%10;
+            choice = (choice%9)+1;
             std::cout<<op<<")OPERAZIONE "<<choice<<std::endl;
 
             if(table.Size()==0){
+                std::cout<<"Rebuild Hash Table\n";
                 for(int i =0; i<100; ++i){
                     const Data d = setValue(table);
                     if(table.Insert(d)!=bst.Insert(d))
-                        throw std::length_error("Risultato errato\n");
+                        throw std::length_error("RISULTATO ERRATO!\n");
                 }
             }
             
@@ -847,13 +844,13 @@ void Test(lasd::HashTable<Data>& table, lasd::BST<Data>bst){
                 case 3:{
                         const Data d = setValue(table);
                         if(table.Insert(d)!=bst.Insert(d))
-                            throw std::length_error("Risultato errato\n");
+                            throw std::length_error("RISULTATO ERRATO!\n");
                     break;}
 
                 case 4:{
                         const Data d = setValue(table);
                         if(table.Remove(d)!=bst.Remove(d))
-                            throw std::length_error("Risultato errato\n");
+                            throw std::length_error("RISULTATO ERRATO!\n");
                     break;}
 
                 case 5:{
@@ -861,12 +858,12 @@ void Test(lasd::HashTable<Data>& table, lasd::BST<Data>bst){
                     break;}
 
                 case 6:{
-                        table.Resize(SetInt()*10);//controlla resize 0
+                        table.Resize((SetInt()+1000));//controlla resize 0
                         if(table.Size()==0)
                             bst.Clear();
 
                         if(table.Size()!=bst.Size())
-                            throw std::length_error("risultato errato\n");
+                            throw std::length_error("RISULTATO ERRATO!\n");
 
                         std::cout<<"Table resized!\n";
                     break;}
@@ -878,23 +875,19 @@ void Test(lasd::HashTable<Data>& table, lasd::BST<Data>bst){
                     break;}
 
                 case 8:{
-                        for(int i =0; i<200; ++i){
+                        for(int i =0; i<300; ++i){
                             const Data d = setValue(table);
                             if(table.Insert(d)!=bst.Insert(d))
-                                throw std::length_error("Risultato errato\n");
+                                throw std::length_error("RISULTATO ERRATO!\n");
                         }
                     break;}
 
                 case 9:{
-                        for(int i =0; i<300; ++i){
+                        for(int i =0; i<200; ++i){
                             const Data d = setValue(table);
                             if(table.Remove(d)!=bst.Remove(d))
-                                throw std::length_error("Risultato errato\n");
+                                throw std::length_error("RISULTATO ERRATO!\n");
                         }
-                    break;}
-
-                case 10:{
-                        // exit = true;
                     break;}
 
                 default:
@@ -926,30 +919,30 @@ bool exit = false;
         switch(choice){
             
             case 1:{
-                const ulong lenght = SetLenght();
-                lasd::Vector<int> vector(lenght);
+                lasd::Vector<int> vector(100);
                 IntFill(vector);
 
-                // lasd::HashTableOpnAdr<int> table(vector);
-                // Test(table);
+                lasd::HashTableOpnAdr<int> table(vector.Size()/2, vector);
+                lasd::BST<int>bst (vector);
+                Test(table, bst);
                 break;}
             
             case 2:{
-                const ulong lenght = SetLenght();
-                lasd::Vector<double> vector(lenght);
+                lasd::Vector<double> vector(100);
                 FloatFill(vector);
 
-                // lasd::HashTableOpnAdr<double> table(vector);
-                // Test(table);
+                lasd::HashTableOpnAdr<double> table(vector.Size()/2, vector);
+                lasd::BST<double>bst (vector);
+                Test(table, bst);
                 break;}
 
             case 3:{
-                const ulong lenght = SetLenght();
-                lasd::Vector<std::string> vector(lenght);
+                lasd::Vector<std::string> vector(100);
                 StringFill(vector);
 
-                // lasd::HashTableOpnAdr<std::string> table(vector);
-                // Test(table);
+                lasd::HashTableOpnAdr<std::string> table(vector.Size()/2, vector);
+                lasd::BST<std::string>bst (vector);
+                Test(table, bst);
                 break;}
 
             case 4:{
@@ -972,10 +965,10 @@ bool exit = false;
         switch(choice){
             
             case 1:{
-                lasd::Vector<int> vector(250);
+                lasd::Vector<int> vector(500);
                 IntFill(vector);
 
-                lasd::HashTableClsAdr<int> table(vector.Size()/2, vector);
+                lasd::HashTableClsAdr<int> table(200, vector);
                 lasd::BST<int>bst (vector);
                 Test(table, bst);
                 break;}
