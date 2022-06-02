@@ -30,6 +30,10 @@ protected:
   using HashTable<Data>::B;
 
 
+  ulong a = HashTable<Data>::getRandom(0);
+  ulong b = HashTable<Data>::getRandom(1);
+  ulong p = 4001;
+
   ulong ts = 0;
 
   Vector<Data> elements {dim};
@@ -39,7 +43,7 @@ protected:
 public:
 
   // Default constructor
-  HashTableOpnAdr() {for(ulong i=0; i<dim; ++i) {flag[i] = 0;}};
+  HashTableOpnAdr() {for(ulong i=0; i<dim; ++i) flag[i] = 0; };
 
   /* ************************************************************************ */
 
@@ -77,7 +81,12 @@ public:
 
   // Copy constructor
 
-  HashTableOpnAdr(const HashTableOpnAdr<Data>&);
+  HashTableOpnAdr(const HashTableOpnAdr<Data>& table): elements(table.elements), flag(table.flag), ts(table.ts), a(table.a), b(table.b){
+    A = table.A;
+    B = table.B;
+    dim = table.dim;
+    size = table.size;
+  }
 
 
   // Move constructor
@@ -164,6 +173,8 @@ protected:
   bool Remove(const Data&, ulong&);
   
   ulong HashKey(const Data&, const ulong&) const noexcept;
+
+  ulong HashKey(const Data&, const ulong&, const ulong&) const noexcept;
 
   ulong FindSize(const ulong&) const noexcept;
 

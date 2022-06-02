@@ -5,13 +5,15 @@ namespace lasd {
 
 // Constructors
 
-template <typename Data>
-HashTableOpnAdr<Data>::HashTableOpnAdr(const HashTableOpnAdr<Data>& table): elements(table.elements), flag(table.flag), ts(table.ts) {
-    A = table.A;
-    B = table.B;
-    dim = table.dim;
-    size = table.size;
-}
+// template <typename Data>
+// HashTableOpnAdr<Data>::HashTableOpnAdr(const HashTableOpnAdr<Data>& table): elements(table.elements), flag(table.flag), ts(table.ts) {
+//     A = table.A;
+//     B = table.B;
+//     a = table.a;
+//     b = table.b;
+//     dim = table.dim;
+//     size = table.size;
+// }
 
 
 /* ************************************************************************** */
@@ -35,6 +37,8 @@ HashTableOpnAdr<Data>& HashTableOpnAdr<Data>:: operator=(HashTableOpnAdr<Data>&&
     std::swap(elements, table.elements);
     std::swap(flag, table.flag);
     std::swap(ts, table.ts);
+    std::swap(a, table.a);
+    std::swap(b, table.b);
     return *this;
 }
 
@@ -90,7 +94,7 @@ template <typename Data>
 ulong HashTableOpnAdr<Data>:: FindSize(const ulong& newSize) const noexcept{
     ulong i=7;
 
-    while(std::pow(2,i) < newSize || std::pow(2,i) < size*2)
+    while(std::pow(2,i) <= newSize || std::pow(2,i) < size*2)
         ++i;
     
     return std::pow(2,i);
@@ -117,7 +121,7 @@ void HashTableOpnAdr<Data>::Resize(const ulong& newSize){
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Insert(const Data& data){
-    if((size+ts) > dim/2)
+    if((size+ts) == dim)
         Resize(dim+1);
 
     if(ts > size/2)
@@ -274,9 +278,6 @@ ulong HashTableOpnAdr<Data>::FindEmpty(const Data& data, ulong& i) const noexcep
 
     }while(flag[curr] == 1);
 
-    // if(i == dim)
-    //     return dim*2;
-
     return --i;
 }
 
@@ -296,7 +297,7 @@ bool HashTableOpnAdr<Data>::Remove(const Data& data, ulong& i){
         result = true;
     }
 
-    if((size+ts) < dim/4 && dim>=std::pow(2,8))
+    if((size+ts) < dim/4 && dim >= std::pow(2,8))
         Resize(dim/2);
 
     return result;
@@ -305,7 +306,18 @@ bool HashTableOpnAdr<Data>::Remove(const Data& data, ulong& i){
 
 template <typename Data>
 ulong HashTableOpnAdr<Data>::HashKey(const Data& data, const ulong& i) const noexcept{
-    return (hash(data)+prime*i)%dim;
+    return ((HashTable<Data>::HashKey(data))+ i*(HashKey(data, a, b)))%dim;
+}
+
+
+template <typename Data>
+ulong HashTableOpnAdr<Data>::HashKey(const Data& data, const ulong& x, const ulong& y) const noexcept {
+    ulong result = ((x*(hash(data))+y)%p)%dim;
+
+    if(result%2 == 0)
+        return --result;
+    else
+        return result;
 }
 
 
