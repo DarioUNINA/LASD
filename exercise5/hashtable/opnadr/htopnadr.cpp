@@ -3,21 +3,6 @@ namespace lasd {
 
 /* ************************************************************************** */
 
-// Constructors
-
-// template <typename Data>
-// HashTableOpnAdr<Data>::HashTableOpnAdr(const HashTableOpnAdr<Data>& table): elements(table.elements), flag(table.flag), ts(table.ts) {
-//     A = table.A;
-//     B = table.B;
-//     a = table.a;
-//     b = table.b;
-//     dim = table.dim;
-//     size = table.size;
-// }
-
-
-/* ************************************************************************** */
-
 // Copy and Move Assignment
 
 template <typename Data>
@@ -39,6 +24,7 @@ HashTableOpnAdr<Data>& HashTableOpnAdr<Data>:: operator=(HashTableOpnAdr<Data>&&
     std::swap(ts, table.ts);
     std::swap(a, table.a);
     std::swap(b, table.b);
+
     return *this;
 }
 
@@ -103,6 +89,7 @@ ulong HashTableOpnAdr<Data>:: FindSize(const ulong& newSize) const noexcept{
 
 template <typename Data>
 void HashTableOpnAdr<Data>::Resize(const ulong& newSize){
+    std::cout<<"\nRESIZE\n";
     ulong nSize = FindSize(newSize);
 
     HashTableOpnAdr<Data>* temp = new HashTableOpnAdr(nSize);

@@ -95,6 +95,8 @@ public:
     std::swap(elements, table.elements);
     std::swap(flag, table.flag);
     std::swap(ts, table.ts);
+    std::swap(a, table.a);
+    std::swap(b, table.b);
 }
 
 
