@@ -39,7 +39,9 @@ public:
 
   // Specific constructors
   HashTableClsAdr(const ulong&);
+
   HashTableClsAdr(const LinearContainer<Data>&);
+
   HashTableClsAdr(const ulong&, const LinearContainer<Data>&);
 
   /* ************************************************************************ */
@@ -81,14 +83,16 @@ public:
   // Specific member functions (inherited from DictionaryContainer)
 
   bool Insert(const Data&) override;
+
   bool Insert(Data&&) override;
+
   bool Remove(const Data&) override;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from TestableContainer)
 
-  bool Exists(const Data&)const noexcept;
+  bool Exists(const Data&) const noexcept;
 
   /* ************************************************************************ */
 
@@ -96,7 +100,7 @@ public:
 
   using typename MappableContainer<Data>::MapFunctor;
 
-  virtual void Map(MapFunctor, void *) override;
+  virtual void Map(MapFunctor, void*) override;
 
   /* ************************************************************************ */
 

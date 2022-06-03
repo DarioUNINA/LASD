@@ -58,9 +58,6 @@ public:
   // Copy assignment
   HashTable<Data>& operator=(const HashTable<Data>&) = delete;
 
-  // Move assignment
-  // HashTable<Data> operator=(HashTable<Data>&&) noexcept = delete;
-
   /* ************************************************************************ */
 
   // Comparison operators
