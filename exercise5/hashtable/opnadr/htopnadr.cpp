@@ -78,9 +78,9 @@ void MapIns(const Data& data, void* table){
 
 template <typename Data>
 ulong HashTableOpnAdr<Data>:: FindSize(const ulong& newSize) const noexcept{
-    ulong i=7;
+    ushort i=7;
 
-    while(std::pow(2,i) <= newSize || std::pow(2,i) < size*2)
+    while(std::pow(2,i) < newSize || std::pow(2,i) < size*2)
         ++i;
     
     return std::pow(2,i);
@@ -89,7 +89,6 @@ ulong HashTableOpnAdr<Data>:: FindSize(const ulong& newSize) const noexcept{
 
 template <typename Data>
 void HashTableOpnAdr<Data>::Resize(const ulong& newSize){
-    std::cout<<"\nRESIZE\n";
     ulong nSize = FindSize(newSize);
 
     HashTableOpnAdr<Data>* temp = new HashTableOpnAdr(nSize);
@@ -108,7 +107,7 @@ void HashTableOpnAdr<Data>::Resize(const ulong& newSize){
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Insert(const Data& data){
-    if((size+ts) == dim)
+    if((size+ts) > dim/2)
         Resize(dim+1);
 
     if(ts > size/2)
@@ -239,7 +238,7 @@ void HashTableOpnAdr<Data>:: Clear(){
 template <typename Data>
 ulong HashTableOpnAdr<Data>::Find(const Data& data, ulong& i) const noexcept{
     ulong curr;
-    while(i<dim){
+    while(i<(size+ts)){
         curr = HashKey(data, i);
 
         if(elements[curr] == data && flag[curr] == 1)
@@ -271,13 +270,13 @@ ulong HashTableOpnAdr<Data>::FindEmpty(const Data& data, ulong& i) const noexcep
 
 template <typename Data>
 bool HashTableOpnAdr<Data>::Remove(const Data& data, ulong& i){
-    ulong index = Find(data, i);
+    ulong position = Find(data, i);
     bool result;
 
-    if(index == dim)
+    if(position == dim)
         result = false;
     else{
-        flag[index] = 2;
+        flag[position] = 2;
         size--;
         ts++;
 

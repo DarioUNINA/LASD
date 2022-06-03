@@ -50,28 +50,21 @@ public:
   // Specific constructors
 
   HashTableOpnAdr(const ulong& newSize){
-      dim = newSize;
-      elements.Resize(newSize);
-      flag.Resize(newSize);
+      dim = FindSize(newSize);
+      elements.Resize(dim);
+      flag.Resize(dim);
 
       for(ulong i=0; i<dim; ++i)
         flag[i]=0;
   };
   
 
-  HashTableOpnAdr(const LinearContainer<Data>& container){
+  HashTableOpnAdr(const LinearContainer<Data>& container): HashTableOpnAdr(){
         DictionaryContainer<Data>::Insert(container);
   };
 
 
-  HashTableOpnAdr(const ulong& newSize, const LinearContainer<Data>& container){
-    dim = newSize;
-    elements.Resize(newSize);
-    flag.Resize(newSize);
-
-    for(ulong i=0; i<dim; ++i)
-      flag[i]=0;
-
+  HashTableOpnAdr(const ulong& newSize, const LinearContainer<Data>& container): HashTableOpnAdr(newSize){
     DictionaryContainer<Data>::Insert(container);
 
 };
@@ -117,6 +110,7 @@ public:
 
   // Comparison operators
   bool operator==(const HashTableOpnAdr<Data>&) const noexcept;
+
   bool operator!=(const HashTableOpnAdr<Data>&) const noexcept;
 
   /* ************************************************************************ */
@@ -130,14 +124,16 @@ public:
   // Specific member functions (inherited from DictionaryContainer)
 
   bool Insert(const Data&) override;
+
   bool Insert(Data&&) override;
+
   bool Remove(const Data&) override;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from TestableContainer)
 
-  bool Exists(const Data&)const noexcept;
+  bool Exists(const Data&) const noexcept;
 
   /* ************************************************************************ */
 
