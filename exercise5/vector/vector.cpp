@@ -8,13 +8,13 @@ namespace lasd {
 template <typename Data>
 Vector<Data>:: Vector(const ulong newSize){
     size = newSize;
-    Elements = new Data[newSize];
+    Elements = new Data[newSize]{};
 }
 
 template <typename Data>
 Vector<Data>::Vector(const LinearContainer<Data>& container){
     size = container.Size();
-    Elements = new Data[size];
+    Elements = new Data[size]{};
 
     for(ulong i = 0; i<size; ++i)
         Elements[i] = container[i];
@@ -27,7 +27,7 @@ template<typename Data>
 Vector<Data>::Vector(const Vector<Data>& vector){
 
     size = vector.size;
-    Elements = new Data[size];
+    Elements = new Data[size]{};
 
     std::copy(vector.Elements, (vector.Elements + vector.size) , Elements);
 }
@@ -113,7 +113,7 @@ void Vector<Data>:: Resize(const ulong newSize){
     else
         if(size!= newSize){
                
-            Data* newElements = new Data[newSize];
+            Data* newElements = new Data[newSize]{};
             ulong limit = newSize;
 
             if(size < newSize)
