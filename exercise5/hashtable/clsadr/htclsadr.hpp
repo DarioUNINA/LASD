@@ -86,6 +86,8 @@ public:
 
   bool Insert(Data&&) override;
 
+  bool Insert(const LinearContainer<Data> container) { return DictionaryContainer<Data>::Insert(container);};
+
   bool Remove(const Data&) override;
 
   /* ************************************************************************ */

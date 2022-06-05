@@ -7,9 +7,7 @@ namespace lasd {
 
 template <typename Data>
 HashTableClsAdr<Data>::HashTableClsAdr(const ulong& newSize){
-    if(newSize == 0)
-        Clear();
-    else{
+    if(newSize>0){
         dim = newSize;
         elements.Resize(newSize);
     }
