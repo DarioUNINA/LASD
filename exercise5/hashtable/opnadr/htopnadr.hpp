@@ -43,7 +43,7 @@ protected:
 public:
 
   // Default constructor
-  HashTableOpnAdr() {for(ulong i=0; i<dim; ++i) flag[i] = 0; };
+  HashTableOpnAdr() = default;
 
   /* ************************************************************************ */
 
@@ -53,13 +53,10 @@ public:
       dim = FindSize(newSize);
       elements.Resize(dim);
       flag.Resize(dim);
-
-      for(ulong i=0; i<dim; ++i)
-        flag[i]=0;
   };
   
 
-  HashTableOpnAdr(const LinearContainer<Data>& container): HashTableOpnAdr(){
+  HashTableOpnAdr(const LinearContainer<Data>& container){
         DictionaryContainer<Data>::Insert(container);
   };
 
