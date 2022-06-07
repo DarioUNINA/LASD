@@ -130,6 +130,7 @@ bool HashTableOpnAdr<Data>::Insert(const Data& data){
         return true;
 
     }else{
+        --ts;
         flag[position] = 1;
         return !Remove(data, ++index);
     }
@@ -161,6 +162,7 @@ bool HashTableOpnAdr<Data>::Insert(Data&& data){
         return true;
 
     }else{
+        --ts;
         flag[position] = 1;
         return !Remove(data, ++index);
     }
